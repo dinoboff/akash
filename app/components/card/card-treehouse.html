@@ -1,0 +1,80 @@
+<div ng-if="info" class="well clearfix">
+
+    <div class="report-card treehouse" ng-if="info">
+        <h1>
+            <span ng-if="isCurrentUser">Your</span>
+            Treehouse progress
+        </h1>
+
+        <div class="badges" ng-if="info.badges.length > 0">
+            <h2>Earned badges:</h2>
+            <div class="row">
+                <div ng-repeat="badge in info.badges" class="col-xs-4 col-md-2">
+                    <a ng-href="{{info.profileUrl}}" class="thumbnail"
+                        title="earned the {{badge.name}} badge on {{badge.earnedDate}}"
+                        target="_blank"
+                    >
+                        <img class="treebadge"
+                            ng-src="{{badge.iconUrl}}"
+                            alt="{{badge.name}}"
+                            title="earned the {{badge.name}} badge on {{badge.earnedDate}}"
+                        />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="completed-courses courses" ng-if="!(info.courses.completed|oepEmpty)">
+            <h2>Completed courses:</h2>
+            <div class="row">
+                <div ng-repeat="(name, course) in info.courses.completed"
+                    class="col-xs-4 col-md-2"
+                >
+                    <a ng-href="{{course.url}}" class="thumbnail"
+                        title="completed the course &quot;{{course.name}}&quot;"
+                        target="_blank"
+                    >
+                        <img alt="{{course.name}}"
+                            ng-style="{'background-color': course.iconColor}"
+                            class="course"
+                            ng-src="{{course.iconUrl}}"
+                            title="completed the course &quot;{{course.name}}&quot;"
+                        />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="inprogress-courses courses" ng-if="!(info.courses.inProgress|oepEmpty)">
+            <h2>Courses in progress:</h2>
+            <div class="row">
+                <div ng-repeat="(name, course) in info.courses.inProgress"
+                    class="col-xs-4 col-md-2"
+                    ng-if="$index < 6"
+                >
+                    <a ng-href="{{course.url}}" class="thumbnail"
+                        title="learning &quot;{{course.name}}&quot;"
+                        target="_blank"
+                    >
+                        <img alt="{{course.name}}"
+                            ng-style="{'background-color': course.iconColor}"
+                            class="course"
+                            ng-src="{{course.iconUrl}}"
+                            title="learning &quot;{{course.name}}&quot;"
+                        />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="isCurrentUser">
+            <h2>
+                <a href="http://teamtreehouse.com/library/topic:html">
+                    <span ng-if="!info.courses.inProgress['How to Make a Website'] && !info.courses.completed['How to Make a Website']">Start</span>
+                    <span ng-if="info.courses.inProgress['How to Make a Website'] || info.courses.completed['How to Make a Website']">Continue</span>
+                    your HTML Journey on Tree House
+                </a>
+            </h2>
+        </div>
+    </div>
+</div>

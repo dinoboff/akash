@@ -1,0 +1,142 @@
+<h1>Ranks</h1>
+
+<div class="well rank-filter">
+    <form role="form" class="form-inline filter-selectors">
+
+        <div class="form-group">
+            <label for="filterType">Filter player by: </label>
+            <select id="filterType" class="form-control"
+                ng-model="ctrl.filterBy.type"
+                ng-options="type as type.name for (name, type) in ctrl.filterOptions"
+                ng-change="ctrl.filterTypeChanged()"
+            >
+                <option value="">No Filter</option>
+            </select>
+        </div>
+
+        <div class="form-group" ng-if="ctrl.filterBy.type">
+            <label for="filterValue" class="sr-only">Set to: </label>
+            <select id="filterValue" class="form-control"
+                ng-model="ctrl.filterBy.value"
+                ng-options="choice as choice.name for choice in ctrl.filterBy.type.choices"
+                ng-change="ctrl.getRanks()"
+            >
+                <option value="">No Filter</option>
+            </select>
+        </div>
+
+    </form>
+</div>
+
+<table class="table table-striped ranks">
+    <thead>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('totalBadges')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'totalBadges'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Total Badges
+            </a>
+        </th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('score')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'score'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Total Score
+            </a>
+        </th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('treeHouse')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'treeHouse'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Threehouse badges
+            </a>
+        </th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('treeHousePoints')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'treeHousePoints'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Threehouse points
+            </a>
+        </th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('codeSchool')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'codeSchool'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Code School badges
+            </a>
+        </th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('codeSchoolPoints')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'codeSchoolPoints'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Code School points
+            </a>
+        </th>
+        <th>
+            <a
+                ng-click="ctrl.getRanksSortedBy('codeCombatPoints')"
+                class="sort" ng-class="{selected: ctrl.sortBy == 'codeCombatPoints'}"
+            >
+                <span class="glyphicon glyphicon-chevron-down sort-icon"></span>
+                Code Combat points
+            </a>
+        </th>
+        <th>
+            Badges
+        </th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="student in ctrl.ranks">
+            <td>{{$index + 1}}</td>
+            <td>
+                <a ng-href="#/user/{{student.id}}">
+                    {{student.name}}
+                </a>
+            </td>
+            <td>{{student.totalBadges}}</td>
+            <td>{{student.score}}</td>
+            <td>{{student.treeHouse.badges.length || 0}}</td>
+            <td>{{student.treeHouse.points || 0}}</td>
+            <td>{{student.codeSchool.badges.length || 0}}</td>
+            <td>{{student.codeSchool.points || 0}}</td>
+            <td>{{student.codeCombat.points || 0}}</td>
+            <td class="badge-list">
+                <img ng-repeat="badge in student.treeHouse.badges"
+                    ng-src="{{badge.iconUrl}}"
+                    alt="{{badge.name}}"
+                    title="{{badge.name}}"
+                    class="badge-thumbnail"
+                />
+                <img ng-repeat="badge in student.codeSchool.badges"
+                    ng-src="{{badge.iconUrl}}"
+                    alt="{{badge.name}}"
+                    title="{{badge.name}}"
+                    class="badge-thumbnail"
+                />
+
+            </td>
+        </tr>
+        <tr ng-if="ctrl.userStats">
+            <td>You</td>
+            <td>{{ctrl.userStats.name}}</td>
+            <td>{{ctrl.userStats.score}}</td>
+            <td>{{ctrl.userStats.totalBadges}}</td>
+            <td>{{ctrl.userStats.treeHouse.badges.length || 0}}</td>
+            <td>{{ctrl.userStats.codeSchool.badges.length || 0}}</td>
+        </tr>
+    </tbody>
+</table>

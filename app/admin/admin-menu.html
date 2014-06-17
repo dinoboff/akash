@@ -1,0 +1,5 @@
+<ul class="nav nav-pills nav-stacked">
+    <li ng-repeat="(key, item) in menuItems" ng-class="{active: isActive(item.url)}">
+        <a ng-href="#{{item.url}}">{{item.title}}</a>
+    </li>
+</ul>
