@@ -64,6 +64,26 @@
         controller: 'OepSuggestionFormCtrl',
         controllerAs: 'ctrl',
       }).
+      when('/a', {
+        templateUrl: 'oneteam/a.html',
+        controller: 'OepRanksShowRanks',
+        controllerAs: 'ctrl',
+      }).
+      when('/b', {
+        templateUrl: 'oneteam/b.html',
+        controller: 'OepRanksShowRanks',
+        controllerAs: 'ctrl',
+      }).
+      when('/c', {
+        templateUrl: 'oneteam/c.html',
+        controller: 'OepRanksShowRanks',
+        controllerAs: 'ctrl',
+      }).
+      when('/d', {
+        templateUrl: 'oneteam/d.html',
+        controller: 'OepRanksShowRanks',
+        controllerAs: 'ctrl',
+      }).
       when('/ranks', {
         templateUrl: 'ranks/ranks.html',
         controller: 'OepRanksShowRanks',
