@@ -1,10 +1,8 @@
-# akash
+# akash ![alt text](https://travis-ci.org/ChrisBoesch/akash.svg?branch=gh-pages "Logo Title Text 1")
 
 The Angularjs-based GUI for ChrisBoesch.com.
 
-
 ## Setup
-
 Fork https://github.com/ChrisBoesch/akash and clone it:
 ```
 git clone git@github.com:your-gihub-user-name/akash.git
