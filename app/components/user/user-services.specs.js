@@ -274,6 +274,21 @@
         expect(data.length).toBe(0);
 
       });
+      
+      it('should query summary', function() {
+        var data;
+
+        $httpBackend.expectGET('/api/v1/summary').respond({'schools':{'DHS':9},'genders':{'male':5}, 'services':{} });
+
+        usersApi.getSummary().then(function(_data_) {
+          data = _data_;
+        });
+
+        $httpBackend.flush();
+        expect(data.schools.DHS).toBe(9);
+        expect(data.genders.male).toBe(5);
+        
+      });
 
       it('should query ranks by badges', function() {
         $httpBackend.expectGET('/api/v1/ranks?sortBy=score').respond([]);

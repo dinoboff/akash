@@ -71,7 +71,15 @@
         getRanks: function(filterBy) {
           return oepApi.all('ranks').getList(filterBy);
         },
-
+        
+        //Chris attempt at adding Restacular endpoint.
+        getSummary: function() {
+          //return oepApi.all('summary').getList();
+          //return oepApi.one('summary').get();
+          // Just ONE GET to /accounts/123/buildings/456
+          return oepApi.one('summary').get();
+          
+        },
         /**
          * Request the users badges info to be updated.
          *
