@@ -272,7 +272,7 @@ Optionally, if the page have to query new API endpoints, it would need to append
 an existing service (or create a new one) and edit app-mock.js to mock the new
 API endpoint.
 
-### a New subsection
+### New subsection
 
 We will create the new subsection directory and empty files for our controllers,
 partials and tests.
@@ -285,7 +285,7 @@ touch app/schools/schools-controllers.specs.js
 touch app/schools/schools.e2e.specs.js
 ```
 
-### A new controller
+### New controller
 
 Because it's the first controller for that subsection, we need to create
 a new angular module. We will use the following format to name it:
@@ -323,9 +323,9 @@ pass it the partial scope.
 ```
 We will be using the new "controller As" syntax. The controller instance
 is added to the scope and the data is passed to the scope by assigning it to
-controller properties; in this case via `schools` property.
+controller properties; in this case via the `schools` property.
 
-Akash already query the list of school on to other pages using the oepUsersApi.
+Akash already query the list of school on two other pages using `oepUsersApi`.
 We will use the same api client on this page.
 
 ```
@@ -352,7 +352,7 @@ We will use the same api client on this page.
 
 })();
 ```
-`oepUsersApi` is define in the `oep.user.services` module; we had it the
+`oepUsersApi` is define in the `oep.user.services` module; we add it to the
 the list of requirement of `oep.schools.controllers`. And we can now inject it
 in our controller.
 
@@ -384,8 +384,8 @@ Before each test, we first make sure the modules we will be using will be access
 to the injector using the `module` global function.
 
 We then inject and save the references to some components we will be using in our tests.
-Because we are testing controllers we get `$controller` which will instantiate
-controller for us. We will also get `$rootScope`; it's often needed to deal
+Because we are testing controllers, we get `$controller` which will instantiate
+controllers for us. We will also get `$rootScope`; it's often needed to deal
 with asynchronous tasks.
 
 We can now write a suite for our controller:
@@ -480,7 +480,7 @@ our api call resolve:
 ### Karma config
 
 Karma is our unit test runner. You can run your test using `grunt test:unit`.
-However, if you were to run it now, it wouldn't run the 2 new tests above.
+However, if you were to run it now, it wouldn't run the two new tests above.
 You need to make it load your tests first.
 
 Karma config file used by grunt is located in `config/karma.conf.js`. Look
@@ -513,7 +513,7 @@ to load it. Open `app/index.html` and locate the following comment:
 Just before add :
 ```<script src="schools/schools-controllers.js"></script>```
 
-It should beinside a list of script between:
+It should be inside a list of script between:
 ```
   <!-- build:js(app) app.js -->
   [...]
