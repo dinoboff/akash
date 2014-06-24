@@ -192,7 +192,7 @@ annotation:
 someModule.factory('greeter', ['$window', function($window) {
   // ...
 }]);
-'''
+```
 See [Angularjs dependency injection guide](https://code.angularjs.org/1.2.16/docs/guide/di#dependency-annotation)
 for more details.
 
