@@ -24,6 +24,7 @@
       'ngRoute',
       'oep.admin.controllers',
       'oep.admin.directives',
+      'oep.controllers',
       'oep.ranks.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
