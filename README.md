@@ -95,7 +95,7 @@ that need different settings something like:
 
 ### indent
 
-Use 2 spaces to indent JavaScript code.
+Use 2 spaces to indent JavaScript blocks.
 
 
 ### curly brace
@@ -115,7 +115,7 @@ Use single quote for string literals.
 
 ### No trailing space
 
-You should leave trailing white space in your code. Most text editor have
+You should not leave trailing white space in your code. Most text editor have
 an option to remote them when saving files or to at least show them.
 
 To show them in Nitrous.io IDE, go to "View" > "Show Trailing white space".
