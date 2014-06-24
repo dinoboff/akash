@@ -152,7 +152,7 @@ angular('someModule', []).controller('SomeCtrl', ['$window', function($window){
 
 ### Unused variables
 
-The tests will complain if they find any unused variables, it the single you
+The tests will complain if they find any unused variables;  you
 might have misspell a variable call.
 
 
