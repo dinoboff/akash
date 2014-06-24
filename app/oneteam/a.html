@@ -1,4 +1,19 @@
 <div class="row">
 
-    Hi. This is partial A. 
+    Hi. This is partial A. <hr>
+    Here are some examples of pulling data from a controller. <br>
+    Total girls {{ctrl.summary.genders.female}}<br>
+    Number of schools {{ctrl.summary.numSchools}}<br>
+    <ul>
+      <li ng-repeat="(school,count) in ctrl.summary.schools">
+        {{count}}, {{school}}
+      </li>
+    </ul>
+    Number of users {{ctrl.summary.numUsers}}<br> 
+    Total services {{ctrl.summary.services}}<br>
+
+  
+  All controller data<br>
+  <pre>{{ctrl}}</pre>
+
 </div>

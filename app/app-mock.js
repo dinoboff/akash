@@ -99,6 +99,9 @@
       // school list
       httpBackend.whenGET(fixtures.url.schools).respond(fixtures.schoolList);
 
+      // summary 
+      httpBackend.whenGET(fixtures.url.summary).respond(fixtures.summary);
+
       // Code combat username validation
       httpBackend.whenGET(fixtures.url.codeCombatCheck).respond(function(m, url) {
         var match = fixtures.url.codeCombatCheck.exec(url),

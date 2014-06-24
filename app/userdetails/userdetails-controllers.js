@@ -144,11 +144,21 @@
     }
   };
 
+  // Summary controller
+  function SummaryController(oepUsersApi) {
+    var self = this;
+    
+    oepUsersApi.getSummary().then(function(summary) {
+      self.summary = summary;
+    });
+  
+  }
+
   angular.module('oep.userdetails.controllers', ['oep.config', 'oep.user.services', 'eop.card.directives', 'eop.card.services']).
 
   controller('OepUserCtrl', ['user', 'oepUsersApi', 'eopReportCardApi', 'oepCurrentUserApi', '$q', OepUserCtrl]).
-  controller('OepUserFormListCtrl', ['$location', '$window', 'oepSettings', 'oepCurrentUserApi', 'oepUsersApi', 'user', OepUserFormListCtrl])
-
+  controller('OepUserFormListCtrl', ['$location', '$window', 'oepSettings', 'oepCurrentUserApi', 'oepUsersApi', 'user', OepUserFormListCtrl]).
+  controller('SummaryController', ['oepUsersApi', SummaryController])
   ;
 
 })();

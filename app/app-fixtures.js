@@ -22,7 +22,14 @@
       updateBadges: /api\/v1\/users\/([^\/]+)\/stats/,
       ranks: /api\/v1\/ranks\?(.+)$/,
       suggestions: /api\/v1\/suggestions$/,
-      schools: /api\/v1\/schools/
+      schools: /api\/v1\/schools/,
+      summary: /api\/v1\/summary/
+    },
+    summary: {'numSchools':4,
+              'numUsers':29,
+              'schools': {'Dunman High School': 14, 'Other': 2, 'Republic Polytechnic': 1, 'Singapore Management University': 4},
+              'genders': {'secret": 8, "male': 14, 'female': 7},
+              'services': {'codeCombat': 14, 'treeHouse': 10, 'codeSchool': 10}
     },
     newChris: {
       'isLoggedIn': true,

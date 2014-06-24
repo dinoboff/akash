@@ -66,7 +66,7 @@
       }).
       when('/a', {
         templateUrl: 'oneteam/a.html',
-        controller: 'OepRanksShowRanks',
+        controller: 'SummaryController',
         controllerAs: 'ctrl',
       }).
       when('/b', {
