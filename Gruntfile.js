@@ -222,6 +222,14 @@ module.exports = function(grunt) {
       },
     },
 
+    'protractor_webdriver': {
+      e2e: {
+        options: {
+          command: './node_modules/.bin/webdriver-manager start'
+        }
+      }
+    },
+
     rev: {
       dist: {
         files: {
@@ -233,9 +241,6 @@ module.exports = function(grunt) {
         }
       }
     },
-
-    'selenium_phantom_hub': {},
-    'selenium_stop': {},
 
     shell: {
       options: {
@@ -387,17 +392,15 @@ module.exports = function(grunt) {
   grunt.registerTask('test:e2e', [
     'e2e:assets',
     'connect:e2e',
-    'selenium_phantom_hub',
-    'protractor:phantomjs',
-    'selenium_stop'
+    'protractor_webdriver:e2e',
+    'protractor:phantomjs'
   ]);
 
   grunt.registerTask('autotest:unit', ['jshint', 'karma:autoUnit']);
   grunt.registerTask('autotest:e2e', [
     'e2e:assets',
     'connect:e2e',
-    'protractor:chrome',
-    'watch:e2e'
+    'protractor:chrome'
   ]);
 
   grunt.registerTask('dev', ['connect:dev', 'watch:app']);
