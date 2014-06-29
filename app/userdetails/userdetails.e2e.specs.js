@@ -189,13 +189,13 @@
         };
 
         this.setYearOfBirth = function(yearIndex) {
-          return this.yearSelect.findElements(by.tagName('option')).then(function(options){
+          return this.yearSelect.all(by.tagName('option')).then(function(options){
             return options[yearIndex].click();
           });
         };
 
         this.setSchool = function(schoolIndex) {
-          return this.schoolSelect.findElements(by.tagName('option')).then(function(options){
+          return this.schoolSelect.all(by.tagName('option')).then(function(options){
             return options[schoolIndex].click();
           });
         };

@@ -25,11 +25,25 @@
       schools: /api\/v1\/schools/,
       summary: /api\/v1\/summary/
     },
-    summary: {'numSchools':4,
-              'numUsers':29,
-              'schools': {'Dunman High School': 14, 'Other': 2, 'Republic Polytechnic': 1, 'Singapore Management University': 4},
-              'genders': {'secret": 8, "male': 14, 'female': 7},
-              'services': {'codeCombat': 14, 'treeHouse': 10, 'codeSchool': 10}
+    summary: {
+      'numSchools': 4,
+      'numUsers': 29,
+      'schools': {
+        'Dunman High School': 14,
+        'Other': 2,
+        'Republic Polytechnic': 1,
+        'Singapore Management University': 4
+      },
+      'genders': {
+        'secret': 8,
+        'male': 14,
+        'female': 7
+      },
+      'services': {
+        'codeCombat': 14,
+        'treeHouse': 10,
+        'codeSchool': 10
+      }
     },
     newChris: {
       'isLoggedIn': true,
@@ -77,6 +91,19 @@
           'codeCombat': {
             'id': '537d66783dcf67c40571fce9',
             'name': 'ProfBoesch',
+            'badges': [{
+              'id': 'rescue-mission',
+              'name': 'Rescue Mission',
+              'updatedAt': 'Tue, 24 Jun 2014 22:51:54 -0000',
+              'iconUrl': 'http://codecombat.com/file/db/level/52740644904ac0411700067c/rescue_mission_icon.png',
+              'url': 'http://codecombat.com/play/level/rescue-mission'
+            }, {
+              'id': 'taunt',
+              'name': 'Taunt',
+              'updatedAt': 'Fri, 30 May 2014 11:57:10 -0000',
+              'iconUrl': 'http://codecombat.com/file/db/level/525f150306e1ab0962000018/taunt_icon.png',
+              'url': 'http://codecombat.com/play/level/taunt'
+            }],
             'courses': {
               'completed': {},
               'inProgress': {
@@ -112,7 +139,7 @@
                 }
               }
             },
-            'points': 16658
+            'points': 16678
           }
         }
       },
