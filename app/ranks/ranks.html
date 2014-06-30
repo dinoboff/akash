@@ -20,6 +20,16 @@
                 ng-model="ctrl.filterBy.value"
                 ng-options="choice as choice.name for choice in ctrl.filterBy.type.choices"
                 ng-change="ctrl.getRanks()"
+                ng-if="ctrl.filterBy.type.id != 'schools'"
+            >
+                <option value="">No Filter</option>
+            </select>
+
+            <select id="filterValue" class="form-control"
+                ng-model="ctrl.filterBy.value"
+                ng-options="choice as choice.name group by choice.group for choice in ctrl.filterBy.type.choices"
+                ng-change="ctrl.getRanks()"
+                ng-if="ctrl.filterBy.type.id == 'schools'"
             >
                 <option value="">No Filter</option>
             </select>

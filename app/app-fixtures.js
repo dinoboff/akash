@@ -461,68 +461,101 @@
       'error': 'The resource could not be found.'
     },
     schoolList: [{
-      'name': 'Ngee Ann Polytechnic',
-      'id': '10'
-    }, {
-      'name': 'Anglo Chinese School (Independent)',
-      'id': '15'
-    }, {
-      'name': 'NUS High School',
-      'id': '7'
-    }, {
-      'name': 'Other',
-      'id': '0'
-    }, {
-      'name': 'Raffles Institution',
-      'id': '18'
-    }, {
-      'name': 'National University of Singapore',
-      'id': '11'
-    }, {
-      'name': 'Singapore Polytechnic',
-      'id': '9'
-    }, {
-      'name': 'Nanyang Technological University',
-      'id': '12'
-    }, {
-      'name': 'Yishun Junior College',
-      'id': '20'
-    }, {
-      'name': 'Victoria Junior College',
-      'id': '19'
-    }, {
-      'name': 'Temasek Polytechnic',
-      'id': '3'
-    }, {
-      'name': 'Hwa Chong Institution',
-      'id': '13'
-    }, {
-      'name': 'Nanyang Polytechnic',
-      'id': '8'
-    }, {
+      'group': 'Junior College',
       'name': 'Pioneer Junior College',
       'id': '6'
     }, {
-      'name': 'Dunman High School',
-      'id': '5'
+      'group': 'University',
+      'name': 'Singapore Institute of Technology',
+      'id': '21'
     }, {
+      'group': 'Junior College',
+      'name': 'NUS High School',
+      'id': '7'
+    }, {
+      'group': 'Polytechnic',
+      'name': 'Temasek Polytechnic',
+      'id': '3'
+    }, {
+      'group': 'Junior College',
+      'name': 'Raffles Institution',
+      'id': '18'
+    }, {
+      'group': 'University',
       'name': 'Singapore Management University',
       'id': '1'
     }, {
-      'name': 'K12',
-      'id': '4'
+      'group': 'Junior College',
+      'name': 'Dunman High School',
+      'id': '5'
     }, {
-      'name': 'Temasek Junior College',
-      'id': '17'
+      'group': 'University',
+      'name': 'SIM University',
+      'id': '23'
     }, {
+      'group': 'Junior College',
       'name': 'Anderson Junior College',
       'id': '14'
     }, {
+      'group': 'Polytechnic',
+      'name': 'Ngee Ann Polytechnic',
+      'id': '10'
+    }, {
+      'group': 'Junior College',
+      'name': 'Hwa Chong Institution',
+      'id': '13'
+    }, {
+      'group': 'Junior College',
+      'name': 'Temasek Junior College',
+      'id': '17'
+    }, {
+      'group': 'Other',
+      'name': 'Other',
+      'id': '0'
+    }, {
+      'group': 'University',
+      'name': 'Nanyang Technological University',
+      'id': '12'
+    }, {
+      'group': 'Polytechnic',
+      'name': 'Republic Polytechnic',
+      'id': '2'
+    }, {
+      'group': 'Polytechnic',
+      'name': 'Nanyang Polytechnic',
+      'id': '8'
+    }, {
+      'group': 'Junior College',
+      'name': 'Victoria Junior College',
+      'id': '19'
+    }, {
+      'group': 'Junior College',
+      'name': 'K12',
+      'id': '4'
+    }, {
+      'group': 'Junior College',
+      'name': 'Anglo Chinese School (Independent)',
+      'id': '15'
+    }, {
+      'group': 'Junior College',
+      'name': 'Yishun Junior College',
+      'id': '20'
+    }, {
+      'group': 'Polytechnic',
+      'name': 'Singapore Polytechnic',
+      'id': '9'
+    }, {
+      'group': 'Junior College',
       'name': 'National Junior College',
       'id': '16'
     }, {
-      'name': 'Republic Polytechnic',
-      'id': '2'
+      'group': 'University',
+      'name': 'National University of Singapore',
+      'id': '11'
+    }, {
+      'group': 'University',
+      'name': 'Singapore University of Technology and Design',
+      'id': '22'
     }]
   })
 

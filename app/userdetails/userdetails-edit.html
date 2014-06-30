@@ -86,7 +86,7 @@
                     <select type="text" class="form-control"
                         name="school" id="userSchool"
                         ng-model="ctrl.user.info.school"
-                        ng-options="opt.id as opt.name for opt in ctrl.options.schools.choices"
+                        ng-options="opt.id as opt.name group by opt.group for opt in ctrl.options.schools.choices"
                         required="true"
                     >
                         <option value="">
