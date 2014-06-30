@@ -35,6 +35,14 @@ module.exports = function(grunt) {
           ]
         }]
       },
+      coverage: {
+        files: [{
+          dot: true,
+          src: [
+            'coverage/',
+          ]
+        }]
+      },
       debug: {
         files: [{
           dot: true,
@@ -88,6 +96,15 @@ module.exports = function(grunt) {
           port: 5557,
           base: './e2e',
           middleware: middleware()
+        }
+      },
+      coverage: {
+        options: {
+          port: 5558,
+          base: './coverage',
+          middleware: middleware(),
+          keepalive: true,
+          open: true
         }
       }
     },
@@ -186,11 +203,11 @@ module.exports = function(grunt) {
 
     karma: {
       unit: {
-        configFile: 'config/karma.conf.js',
+        configFile: 'config/karma.coverage.conf.js',
         singleRun: true
       },
       autoUnit: {
-        configFile: 'config/karma.conf.js',
+        configFile: 'config/karma.unit.conf.js',
         autoWatch: true,
         singleRun: false
       }
@@ -388,13 +405,15 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('test', ['test:unit', 'test:e2e']);
-  grunt.registerTask('test:unit', ['jshint', 'karma:unit']);
+  grunt.registerTask('test:unit', ['jshint', 'clean:coverage', 'karma:unit']);
   grunt.registerTask('test:e2e', [
     'e2e:assets',
     'connect:e2e',
     'protractor_webdriver:e2e',
     'protractor:phantomjs'
   ]);
+
+  grunt.registerTask('coverage', ['test:unit', 'connect:coverage']);
 
   grunt.registerTask('autotest:unit', ['jshint', 'karma:autoUnit']);
   grunt.registerTask('autotest:e2e', [
