@@ -99,7 +99,7 @@
       // school list
       httpBackend.whenGET(fixtures.url.schools).respond(fixtures.schoolList);
 
-      // summary 
+      // summary
       httpBackend.whenGET(fixtures.url.summary).respond(fixtures.summary);
 
       // Code combat username validation
@@ -261,7 +261,12 @@
         }
 
         if (doFilter) {
-          filterProperty[params.filterByType] = params.filterByValue;
+          if (params.filterByType === 'schools') {
+            filterProperty.school = params.filterByValue;
+          } else {
+            filterProperty[params.filterByType] = params.filterByValue;
+          }
+
           filteredUsers = _.filter(users, filterProperty);
         } else {
           filteredUsers = users;

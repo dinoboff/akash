@@ -7,9 +7,9 @@
             Code Combat
         </h1>
 
-        <p ng-if="info.courses.inProgress|oepEmpty && info.badges|oepEmpty">No progress yet.</p>
+        <p ng-if="(info.courses.inProgress|oepEmpty) &amp;&amp; (info.badges|oepEmpty)">No progress yet.</p>
 
-        <div ng-if="!info.badges|oepEmpty" class="badges">
+        <div ng-if="!(info.badges|oepEmpty)" class="badges">
             <h2>Levels completed:</h2>
             <div class="row">
                 <div ng-repeat="badge in info.badges" class="col-xs-4 col-md-2">
