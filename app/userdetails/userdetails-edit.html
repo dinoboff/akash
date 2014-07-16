@@ -16,6 +16,7 @@
                         ng-model="ctrl.user.info.id"
                         ng-required="true"
                         ng-pattern="ctrl.userIdPattern"
+                        ng-maxlength="20"
                         oep-uniq-id="true"
                         name="userId"
                     />
@@ -31,6 +32,9 @@
                     <strong class="help-block" ng-show="userDetailsForm.userId.$error.pattern">
                         Should only contain letters, numbers, "-" or "_".
                     </strong>
+                    <strong class="help-block" ng-show="userDetailsForm.userId.$error.maxlength">
+                        Your public id should be up to 20 characters long.
+                    </strong>
                 </div>
             </div>
 
@@ -41,8 +45,12 @@
                         id="user-name" placeholder="Enter a name"
                         ng-model="ctrl.user.info.name"
                         required="true"
+                        ng-maxlength="20"
                         name="userName"
                     />
+                    <strong class="help-block" ng-show="userDetailsForm.userName.$error.maxlength">
+                        Your screen name should be up to 20 characters long.
+                    </strong>
                 </div>
             </div>
 
