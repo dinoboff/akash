@@ -113,7 +113,9 @@
 
         console.log('Mocking calls to code school...');
         if (username === 'dinoboff') {
-          return [200, {userId: '12345'}];
+          return [200, {
+            userId: '12345'
+          }];
         } else {
           console.log(
             'The only valid code school ids are: ' +
@@ -261,7 +263,16 @@
         }
 
         if (doFilter) {
-          if (params.filterByType === 'schools') {
+
+          if (params.filterByType === 'schoolType') {
+            filterProperty = function(user) {
+              return (
+                fixtures.schoolTypes[params.filterByValue] &&
+                fixtures.schoolTypes[params.filterByValue].indexOf &&
+                fixtures.schoolTypes[params.filterByValue].indexOf(user.school) > -1
+              );
+            };
+          } else if (params.filterByType === 'schools') {
             filterProperty.school = params.filterByValue;
           } else {
             filterProperty[params.filterByType] = params.filterByValue;
