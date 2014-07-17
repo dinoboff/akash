@@ -40,7 +40,7 @@
           },
           services: {
             id: 'services',
-            name: 'services',
+            name: 'Services',
             choices: [{
               id: 'treeHouse',
               name: 'Treehouse'
@@ -50,6 +50,23 @@
             }, {
               id: 'codeCombat',
               name: 'Code Combat'
+            }]
+          },
+          schoolType: {
+            id: 'schoolType',
+            name: 'School Type',
+            choices: [{
+              id: 'Junior College',
+              name: 'Junior College'
+            }, {
+              id: 'Polytechnic',
+              name: 'Polytechnic'
+            }, {
+              id: 'University',
+              name: 'University'
+            }, {
+              id: 'Other',
+              name: 'Other'
             }]
           }
         }

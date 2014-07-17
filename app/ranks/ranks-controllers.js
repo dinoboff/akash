@@ -6,6 +6,13 @@
 (function() {
   'use strict';
 
+  var module = angular.module(
+    'oep.ranks.controllers', [
+      'oep.config',
+      'oep.user.services',
+      'eop.card.directives'
+    ]);
+
   /**
    * OepRanksShowRanks - Controller for the ranks subsction
    *
@@ -16,113 +23,112 @@
    * (as `userStats`) If the current user is not part of top ranks.
    *
    */
-  function OepRanksShowRanks(userApi, currentUserApi, settings, window) {
-    var self = this,
-      $ = window.jQuery;
+  module.controller('OepRanksShowRanks', [
+    'oepUsersApi',
+    'oepCurrentUserApi',
+    'oepSettings',
+    '$window',
+    function OepRanksShowRanks(userApi, currentUserApi, settings, window) {
+      var self = this,
+        $ = window.jQuery;
 
-    this.currentUser = currentUserApi;
-    this.userApi = userApi;
+      this.currentUser = currentUserApi;
+      this.userApi = userApi;
 
-    this.filterOptions = $.extend({}, settings.userOptions);
-    this.filterOptions.schools = {
-      id: 'schools',
-      name: 'Schools',
-      choices: []
-    };
+      this.filterOptions = $.extend({}, settings.userOptions);
+      this.filterOptions.schools = {
+        id: 'schools',
+        name: 'Schools',
+        choices: []
+      };
 
-    this.filterBy = {};
-    this.ranks = null;
-    this.userStats = null;
-    this.sortBy = 'totalBadges';
+      this.filterBy = {};
+      this.ranks = null;
+      this.userStats = null;
+      this.sortBy = 'totalBadges';
 
-    currentUserApi.auth().then(this.setUserStats.bind(this));
-    userApi.availableSchools().then(function(schools) {
-      self.filterOptions.schools.choices = schools;
-    });
-    this.getRanks();
-  }
+      /** Methods **/
 
-  OepRanksShowRanks.prototype = {
-    /**
-     * Populate the scope `userStats` property with the current user stats
-     * if he's not part of the top rank.
-     */
-    setUserStats: function() {
-      if (this.ranks === null) {
-        return;
-      }
-
-      if (!this.currentUser.data || !this.currentUser.data.stats) {
-        return;
-      }
-
-      for (var i = 0; i < this.ranks.length; i++) {
-        if (this.ranks[i].id === this.currentUser.data.stats.id) {
+      /**
+       * Populate the scope `userStats` property with the current user stats
+       * if he's not part of the top rank.
+       */
+      this.setUserStats = function() {
+        if (this.ranks === null) {
           return;
         }
-      }
 
-      this.userStats = this.currentUser.data.stats;
-    },
+        if (!this.currentUser.data || !this.currentUser.data.stats) {
+          return;
+        }
 
-    /**
-     * Fetch rank and populate the scope `ranks` property with it.
-     *
-     */
-    getRanks: function() {
-      var self = this,
-        opts = {};
+        for (var i = 0; i < this.ranks.length; i++) {
+          if (this.ranks[i].id === this.currentUser.data.stats.id) {
+            return;
+          }
+        }
 
-      if (
-        this.filterBy &&
-        this.filterBy.type &&
-        this.filterBy.type.id &&
-        this.filterBy.value &&
-        this.filterBy.value.id
-      ) {
-        opts.filterByType = this.filterBy.type.id;
-        opts.filterByValue = this.filterBy.value.id;
-      }
+        this.userStats = this.currentUser.data.stats;
+      };
 
-      if (this.sortBy) {
-        opts.sortBy = this.sortBy;
-      }
+      /**
+       * Fetch rank and populate the scope `ranks` property with it.
+       *
+       */
+      this.getRanks = function() {
+        var opts = {};
 
-      this.ranks = null;
-      return this.userApi.getRanks(opts).then(function(ranks) {
-        self.ranks = ranks;
-        self.setUserStats();
-        return ranks;
+        if (
+          this.filterBy &&
+          this.filterBy.type &&
+          this.filterBy.type.id &&
+          this.filterBy.value &&
+          this.filterBy.value.id
+        ) {
+          opts.filterByType = this.filterBy.type.id;
+          opts.filterByValue = this.filterBy.value.id;
+        }
+
+        if (this.sortBy) {
+          opts.sortBy = this.sortBy;
+        }
+
+        this.ranks = null;
+        return this.userApi.getRanks(opts).then(function(ranks) {
+          self.ranks = ranks;
+          self.setUserStats();
+          return ranks;
+        });
+      };
+
+      /**
+       * Update sortBy and update rank.
+       *
+       */
+      this.getRanksSortedBy = function(sortBy) {
+        this.sortBy = sortBy;
+        return this.getRanks();
+      };
+
+      /**
+       * Reset rank and filter value when the filter type changes.
+       *
+       */
+      this.filterTypeChanged = function() {
+        if (this.filterBy.value) {
+          this.filterBy.value = null;
+          this.getRanks();
+        }
+      };
+
+      /** init. ranks **/
+
+      currentUserApi.auth().then(this.setUserStats.bind(this));
+      userApi.availableSchools().then(function(schools) {
+        self.filterOptions.schools.choices = schools;
       });
-    },
-
-    /**
-     * Update sortBy and update rank.
-     *
-     */
-    getRanksSortedBy: function(sortBy) {
-      this.sortBy = sortBy;
-      return this.getRanks();
-    },
-
-    /**
-     * Reset rank and filter value when the filter type changes.
-     *
-     */
-    filterTypeChanged: function() {
-      if (this.filterBy.value) {
-        this.filterBy.value = null;
-        this.getRanks();
-      }
+      this.getRanks();
     }
-
-  };
-
-
-  angular.module('oep.ranks.controllers', ['oep.config', 'oep.user.services', 'eop.card.directives']).
-
-  controller('OepRanksShowRanks', ['oepUsersApi', 'oepCurrentUserApi', 'oepSettings', '$window', OepRanksShowRanks])
-
-  ;
+  ]);
 
 })();
