@@ -36,6 +36,15 @@
 
   config(['$routeProvider',
     function($routeProvider) {
+      var rankResolver = {
+          'currentUser': ['oepCurrentUserApi', function(oepCurrentUserApi) {
+            return oepCurrentUserApi.auth();
+          }],
+          'availableSchools': ['oepUsersApi', function(oepUsersApi) {
+            return oepUsersApi.availableSchools();
+          }]
+        };
+
       $routeProvider.
       when('/admin', {
         redirectTo: adminMenu.metrics.url
@@ -89,6 +98,13 @@
         templateUrl: 'ranks/ranks.html',
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
+        resolve: rankResolver
+      }).
+      when('/ranks/:sortBy/:filterByType/:filterByValue', {
+        templateUrl: 'ranks/ranks.html',
+        controller: 'OepRanksShowRanks',
+        controllerAs: 'ctrl',
+        resolve: rankResolver
       }).
       when('/user/:userId', {
         templateUrl: 'userdetails/userdetails-user.html',

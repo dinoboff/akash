@@ -118,7 +118,7 @@
       codeSchool: /https:\/\/www\.codeschool\.com\/users\/([^\/]+).json\?callback/,
       treeHouse: /http:\/\/teamtreehouse\.com\/([^\/]+).json/,
       updateBadges: /api\/v1\/users\/([^\/]+)\/stats/,
-      ranks: /api\/v1\/ranks\?(.+)$/,
+      ranks: /api\/v1\/ranks(?:\?(.+))?$/,
       suggestions: /api\/v1\/suggestions$/,
       schools: /api\/v1\/schools/,
       summary: /api\/v1\/summary/
