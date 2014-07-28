@@ -56,6 +56,8 @@
        * if he's not part of the top rank.
        */
       this.setUserStats = function() {
+        this.userStats = null;
+
         if (this.ranks === null) {
           return;
         }
