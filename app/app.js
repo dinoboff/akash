@@ -90,6 +90,11 @@
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
       }).
+      when('/events', {
+        templateUrl: 'events/events-form.html',
+        controller: 'OepEventFormCtrl',
+        controllerAs: 'ctrl',
+      }).
       when('/user/:userId', {
         templateUrl: 'userdetails/userdetails-user.html',
         controller: 'OepUserCtrl',

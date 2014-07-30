@@ -1,0 +1,105 @@
+<div class="row">
+
+    <div class="col-sm-12">
+
+        <form role="form" name="eventForm">
+            <fieldset>
+                <legend>Event Creation Form</legend>
+
+                <p class="alert alert-success" ng-if="ctrl.saved">
+                    Event created on {{ctrl.event.created_at}}
+                    (event id: #{{ctrl.event.id}}).
+                    <br/>
+                    Thanks for creating the event.
+                </p>
+
+                <div class="form-group">
+                    <label for="event-name">Event Name:</label>
+                    <input
+                        name="event-name"
+                        type="email" class="form-control" id="event-name"
+                        ng-model="ctrl.event.eventName" required="true"
+                    />
+                </div>
+              
+                <div class="form-group">
+                    <label for="count">Number of Students:</label>
+                    <input
+                        name="count"
+                        type="number" min="1" step="1" pattern="\d+"
+                        class="form-control" id="count"
+                        ng-model="ctrl.event.count" required="true"
+                    />
+                </div>
+              
+                <div class="form-group">
+                    <label for="school-type">School Type:</label>
+                    <select
+                        name="school-type"
+                        class="form-control" id="school-type"
+                        ng-model="ctrl.event.schoolType" required="true"
+                        ng-options="option.name as option.name for option in schoolTypes"
+                    ></select>
+                </div>
+              
+                <div class="form-group">
+                    <label for="platform">Platform:</label>
+                    <select
+                        name="platform"
+                        class="form-control" id="platform"
+                        ng-model="ctrl.event.service" required="true"
+                        ng-options="option for option in services"
+                    ></select>
+                </div>
+              
+                <div class="form-group">
+                    <label for="criteria">Criteria:</label>
+                    <select
+                        name="criteria"
+                        class="form-control" id="criteria"
+                        ng-model="ctrl.event.criteria" required="true"
+                        ng-options="option for option in criteriaOptions"
+                    ></select>
+                </div>         
+                 
+                <div class="form-group">
+                    <label for="reward">Reward:</label>
+                    <select
+                        name="reward"
+                        class="form-control" id="reward"
+                        ng-model="ctrl.event.reward" required="true"
+                        ng-options="option for option in rewardOptions"
+                    ></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="add-comment">Additional Comments:</label>
+                    <textarea
+                        name="add-comment"
+                        class="form-control" id="add-comment" rows="10"
+                        ng-model="ctrl.event.comments" required="true"
+                    ></textarea>
+                </div>
+            </fieldset>
+
+            <button
+                type="submit" class="btn btn-default"
+                ng-click="ctrl.save(ctrl.event)"
+                ng-disabled="eventForm.$invalid || ctrl.saving || ctrl.saved"
+            >
+                Create Event
+            </button>
+
+            <button
+                class="btn btn-default"
+                ng-click="ctrl.reset()"
+                ng-disabled="ctrl.saving || eventForm.$pristine"
+            >
+                Reset
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
