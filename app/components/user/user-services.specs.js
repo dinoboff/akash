@@ -19,7 +19,7 @@
       bobInfo = {
         'name': 'Bob Coder',
         'id': 'bob',
-        'sevices': {
+        'services': {
           'codeSchool': {
             'id': '123456789'
           },
@@ -239,6 +239,23 @@
         expect(data).toEqual(bobInfo);
       });
 
+      it('should remove extra properties when saving the user info', function() {
+        var data;
+
+        $httpBackend.expectPUT('/api/v1/user').respond(function(m, u, body) {
+          data = JSON.parse(body);
+          return [200, null];
+        });
+
+        bobInfo.foo = 'bar';
+        bobInfo.services.totalScore = 1000;
+        expect(currentUserApi.save(bobInfo).then).toBeDefined();
+        $httpBackend.flush();
+        expect(data.foo).not.toBeDefined();
+        expect(data.services.totalScore).not.toBeDefined();
+
+      });
+
     });
 
     describe('usersApi', function() {
@@ -274,7 +291,7 @@
         expect(data.length).toBe(0);
 
       });
-      
+
       it('should query summary', function() {
         var data;
 
@@ -287,7 +304,7 @@
         $httpBackend.flush();
         expect(data.schools.DHS).toBe(9);
         expect(data.genders.male).toBe(5);
-        
+
       });
 
       it('should query ranks by badges', function() {

@@ -71,14 +71,14 @@
         getRanks: function(filterBy) {
           return oepApi.all('ranks').getList(filterBy);
         },
-        
+
         //Chris attempt at adding Restacular endpoint.
         getSummary: function() {
           //return oepApi.all('summary').getList();
           //return oepApi.one('summary').get();
           // Just ONE GET to /accounts/123/buildings/456
           return oepApi.one('summary').get();
-          
+
         },
         /**
          * Request the users badges info to be updated.
@@ -118,7 +118,7 @@
                 return 0;
               } else if (a.id === '0') {
                 return 1;
-              } else if (b.id === '0' ) {
+              } else if (b.id === '0') {
                 return -1;
               }
 
@@ -155,6 +155,8 @@
    */
   factory('oepCurrentUserApi', ['$location', '$q', 'oepApi', '$window',
     function($location, $q, oepApi, window) {
+      var _ = window._;
+
       api = {
         data: null,
         loading: null,
@@ -209,7 +211,15 @@
          *
          */
         save: function(data) {
-          return oepApi.one('user').customPUT(data);
+          var info = _.pick(
+            data, ['id', 'name', 'gender', 'yearOfBirth', 'school', 'services']
+          );
+
+          info.services = _.pick(
+            info.services, ['treeHouse', 'codeSchool', 'codeCombat']
+          );
+
+          return oepApi.one('user').customPUT(info);
         },
 
         /**
