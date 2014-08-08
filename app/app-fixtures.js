@@ -121,7 +121,14 @@
       ranks: /api\/v1\/ranks(?:\?(.+))?$/,
       suggestions: /api\/v1\/suggestions$/,
       schools: /api\/v1\/schools/,
-      summary: /api\/v1\/summary/
+      summary: /api\/v1\/summary/,
+      courses: /api\/v1\/courses(?:\?(.+))?$/,
+      allCourses: /api\/v1\/courses$/,
+      openedCourses: /api\/v1\/courses\?opened=true$/,
+      coursePassword: /api\/v1\/courses\/([^\/]+)\/password$/,
+      courseOpen: /api\/v1\/courses\/([^\/]+)\/opened$/,
+      courseClose: /api\/v1\/courses\/([^\/]+)\/closed$/,
+      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/
     },
     summary: {
       'numSchools': 4,
@@ -171,7 +178,8 @@
           'treeHouse': {
             'id': 'shannonboesch'
           }
-        }
+        },
+        'courses': []
       },
 
       'ProfChris': {
@@ -239,7 +247,8 @@
             },
             'points': 16678
           }
-        }
+        },
+        'courses': []
       },
 
       'dinoboff': {
@@ -257,7 +266,8 @@
           'codeSchool': {
             'id': 'dinoboff'
           }
-        }
+        },
+        'courses': []
       },
     },
     profiles: {
@@ -569,7 +579,23 @@
       'Polytechnic': [],
       'University': [],
       'Other': []
-    })
+    }),
+    courses: [{
+      id: '1',
+      name: 'SMU MITB Cloud and Big Data Analytics 2013',
+      opened: false,
+      pw: 'password'
+    }, {
+      id: '2',
+      name: 'SMU MITB Cloud and Big Data Analytics 2014',
+      opened: true,
+      pw: 'password'
+    }, {
+      id: '3',
+      name: 'SMU SIS Architectural Analysis G1 Term 1 2014',
+      opened: true,
+      pw: 'password'
+    }]
   })
 
   ;

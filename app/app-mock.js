@@ -103,6 +103,10 @@
           data.services = {};
         }
 
+        if (!data.courses) {
+          data.courses = [];
+        }
+
         users[data.id] = data;
         return [200, null];
       });
@@ -331,7 +335,101 @@
         return [200, suggestion];
       });
 
-      // Everything else (like html templates) should go pass through
+      // Courses
+      httpBackend.whenGET(fixtures.url.courses).respond(function(m, url) {
+        var query = fixtures.url.courses.exec(url)[1],
+          params = parseQuery(query),
+          courses;
+
+        console.log('GET ' + url);
+
+        console.log(params);
+        if (params.opened) {
+          courses = _(fixtures.courses).filter({opened: true});
+        } else {
+          courses = _(fixtures.courses);
+        }
+
+        var resp = {
+          courses: courses.omit('pw').map().value(),
+          cursor: null
+        };
+
+        return [200, resp];
+      });
+
+      httpBackend.whenPOST(fixtures.url.courses).respond(function(m, u, body){
+        var course = JSON.parse(body),
+          newCourse = _.pick(course, ['name', 'opened', 'pw']);
+
+        console.log('POST ' + u + ' ' + body);
+
+        newCourse.id = fixtures.courses.length + 1 + '';
+        fixtures.courses.push(newCourse);
+
+        return [200, newCourse];
+      });
+
+      httpBackend.whenPUT(fixtures.url.courseOpen).respond(function(m, url){
+        var courseId = fixtures.url.courseOpen.exec(url)[1],
+          course = _.find(fixtures.courses, {id: courseId});
+
+        console.log('PUT ' + url);
+
+        course.opened = true;
+        return [200, {}];
+      });
+
+      httpBackend.whenPUT(fixtures.url.courseClose).respond(function(m, url){
+        var courseId = fixtures.url.courseClose.exec(url)[1],
+          course = _.find(fixtures.courses, {id: courseId});
+
+        console.log('PUT ' + url);
+
+        course.opened = false;
+        return [200, {}];
+      });
+
+      httpBackend.whenPOST(fixtures.url.coursePassword).respond(function(m, url, body){
+        var courseId = fixtures.url.coursePassword.exec(url)[1],
+          course = _.find(fixtures.courses, {id: courseId}),
+          req = JSON.parse(body);
+
+        console.log('POST ' + url + ' ' + body);
+
+        if (!course) {
+          return [404, {error: 'course not found.'}];
+        } else if (req.pw && course.pw === req.pw) {
+          return [200, {success: true}];
+        } else {
+          return [400, {success: false, error: 'wrong password'}];
+        }
+        return [200, {}];
+      });
+
+      httpBackend.whenPOST(fixtures.url.courseJoin).respond(function(m, url, body){
+        var courseId = fixtures.url.courseJoin.exec(url)[1],
+          course = _.find(fixtures.courses, {id: courseId}),
+          req = JSON.parse(body),
+          user = fixtures.users[req.userId];
+
+        console.log('POST ' + url + ' ' + body);
+
+        if (!course) {
+          return [404, {error: 'course not found.'}];
+        } else if (!user) {
+          return [400, {error: 'user not found.'}];
+        } else if (req.pw && course.pw !== req.pw) {
+          return [403, {success: false, error: 'wrong password'}];
+        } else {
+          if (!_.find(user.courses, {id: course.id})) {
+            user.courses.push(course);
+          }
+          return [200, {success: true, course: _.omit(course, 'pw')}];
+        }
+      });
+
+      // Everything else (like html templates) should go through
       httpBackend.whenGET(/.*/).passThrough();
     }
   ])

@@ -5,16 +5,18 @@
   'use strict';
 
   describe('oep.user.services', function() {
-    var $httpBackend, scope, rootScope, $http, bob, bobInfo, timeout;
+    var $httpBackend, scope, rootScope, $http, bob, bobInfo, timeout, fix, _;
 
-    beforeEach(module('oep.user.services'));
+    beforeEach(module('oep.user.services', 'oep.fixtures'));
 
-    beforeEach(inject(function(_$httpBackend_, $rootScope, _$http_, _$timeout_) {
+    beforeEach(inject(function(_$httpBackend_, $rootScope, _$http_, _$timeout_, $window, OEP_FIXTURES) {
       $httpBackend = _$httpBackend_;
       scope = $rootScope.$new();
       rootScope = $rootScope;
       $http = _$http_;
       timeout = _$timeout_;
+      fix = OEP_FIXTURES;
+      _ = $window._;
 
       bobInfo = {
         'name': 'Bob Coder',
@@ -258,6 +260,7 @@
 
     });
 
+
     describe('usersApi', function() {
       var usersApi;
 
@@ -295,7 +298,15 @@
       it('should query summary', function() {
         var data;
 
-        $httpBackend.expectGET('/api/v1/summary').respond({'schools':{'DHS':9},'genders':{'male':5}, 'services':{} });
+        $httpBackend.expectGET('/api/v1/summary').respond({
+          'schools': {
+            'DHS': 9
+          },
+          'genders': {
+            'male': 5
+          },
+          'services': {}
+        });
 
         usersApi.getSummary().then(function(_data_) {
           data = _data_;
@@ -377,7 +388,7 @@
           name: 'AAA'
         }]);
 
-        usersApi.availableSchools().then(function(_resp_){
+        usersApi.availableSchools().then(function(_resp_) {
           resp = _resp_;
         });
 
@@ -399,14 +410,137 @@
           name: 'Other'
         }]);
 
-        usersApi.availableSchools().then(function(_resp_){
+        usersApi.availableSchools().then(function(_resp_) {
           resp = _resp_;
         });
 
         $httpBackend.flush();
         expect(resp[2].name).toBe('Other');
       });
+
+      it('should fetch the list of courses', function() {
+        $httpBackend.expectGET(fix.url.allCourses).respond({
+          courses: [],
+          cursor: ''
+        });
+        usersApi.courses.all();
+        $httpBackend.flush();
+      });
+
+      it('should fetch the list of opened courses', function() {
+        $httpBackend.expectGET(fix.url.openedCourses).respond({
+          courses: [],
+          cursor: ''
+        });
+        usersApi.courses.all(true);
+        $httpBackend.flush();
+      });
+
+      it('should add new courses', function() {
+        var req, resp, data = {
+          name: 'foo',
+          opened: true,
+          pw: 'password'
+        };
+
+        $httpBackend.expectPOST(fix.url.allCourses).respond(function(m, u, body) {
+          req = JSON.parse(body);
+          return [200, _.assign({
+            id: '1'
+          }, req)];
+        });
+
+        usersApi.courses.add(data).then(function(_resp_) {
+          resp = _resp_;
+        });
+
+        $httpBackend.flush();
+        expect(req).toEqual(data);
+        expect(resp.id).toEqual('1');
+        expect(resp.name).toEqual(data.name);
+      });
+
+      it('should open courses', function() {
+        var course = {
+            id: '1234',
+            name: 'foo',
+            opened: false
+          },
+          courseId;
+
+        $httpBackend.expectPUT(fix.url.courseOpen).respond(function(m, url) {
+          courseId = fix.url.courseOpen.exec(url)[1];
+          return [200, {}];
+        });
+        usersApi.courses.open(course);
+        $httpBackend.flush();
+        expect(courseId).toBe('1234');
+        expect(course.opened).toBe(true);
+      });
+
+      it('should close courses', function() {
+        var course = {
+            id: '1234',
+            name: 'foo',
+            opened: true
+          },
+          courseId;
+
+        $httpBackend.expectPUT(fix.url.courseClose).respond(function(m, url) {
+          courseId = fix.url.courseClose.exec(url)[1];
+          return [200, {}];
+        });
+
+        usersApi.courses.close(course);
+        $httpBackend.flush();
+        expect(courseId).toBe('1234');
+        expect(course.opened).toBe(false);
+      });
+
+      it('should test course password', function() {
+        var courseId, req;
+
+        $httpBackend.expectPOST(fix.url.coursePassword).respond(function(m, url, body) {
+          courseId = fix.url.coursePassword.exec(url)[1];
+          req = JSON.parse(body);
+          return [200, {
+            'success': true
+          }];
+        });
+
+        usersApi.courses.testPassword('1234', 'password');
+        $httpBackend.flush();
+
+        expect(courseId).toBe('1234');
+        expect(req).toEqual({
+          id: '1234',
+          pw: 'password'
+        });
+      });
+
+      it('should add a student to a course', function() {
+        var courseId, req;
+
+        $httpBackend.expectPOST(fix.url.courseJoin).respond(function(m, url, body) {
+          courseId = fix.url.courseJoin.exec(url)[1];
+          req = JSON.parse(body);
+          return [200, {
+            'success': true
+          }];
+        });
+
+        usersApi.courses.join({id: '1234', pw: 'password'}, fix.users.Shannon);
+        $httpBackend.flush();
+
+        expect(courseId).toBe('1234');
+        expect(req).toEqual({
+          id: '1234',
+          userId: fix.users.Shannon.id,
+          pw: 'password'
+        });
+      });
     });
+
   });
 
 })();
