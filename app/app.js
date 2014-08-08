@@ -144,7 +144,13 @@
                 return user;
               });
             }
-          ]
+          ],
+          availableSchools: ['oepUsersApi', function(oepUsersApi) {
+            return oepUsersApi.availableSchools();
+          }],
+          availableCourses: ['oepUsersApi', function(oepUsersApi) {
+            return oepUsersApi.courses.all(true);
+          }]
         }
       }).
       when('/', {

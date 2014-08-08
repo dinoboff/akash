@@ -343,7 +343,6 @@
 
         console.log('GET ' + url);
 
-        console.log(params);
         if (params.opened) {
           courses = _(fixtures.courses).filter({opened: true});
         } else {

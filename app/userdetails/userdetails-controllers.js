@@ -83,23 +83,39 @@
    * TODO: move the logic to extract the referrer out into a service.
    *
    */
-  function OepUserFormListCtrl($location, $window, settings, currentUserApi, usersApi, user) {
-    var self = this,
-      $ = $window.jQuery,
+  function OepUserFormListCtrl($location, $window, currentUserApi, usersApi, settings, user, availableSchools, availableCourses) {
+    var $ = $window.jQuery,
+      _ = $window._,
       search = $window.location.search,
       refPattern = /\?([^&]+&)*ref=([^&]+)(&.*)?/,
       match = refPattern.exec(search);
 
     this.$ = $;
+    this._ = _;
     this.location = $location;
+    this.alert = $window.alert;
     this.currentUserApi = currentUserApi;
+    this.usersApi = usersApi;
     this.saving = false;
     this.userIdPattern = /^[-\w\d.]+$/;
     this.isNewUser = !user.info;
     this.user = $.extend({}, user);
     this.ref = match && match.length > 2 ? match[2] : null;
     this.options = $.extend({}, settings.userOptions);
-    this.options.schools = {choices: []};
+    this.options.schools = {
+      choices: availableSchools
+    };
+
+    this.newCourse = {
+      selected: {},
+      allCourses: availableCourses,
+      available: _.filter(availableCourses, function(course) {
+        if (!user.info || !user.info.courses) {
+          return course;
+        }
+        return !_.find(user.info.courses, {id: course.id});
+      })
+    };
 
     if (!this.user.info) {
       this.newUserInfo();
@@ -110,10 +126,6 @@
       this.user.info.id = defaultId(user.name);
       this.user.info.name = defaultName(user.name);
     }
-
-    usersApi.availableSchools().then(function(schools) {
-      self.options.schools.choices = schools;
-    });
   }
 
   OepUserFormListCtrl.prototype = {
@@ -131,6 +143,7 @@
 
     /**
      * Save/create user info.
+     *
      */
     save: function(userInfo) {
       var self = this;
@@ -141,24 +154,56 @@
         self.location.path('/');
         self.saving = false;
       });
+    },
+
+    /**
+     * Join a course.
+     *
+     */
+    addCourse: function(course, pwField) {
+      var self = this;
+
+      this.usersApi.courses.join(course, this.user.info).then(function(result) {
+        delete course.id;
+        delete course.pw;
+        self.user.info.courses.push(result);
+        self.newCourse.available = self._.remove(
+          self.newCourse.available, {id: result.id}
+        );
+      }).catch(function(resp) {
+        if (resp.status === 403) {
+          pwField.$setValidity('wrongPassword', false);
+        } else {
+          self.alert('Failed to register you to the course.');
+        }
+      });
     }
   };
 
   // Summary controller
   function SummaryController(oepUsersApi) {
     var self = this;
-    
+
     oepUsersApi.getSummary().then(function(summary) {
       self.summary = summary;
     });
-  
+
   }
 
   angular.module('oep.userdetails.controllers', ['oep.config', 'oep.user.services', 'eop.card.directives', 'eop.card.services']).
 
   controller('OepUserCtrl', ['user', 'oepUsersApi', 'eopReportCardApi', 'oepCurrentUserApi', '$q', OepUserCtrl]).
-  controller('OepUserFormListCtrl', ['$location', '$window', 'oepSettings', 'oepCurrentUserApi', 'oepUsersApi', 'user', OepUserFormListCtrl]).
-  controller('SummaryController', ['oepUsersApi', SummaryController])
-  ;
+  controller('OepUserFormListCtrl', [
+    '$location',
+    '$window',
+    'oepCurrentUserApi',
+    'oepUsersApi',
+    'oepSettings',
+    'user',
+    'availableSchools',
+    'availableCourses',
+    OepUserFormListCtrl
+  ]).
+  controller('SummaryController', ['oepUsersApi', SummaryController]);
 
 })();
