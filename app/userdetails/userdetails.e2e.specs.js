@@ -149,6 +149,39 @@
               }
             });
 
+            function parseQuery(q) {
+              var params = {};
+
+              q.split('&').forEach(function(pair) {
+                var parts = pair.split('=');
+                params[parts[0]] = parts[1];
+              });
+
+              return params;
+            }
+
+            // Courses
+            $httpBackend.whenGET(fix.url.courses).respond(function(m, url) {
+              var query = fix.url.courses.exec(url)[1] || '',
+                params = parseQuery(query),
+                courses;
+
+              console.log('GET ' + url);
+
+              if (params.opened) {
+                courses = _(fix.courses).filter({opened: true});
+              } else {
+                courses = _(fix.courses);
+              }
+
+              var resp = {
+                courses: courses.omit('pw').map().value(),
+                cursor: null
+              };
+
+              return [200, resp];
+            });
+
             $httpBackend.whenGET(/.*/).passThrough();
           });
       },
