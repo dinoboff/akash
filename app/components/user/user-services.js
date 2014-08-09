@@ -136,6 +136,51 @@
           });
 
           return schoolsPromise;
+        },
+
+        courses: {
+          all: function(opened) {
+            var params = {};
+
+            if (opened) {
+              params.opened = true;
+            }
+
+            return oepApi.all('courses').getList(params);
+          },
+
+          add: function(course) {
+            return oepApi.all('courses').post(course);
+          },
+
+          open: function(course) {
+            return oepApi.one('courses', course.id).one('opened').put().then(function() {
+              course.opened = true;
+            });
+          },
+
+          close: function(course) {
+            return oepApi.one('courses', course.id).one('closed').put().then(function() {
+              course.opened = false;
+            });
+          },
+
+          testPassword: function(courseId, password) {
+            return oepApi.one('courses', courseId).all('password').post({
+              id: courseId,
+              pw: password
+            });
+          },
+
+          join: function(course, user) {
+            return oepApi.one('courses', course.id).all('participants').post({
+              id: course.id,
+              userId: user.id,
+              pw: course.pw
+            }).then(function(result) {
+              return result.course;
+            });
+          }
         }
       };
     }
