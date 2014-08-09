@@ -337,7 +337,7 @@
 
       // Courses
       httpBackend.whenGET(fixtures.url.courses).respond(function(m, url) {
-        var query = fixtures.url.courses.exec(url)[1],
+        var query = fixtures.url.courses.exec(url)[1] || '',
           params = parseQuery(query),
           courses;
 
