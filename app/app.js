@@ -53,6 +53,11 @@
             function(oepUsersApi) {
               return oepUsersApi.availableSchools();
             }
+          ],
+          'allCourses': ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.courses.all();
+            }
           ]
         },
         adminMenuResolver = ['$location', 'oepCurrentUserApi',

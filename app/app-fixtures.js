@@ -179,7 +179,11 @@
             'id': 'shannonboesch'
           }
         },
-        'courses': []
+        'courses': [{
+          id: '2',
+          name: 'SMU MITB Cloud and Big Data Analytics 2014',
+          opened: true
+        }]
       },
 
       'ProfChris': {
@@ -248,7 +252,11 @@
             'points': 16678
           }
         },
-        'courses': []
+        'courses': [{
+          id: '1',
+          name: 'SMU MITB Cloud and Big Data Analytics 2013',
+          opened: false
+        }]
       },
 
       'dinoboff': {
@@ -267,7 +275,11 @@
             'id': 'dinoboff'
           }
         },
-        'courses': []
+        'courses': [{
+          id: '2',
+          name: 'SMU MITB Cloud and Big Data Analytics 2014',
+          opened: true
+        }]
       },
     },
     profiles: {

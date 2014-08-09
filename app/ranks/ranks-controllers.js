@@ -32,7 +32,8 @@
     'oepSettings',
     'currentUser',
     'availableSchools',
-    function OepRanksShowRanks($routeParams, window, $location, userApi, settings, currentUser, availableSchools) {
+    'allCourses',
+    function OepRanksShowRanks($routeParams, window, $location, oepUsersApi, settings, currentUser, availableSchools, allCourses) {
       var self = this,
         $ = window.jQuery;
 
@@ -41,6 +42,11 @@
         id: 'schools',
         name: 'Schools',
         choices: availableSchools
+      };
+      this.filterOptions.courses = {
+        id: 'courses',
+        name: 'Courses',
+        choices: allCourses
       };
 
       this.filterBy = null;
@@ -81,8 +87,7 @@
        */
       this.getRanks = function() {
         this.ranks = null;
-        console.dir(this.rankOpts);
-        return userApi.getRanks(this.rankOpts).then(function(ranks) {
+        return oepUsersApi.getRanks(this.rankOpts).then(function(ranks) {
           self.ranks = ranks;
           self.setUserStats();
           return ranks;

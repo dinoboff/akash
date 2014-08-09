@@ -304,6 +304,8 @@
             };
           } else if (params.filterByType === 'schools') {
             filterProperty.school = params.filterByValue;
+          } else if (params.filterByType === 'courses') {
+            filterProperty.courses = [{id: params.filterByValue}];
           } else {
             filterProperty[params.filterByType] = params.filterByValue;
           }
