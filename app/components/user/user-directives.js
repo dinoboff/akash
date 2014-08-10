@@ -48,7 +48,34 @@
         }
       };
     }
-  ])
+  ]).
+
+  /**
+   * It will reset the error message after ant edit of model
+   */
+  directive('oepResetErrors', [function() {
+    return {
+      require: 'ngModel',
+      link: function(s, e, attr, ctrl) {
+        var errorIds = attr.oepResetErrors.split(','),
+          lastValue;
+
+        ctrl.$parsers.unshift(function(viewValue) {
+          if (lastValue === viewValue) {
+            return viewValue;
+          } else {
+            lastValue = viewValue;
+          }
+
+          for (var i = 0; i < errorIds.length; i++) {
+            ctrl.$setValidity(errorIds[i], true);
+          }
+
+          return viewValue;
+        });
+      }
+    };
+  }])
 
   ;
 

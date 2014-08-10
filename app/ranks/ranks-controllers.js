@@ -8,9 +8,10 @@
 
   var module = angular.module(
     'oep.ranks.controllers', [
+      'eop.card.directives', // TODO: rename
+      'ngRoute',
       'oep.config',
-      'oep.user.services',
-      'eop.card.directives'
+      'oep.user.services'
     ]);
 
   /**
@@ -24,28 +25,35 @@
    *
    */
   module.controller('OepRanksShowRanks', [
-    'oepUsersApi',
-    'oepCurrentUserApi',
-    'oepSettings',
+    '$routeParams',
     '$window',
-    function OepRanksShowRanks(userApi, currentUserApi, settings, window) {
+    '$location',
+    'oepUsersApi',
+    'oepSettings',
+    'currentUser',
+    'availableSchools',
+    'allCourses',
+    function OepRanksShowRanks($routeParams, window, $location, oepUsersApi, settings, currentUser, availableSchools, allCourses) {
       var self = this,
         $ = window.jQuery;
-
-      this.currentUser = currentUserApi;
-      this.userApi = userApi;
 
       this.filterOptions = $.extend({}, settings.userOptions);
       this.filterOptions.schools = {
         id: 'schools',
         name: 'Schools',
-        choices: []
+        choices: availableSchools
+      };
+      this.filterOptions.courses = {
+        id: 'courses',
+        name: 'Courses',
+        choices: allCourses
       };
 
-      this.filterBy = {};
+      this.filterBy = null;
+      this.rankOpts = $.extend({sortBy: 'totalBadges'}, $routeParams);
       this.ranks = null;
       this.userStats = null;
-      this.sortBy = 'totalBadges';
+
 
       /** Methods **/
 
@@ -54,21 +62,23 @@
        * if he's not part of the top rank.
        */
       this.setUserStats = function() {
+        this.userStats = null;
+
         if (this.ranks === null) {
           return;
         }
 
-        if (!this.currentUser.data || !this.currentUser.data.stats) {
+        if (!currentUser.info || !currentUser.info.services) {
           return;
         }
 
         for (var i = 0; i < this.ranks.length; i++) {
-          if (this.ranks[i].id === this.currentUser.data.stats.id) {
+          if (this.ranks[i].id === currentUser.info.id) {
             return;
           }
         }
 
-        this.userStats = this.currentUser.data.stats;
+        this.userStats = currentUser.info.services;
       };
 
       /**
@@ -76,25 +86,8 @@
        *
        */
       this.getRanks = function() {
-        var opts = {};
-
-        if (
-          this.filterBy &&
-          this.filterBy.type &&
-          this.filterBy.type.id &&
-          this.filterBy.value &&
-          this.filterBy.value.id
-        ) {
-          opts.filterByType = this.filterBy.type.id;
-          opts.filterByValue = this.filterBy.value.id;
-        }
-
-        if (this.sortBy) {
-          opts.sortBy = this.sortBy;
-        }
-
         this.ranks = null;
-        return this.userApi.getRanks(opts).then(function(ranks) {
+        return oepUsersApi.getRanks(this.rankOpts).then(function(ranks) {
           self.ranks = ranks;
           self.setUserStats();
           return ranks;
@@ -106,7 +99,7 @@
        *
        */
       this.getRanksSortedBy = function(sortBy) {
-        this.sortBy = sortBy;
+        this.rankOpts.sortBy = sortBy;
         return this.getRanks();
       };
 
@@ -115,18 +108,47 @@
        *
        */
       this.filterTypeChanged = function() {
-        if (this.filterBy.value) {
-          this.filterBy.value = null;
+        if (this.filterBy && this.filterBy.id) {
+          this.rankOpts.filterByType = this.filterBy.id;
+        } else {
+          delete this.rankOpts.filterByType;
+        }
+        if (this.rankOpts.filterValue) {
+          delete this.rankOpts.filterValue;
           this.getRanks();
         }
       };
 
+      /**
+       * Build link to current to current rank
+       */
+      this.link = function() {
+        var loc = window.location,
+          parts = [loc.protocol, '//', loc.host, loc.pathname, '#/ranks'];
+
+        if (
+          this.rankOpts.sortBy &&
+          this.rankOpts.filterByType &&
+          this.rankOpts.filterByValue
+        ) {
+          parts.push(
+            '/', this.rankOpts.sortBy,
+            '/', this.rankOpts.filterByType,
+            '/', this.rankOpts.filterByValue
+          );
+        }
+
+        return parts.join('');
+      };
+
       /** init. ranks **/
 
-      currentUserApi.auth().then(this.setUserStats.bind(this));
-      userApi.availableSchools().then(function(schools) {
-        self.filterOptions.schools.choices = schools;
-      });
+      if (this.rankOpts.filterByType) {
+        this.filterBy = window._.find(
+          this.filterOptions, {id: this.rankOpts.filterByType}
+        );
+      }
+
       this.getRanks();
     }
   ]);

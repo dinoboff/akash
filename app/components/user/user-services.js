@@ -71,14 +71,14 @@
         getRanks: function(filterBy) {
           return oepApi.all('ranks').getList(filterBy);
         },
-        
+
         //Chris attempt at adding Restacular endpoint.
         getSummary: function() {
           //return oepApi.all('summary').getList();
           //return oepApi.one('summary').get();
           // Just ONE GET to /accounts/123/buildings/456
           return oepApi.one('summary').get();
-          
+
         },
         /**
          * Request the users badges info to be updated.
@@ -118,7 +118,7 @@
                 return 0;
               } else if (a.id === '0') {
                 return 1;
-              } else if (b.id === '0' ) {
+              } else if (b.id === '0') {
                 return -1;
               }
 
@@ -136,6 +136,51 @@
           });
 
           return schoolsPromise;
+        },
+
+        courses: {
+          all: function(opened) {
+            var params = {};
+
+            if (opened) {
+              params.opened = true;
+            }
+
+            return oepApi.all('courses').getList(params);
+          },
+
+          add: function(course) {
+            return oepApi.all('courses').post(course);
+          },
+
+          open: function(course) {
+            return oepApi.one('courses', course.id).one('opened').put().then(function() {
+              course.opened = true;
+            });
+          },
+
+          close: function(course) {
+            return oepApi.one('courses', course.id).one('closed').put().then(function() {
+              course.opened = false;
+            });
+          },
+
+          testPassword: function(courseId, password) {
+            return oepApi.one('courses', courseId).all('password').post({
+              id: courseId,
+              pw: password
+            });
+          },
+
+          join: function(course, user) {
+            return oepApi.one('courses', course.id).all('participants').post({
+              id: course.id,
+              userId: user.id,
+              pw: course.pw
+            }).then(function(result) {
+              return result.course;
+            });
+          }
         }
       };
     }
@@ -155,6 +200,8 @@
    */
   factory('oepCurrentUserApi', ['$location', '$q', 'oepApi', '$window',
     function($location, $q, oepApi, window) {
+      var _ = window._;
+
       api = {
         data: null,
         loading: null,
@@ -209,7 +256,15 @@
          *
          */
         save: function(data) {
-          return oepApi.one('user').customPUT(data);
+          var info = _.pick(
+            data, ['id', 'name', 'gender', 'yearOfBirth', 'school', 'services']
+          );
+
+          info.services = _.pick(
+            info.services, ['treeHouse', 'codeSchool', 'codeCombat']
+          );
+
+          return oepApi.one('user').customPUT(info);
         },
 
         /**

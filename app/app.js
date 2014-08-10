@@ -12,10 +12,17 @@
       url: '/admin/metrics',
       title: 'Metrics'
     },
+
     suggestions: {
       url: '/admin/suggestions',
       title: 'Suggestions'
+    },
+
+    courses: {
+      url: '/admin/courses',
+      title: 'Courses'
     }
+
   };
 
   angular.module(
@@ -37,6 +44,40 @@
 
   config(['$routeProvider',
     function($routeProvider) {
+      var rankResolver = {
+          'currentUser': ['oepCurrentUserApi',
+            function(oepCurrentUserApi) {
+              return oepCurrentUserApi.auth();
+            }
+          ],
+          'availableSchools': ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.availableSchools();
+            }
+          ],
+          'allCourses': ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.courses.all();
+            }
+          ]
+        },
+        adminMenuResolver = ['$location', 'oepCurrentUserApi',
+          function($location, oepCurrentUserApi) {
+            // Resolve the the menu object
+            // And check user permission.
+            return oepCurrentUserApi.auth().then(function(user) {
+              if (user && user.isAdmin) {
+                return adminMenu;
+              } else {
+                $location.path('/');
+                return;
+              }
+            }).catch(function() {
+              $location.path('/');
+            });
+          }
+        ];
+
       $routeProvider.
       when('/admin', {
         redirectTo: adminMenu.metrics.url
@@ -46,9 +87,7 @@
         controller: 'OepAdminMetrixCtrl',
         controllerAs: 'ctrl',
         resolve: {
-          menu: function() {
-            return adminMenu;
-          }
+          menu: adminMenuResolver
         }
       }).
       when(adminMenu.suggestions.url, {
@@ -56,9 +95,25 @@
         controller: 'OepAdminSuggestionsCtrl',
         controllerAs: 'ctrl',
         resolve: {
-          menu: function() {
-            return adminMenu;
-          }
+          menu: adminMenuResolver,
+          suggestions: ['oepSuggestionsApi',
+            function(oepSuggestionsApi) {
+              return oepSuggestionsApi.get();
+            }
+          ]
+        }
+      }).
+      when(adminMenu.courses.url, {
+        templateUrl: 'admin/admin-courses.html',
+        controller: 'OepAdminCoursesCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          menu: adminMenuResolver,
+          courses: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.courses.all();
+            }
+          ]
         }
       }).
       when('/suggestion', {
@@ -90,6 +145,13 @@
         templateUrl: 'ranks/ranks.html',
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
+        resolve: rankResolver
+      }).
+      when('/ranks/:sortBy/:filterByType/:filterByValue', {
+        templateUrl: 'ranks/ranks.html',
+        controller: 'OepRanksShowRanks',
+        controllerAs: 'ctrl',
+        resolve: rankResolver
       }).
       when('/events', {
         templateUrl: 'events/events-form.html',
@@ -133,6 +195,16 @@
                 }
                 return user;
               });
+            }
+          ],
+          availableSchools: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.availableSchools();
+            }
+          ],
+          availableCourses: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.courses.all(true);
             }
           ]
         }

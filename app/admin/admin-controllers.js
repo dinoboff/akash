@@ -10,34 +10,22 @@
 (function() {
   'use strict';
 
-  /**
-   * Check the the current user is an admin and populate scope with
-   * the admin menu items.
-   *
-   */
-  function init(scope, $location, currentUserApi, menu) {
-    scope.menu = menu;
-    scope.loading = true;
+  var module = angular.module(
+    'oep.admin.controllers', ['oep.user.services', 'oep.suggestions.services']
+  );
 
-    return currentUserApi.auth().then(function(user) {
-      if (user && user.isAdmin) {
-        return true;
-      } else {
-        $location.path('/');
-        return false;
-      }
-    })['finally'](function() {
-      scope.loading = false;
-    });
-  }
 
   /**
    * OepAdminMetrixCtrl - controller for the Metric partial.
-   *
+   * TODO: show metric charts
    */
-  function OepAdminMetrixCtrl($location, currentUserApi, menu) {
-    init(this, $location, currentUserApi, menu);
+  function OepAdminMetrixCtrl(menu) {
+    this.menu = menu;
   }
+
+  module.controller('OepAdminMetrixCtrl', ['menu', OepAdminMetrixCtrl]);
+
+
 
   /**
    * OepAdminSuggestionsCtrl - Controller for the suggestions partials.
@@ -46,45 +34,68 @@
    * with the list of suggestions, queried from the OEP API.
    *
    */
-  function OepAdminSuggestionsCtrl($location, currentUserApi, suggestionApi, $q, menu) {
+  function OepAdminSuggestionsCtrl(oepSuggestionsApi, menu, suggestions) {
     var self = this;
 
-    this.suggestionApi = suggestionApi;
+    // oepSuggestionsApi.get()
+    this.suggestions = suggestions;
+    this.menu = menu;
 
-    init(this, $location, currentUserApi, menu).then(function(isAdmin) {
-      if (!isAdmin) {
-        return $q.reject();
-      }
+    /**
+     * OepAdminSuggestionsCtrl.next - query more suggestions and add them
+     * to the list of suggestions.
+     *
+     */
+    this.next = function(cursor) {
+      oepSuggestionsApi.get(cursor).then(function(suggestions) {
+        if (!self.suggestions) {
+          self.suggestions = [];
+        }
 
-      return suggestionApi.get();
-    }).then(function(suggestions) {
-      self.suggestions = suggestions;
-    });
+        self.suggestions = self.suggestions.concat(suggestions);
+        self.suggestions.cursor = suggestions.cursor;
+      });
+    };
   }
 
+  module.controller('OepAdminSuggestionsCtrl', [
+    'oepSuggestionsApi', 'menu', 'suggestions', OepAdminSuggestionsCtrl
+  ]);
+
+
+
   /**
-   * OepAdminSuggestionsCtrl.next - query more suggestions and add them
-   * to the list of suggestions.
+   * OepAdminCoursesCtrl - Controller for creating and updating courses
    *
    */
-  OepAdminSuggestionsCtrl.prototype.next = function(cursor) {
+  function OepAdminCoursesCtrl(oepUsersApi, menu, courses) {
     var self = this;
 
-    this.suggestionApi.get(cursor).then(function(suggestions) {
-      if (!self.suggestions) {
-        self.suggestions = [];
-      }
+    this.menu = menu;
+    this.courses = courses;
 
-      self.suggestions = self.suggestions.concat(suggestions);
-      self.suggestions.cursor = suggestions.cursor;
-    });
-  };
+    this.open = function(course) {
+      oepUsersApi.courses.open(course).then(function() {
+        course.opened = true;
+      });
+    };
 
-  angular.module('oep.admin.controllers', ['oep.user.services', 'oep.suggestions.services']).
+    this.close = function(course) {
+      oepUsersApi.courses.close(course).then(function() {
+        course.opened = false;
+      });
+    };
 
-  controller('OepAdminMetrixCtrl', ['$location', 'oepCurrentUserApi', 'menu', OepAdminMetrixCtrl]).
-  controller('OepAdminSuggestionsCtrl', ['$location', 'oepCurrentUserApi', 'oepSuggestionsApi', '$q', 'menu', OepAdminSuggestionsCtrl])
+    this.add = function(course) {
+      oepUsersApi.courses.add(course).then(function(newCourse) {
+        self.courses.push(newCourse);
+        course.name = course.pw = course.opened = null;
+      });
+    };
+  }
 
-  ;
+  module.controller('OepAdminCoursesCtrl', [
+    'oepUsersApi', 'menu', 'courses', OepAdminCoursesCtrl
+  ]);
 
 })();
