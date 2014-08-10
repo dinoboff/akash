@@ -26,7 +26,6 @@
    */
   OepEventFormCtrl.prototype.save = function(event) {
     var self = this;
-    console.log("Here!")
     this.saving = true;
     this.saved = false;
 
@@ -47,14 +46,15 @@
 
     this.saving = false;
     this.saved = false;
-    this.event = {};    
-    this.theEvent.eventName = 'My Event';
-    this.theEvent.schoolType = 'Poly';
-    this.theEvent.count = 40;
-    this.theEvent.criteria = 'Rescue Mission badge';
-    this.theEvent.service = 'Code Combat';
-    this.theEvent.reward = 'earn a letter of recommendation for university applications';
-    this.theEvent.comments = 'Have fun!';
+    this.event = {};
+    this.event.eventName = 'My Event';
+    this.event.schoolType = 'Polytechnic';
+    this.event.school = 'Republic Polytechnic';
+    this.event.count = 40;
+    this.event.criteria = 'Earn 1 Badge';
+    this.event.service = 'Code Combat';
+    this.event.reward = 'Earn a letter of recommendation for university applications';
+    this.event.comments = 'Have fun!';
 
     this.currentUser.auth().then(function(data) {
       if (!data || !data.info || !data.info.email) {

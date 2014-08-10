@@ -40,7 +40,7 @@
         var results;
 
         httpBackend.expectGET('/api/v1/events').respond(
-          '{"events":[{"eventName":"My Event","schoolType":"Poly","count":1,"criteria":"Rescue Mission badge","service":"Code Combat","reward":"earn a letter of recommendation for university applications","comments":"Have fun.","from":"me@example.com"}], ' +
+          '{"events":[{"eventName":"My Event","schoolType":"Polytechnic","school":"Republic Polytechnic","count":40,"criteria":"Earn 1 Badge","service":"Code Combat","reward":"Earn a letter of recommendation for university applications","comments":"Have fun.","from":"me@example.com"}], ' +
           '"cursor": "abcd"}'
         );
 
@@ -61,7 +61,7 @@
       });
 
       it('should post new events', function() {
-        var data, event = {"eventName":"My Event","schoolType":"Poly","count":1,"criteria":"Rescue Mission badge","service":"Code Combat","reward":"earn a letter of recommendation for university applications","comments":"Have fun.","from":"me@example.com"};
+        var data, event = {'eventName':'My Event','schoolType':'Polytechnic','school':'Republic Polytechnic','count':40,'criteria':'Earn 1 Badge','service':'Code Combat','reward':'Earn a letter of recommendation for university applications','comments':'Have fun.','from':'me@example.com'};
 
         httpBackend.expectPOST('/api/v1/events').respond(function(m, u, body) {
           data = JSON.parse(body);
@@ -71,7 +71,7 @@
         api.create(event);
         httpBackend.flush();
 
-        expect(data).toEqual(suggestion);
+        expect(data).toEqual(event);
       });
 
     });

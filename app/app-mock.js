@@ -25,6 +25,7 @@
     function(httpBackend, fixtures, window, reportCardApi) {
       var users = fixtures.users, // List of user info,
         suggestions = [],
+        events = [],
         chrisId = null, // Id of Chris, our logged in user.
         _ = window._,
         updateBadges = function(id) {
@@ -326,6 +327,17 @@
         suggestion.createdAt = new Date().toUTCString();
 
         return [200, suggestion];
+      });
+      
+      // New event
+      httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
+        var event = JSON.parse(body);
+
+        events.push(event);
+        event.id = events.length;
+        event.createdAt = new Date().toUTCString();
+
+        return [200, event];
       });
 
       // Everything else (like html templates) should go pass through
