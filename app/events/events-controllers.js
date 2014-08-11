@@ -14,9 +14,32 @@
    * Populate the scope currentUser property with current user info.
    *
    */
-  function OepEventFormCtrl(currentUser, eventApi) {
+  function OepEventFormCtrl(currentUser, eventApi, availableSchools) {
     this.api = eventApi;
     this.currentUser = currentUser;
+    this.schools = {
+      id: 'schools',
+      name: 'Schools',
+      choices: availableSchools
+    };
+    this.services = {
+      id: 'services',
+      name: 'Services',
+      choices: [
+        {'id': '1', 'name': 'Code School'},
+        {'id': '2', 'name': 'Treehouse'},
+        {'id': '3', 'name': 'Code Combat'}
+      ]
+    };
+    this.criteria = {
+      id: 'criteria',
+      name: 'Criteria',
+      choices: [
+        {'id': '1', 'name': 'Earn 2 badges'},
+        {'id': '2', 'name': 'Earn 5 badges'},
+        {'id': '3', 'name': 'Earn maximum badges'}
+      ]
+    };
     this.reset();
   }
 
@@ -48,11 +71,10 @@
     this.saved = false;
     this.event = {};
     this.event.eventName = 'My Event';
-    this.event.schoolType = 'Polytechnic';
-    this.event.school = 'Republic Polytechnic';
+    this.event.school = 'Any';
     this.event.count = 40;
-    this.event.criteria = 'Earn 1 Badge';
-    this.event.service = 'Code Combat';
+    this.event.criteria = 'Earn 1 badge';
+    this.event.service = 'Any';
     this.event.reward = 'Earn a letter of recommendation for university applications';
     this.event.comments = 'Have fun!';
 
@@ -74,6 +96,7 @@
   controller('OepEventFormCtrl', [
     'oepCurrentUserApi',
     'oepEventsApi',
+    'availableSchools',
     OepEventFormCtrl
   ])
 
