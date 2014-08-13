@@ -157,6 +157,7 @@
         templateUrl: 'ranks/ranks.html',
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
+        resolve: rankResolver
       }).
       when('/user/:userId', {
         templateUrl: 'userdetails/userdetails-user.html',
