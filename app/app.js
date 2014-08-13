@@ -33,6 +33,7 @@
       'oep.admin.directives',
       'oep.controllers',
       'oep.ranks.controllers',
+      'oep.events.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
@@ -139,6 +140,12 @@
         templateUrl: 'oneteam/d.html',
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
+      }).
+      when('/events', {
+        templateUrl: 'events/events-form.html',
+        controller: 'OepEventFormCtrl',
+        controllerAs: 'ctrl',
+        resolve: rankResolver
       }).
       when('/ranks', {
         templateUrl: 'ranks/ranks.html',
