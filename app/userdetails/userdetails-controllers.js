@@ -41,6 +41,9 @@
   function OepUserCtrl(user, userApi, reportCardApi, currentUserApi) {
     var self = this;
 
+    //quick hack
+
+    
     this.userApi = userApi;
     this.reportCardApi = reportCardApi;
     this.profile = user;

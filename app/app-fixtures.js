@@ -155,7 +155,8 @@
       'isLoggedIn': true,
       'isAdmin': true,
       'logoutUrl': '/logout',
-      'name': 'chris@example.com'
+      'name': 'chris@example.com',
+      'internship': {'company':[]}
     },
     chris: function(info) {
       return {

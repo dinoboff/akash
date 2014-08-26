@@ -255,3 +255,43 @@
         </div>
     </form>
 </div>
+
+<div ng-if="!ctrl.isNewUser">
+    <h2>Internships</h2>
+    <hr/>
+     
+          <input type="checkbox" name="interestedInInternships"
+                   ng-model="ctrl.user.internship.interestedInInternshps"/> <b>I'm interested in internships.</b><br>
+        
+        <div ng-show='ctrl.user.internship.interestedInInternshps==true' class="col-sm-8">
+        
+          <div>
+              What companies would you like to intern at? <br>
+              You can choose  up to 5 or enter additional companies.<br>
+              <div ng-repeat="name in ['google', 'facebook','paypal','visa','carousel']">
+                <input type="checkbox" ng-model="ctrl.user.internship.company[name]"/> {{name}}
+              </div>
+              <input type="checkbox" ng-model="ctrl.user.internship.company.blank1"/> <input type="text"> Add your own company preference.<br>
+              <div ng-show="ctrl.user.internship.company.blank1==true">
+              <input  type="checkbox" ng-model="ctrl.user.internship.company.blank2"/> <input type="text"> Add your own company preference.
+            </div>
+
+            <b> When would you like to intern?</b><br>
+            Start: <input type="date" id="exampleInput" name="input" ng-model="internship.startdate"
+                      placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
+            Stop: <input type="date" id="exampleInput" name="input" ng-model="internship.stopdate"
+                     placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required /><br>
+            
+            Start: <input type="date" id="exampleInput" name="input" ng-model="internship.startdate2"
+                      placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
+            Stop: <input type="date" id="exampleInput" name="input" ng-model="internship.stopdate2"
+                     placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required /><br>
+        </div>
+                    
+            <input type="checkbox" name="emailMeAboutInternships"
+                   ng-model="ctrl.user.internship.emailMeAboutInternshps"/> Email me about my internship choices.<br>  
+            <input type="checkbox" name="emailMeAboutRecommendedInternships"
+                   ng-model="ctrl.user.internship.emailMeAboutRecommendedInternshps"/> Email me about recommended internships.<br>   
+
+          
+</div>
