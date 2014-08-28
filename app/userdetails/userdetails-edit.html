@@ -256,7 +256,7 @@
     </form>
 </div>
 
-<div ng-if="!ctrl.isNewUser">
+<div> <!--<div ng-if="!ctrl.isNewUser">-->
     <h2>Internships</h2>
     <hr/>
      
@@ -268,7 +268,7 @@
           <div>
               What companies would you like to intern at? <br>
               You can choose  up to 5 or enter additional companies.<br>
-              <div ng-repeat="name in ['google', 'facebook','paypal','visa','carousel']">
+              <div ng-repeat="name in ['Accenture','Amazon','Carousel','Cisco','Facebook','Google','HP','IBM','Neo','Nitrous.io','PayPal','RevolutionR','Salesforce','SAP','SAS','Singtel','Viki','Visa']">
                 <input type="checkbox" ng-model="ctrl.user.internship.company[name]"/> {{name}}
               </div>
               <input type="checkbox" ng-model="ctrl.user.internship.company.blank1"/> <input type="text"> Add your own company preference.<br>
