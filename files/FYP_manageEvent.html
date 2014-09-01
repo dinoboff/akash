@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+	<!-- Basic Page Needs
+	================================================== -->
+	<meta charset="utf-8">
+	<title>1Platform</title>
+	<meta name="description" content="Think of something later....">
+	<meta name="author" content="1Platform">
+	<!-- Mobile Specific Metas
+	================================================== -->
+	<!-- meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"-->
+	<!-- CSS
+	================================================== -->
+	<!-- Bootstrap  -->
+	<link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<!-- web font  -->
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+	<!-- plugin css  -->
+	<link rel="stylesheet" type="text/css" href="js-plugin/animation-framework/animate.css">
+	<!-- Pop up-->
+	<link rel="stylesheet" type="text/css" href="js-plugin/magnific-popup/magnific-popup.css">
+	<!-- Flex slider-->
+	<link rel="stylesheet" type="text/css" href="js-plugin/flexslider/flexslider.css">
+	<!-- Owl carousel-->
+	<link rel="stylesheet" href="js-plugin/owl.carousel/owl-carousel/owl.carousel.css">
+	<link rel="stylesheet" href="js-plugin/owl.carousel/owl-carousel/owl.transitions.css">
+	<link rel="stylesheet" href="js-plugin/owl.carousel/owl-carousel/owl.theme.css">
+	<!-- icon fonts -->
+	<link type="text/css" rel="stylesheet" href="font-icons/custom-icons/css/custom-icons.css">
+	<link type="text/css" rel="stylesheet" href="font-icons/custom-icons/css/custom-icons-ie7.css">
+	<!-- nekoAnim-->
+	<link rel="stylesheet" type="text/css" href="js-plugin/appear/nekoAnim.css">
+	<!-- Custom css -->
+	<link type="text/css" rel="stylesheet" href="css/layout.css">
+	<link type="text/css" id="colors" rel="stylesheet" href="css/light.css">
+	<link type="text/css" rel="stylesheet" href="css/custom.css">
+	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
+	<script src="js/modernizr-2.6.1.min.js"></script>
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="images/apple-touch-icon-144x144.png">
+</head>
+<body>
+	<!-- Primary Page Layout 
+	================================================== -->
+	<!-- globalWrapper -->
+	<div id="globalWrapper" >
+		<header class="navbar-fixed-top">			
+			<!-- header -->
+			<div id="mainHeader" role="banner">
+				<div class="container">
+					<nav class="navbar navbar-default scrollMenu" role="navigation">
+						<div class="navbar-header">
+							<!-- responsive navigation -->
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<!-- Logo -->
+							<a class="navbar-brand" href="index.html"><img src="images/main-logo.png" alt="1Platform"/></a>
+						</div>
+						<div class="collapse navbar-collapse" id="mainMenu">
+							<!-- Main navigation -->
+							<ul class="nav navbar-nav pull-right">
+
+								<li class="primary">
+									<a href="FYP_profile_v2.html" class="firstLevel hasSubMenu" >Home</a>
+								</li>
+								<li class="sep"></li>
+								<li class="primary"> 
+									<a href="FYP_ranks.html" class="firstLevel hasSubMenu" >Ranks</a>
+								</li>
+								<li class="sep"></li>
+								<li class="primary">
+									<a href="FYP_manageEvent.html" class="firstLevel active hasSubMenu">Fun Stuff</a>
+								</li>
+								
+								<li class="sep"></li>
+								<li class="primary">
+									<a href="FYP_contactUs.html" class="firstLevel hasSubMenu">Contact</a>
+								</li>
+								<li class="sep"></li>
+								<li id="lastMenu" class="last"><a href="FYP_homepage.html" class="firstLevel last">Logout</a></li>
+
+								<!-- Archit Changed This -->
+								
+							</ul>
+							<!-- End main navigation -->
+						</div>
+					</nav>
+				</div>
+			</div>
+		</header>
+		</br>
+		<div class="launchPreview" align="center">
+			<a href="FYP_manageEvent.html"><button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">Manage Events</button></a>
+			<a href="FYP_luckyDraw.html"><button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">Lucky Draw</button></a>
+			<a href="FYP_wishList.html"><button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">Wish List</button></a>
+			<a href="FYP_internOpp.html"><button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">Internship Opportunities</button></a>
+		</div>
+		<section id="content" class="mt30 pb30">
+			<div class="container">	
+				<div align="right">
+					<a href="FYP_createEvent.html"><button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">Create Event</button></a>
+				</div>
+				
+				<h1 align="left">Manage Events</h1>
+				<ul id="myTab" class="nav nav-tabs">
+					<li class="active"><a href="#overallRank" data-toggle="tab">Registered</a></li>
+					<li class=""><a href="#codeSchool" data-toggle="tab">Created</a></li>
+				</ul>
+				
+				<div id="myTabContent" class="tab-content" >
+					<div class="tab-pane fade active in" id="overallRank">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-11 pt20">
+									<div class="table-responsive">
+									<table class="table table-bordered">
+										<tbody align="center" >
+											<tr>
+												<td><b>Find the next coding "GODDESS"</b><br><br>
+													<b>Date:</b> 29th August, 2014<br><br>
+													<b>Time:</b> 5pm-8pm<br><br>
+													<b>Venue:</b> SMU LKCSB Seminar Room 3-3</td>
+												<td><img src="images/FYP/poster 1.png" alt="graph" class="img-responsive" width="300" height="300"/></td>
+											</tr>
+											<tr>
+												<td><b>DRUNKEN CODING</b><br><br>
+													<b>Date:</b> 5th September, 2014<br><br>
+													<b>Time:</b> 2pm-5pm<br><br>
+													<b>Venue:</b> SMU Concourse</td>
+												<td><img src="images/FYP/poster 2.png" alt="graph" class="img-responsive" width="300" height="300"/></td>
+											</tr>
+											<tr>
+												<td><b>Challenge a friend</b><br><br>
+													<b>Date:</b> 6th August, 2014<br><br>
+													<b>Time:</b> 11am-7pm<br><br>
+													<b>Venue:</b> SMU Admin Building - Sports Hall</td>
+												<td><img src="images/FYP/poster 3.png" alt="graph" class="img-responsive" width="300" height="300"/></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+								
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="codeSchool">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-5 pt20">
+									<div class="table-responsive">
+									<table class="table table-bordered">
+										<tbody align="center" >
+											<tr>
+												<td><b>Find the next coding "GODDESS"</b><br><br>
+													<b>Date:</b> 29th August, 2014<br><br>
+													<b>Time:</b> 5pm-8pm<br><br>
+													<b>Venue:</b> SMU LKCSB Seminar Room 3-3<br><br>
+													<div class="launchPreview" align="center">
+														<a href="FYP_statsEvent.html">
+														<button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">See Statistics</button>
+														</a>
+													</div>
+												</td>
+												
+											</tr>
+											<tr>
+												<td><b>DRUNKEN CODING</b><br><br>
+													<b>Date:</b> 5th September, 2014<br><br>
+													<b>Time:</b> 2pm-5pm<br><br>
+													<b>Venue:</b> SMU Concourse<br><br>
+													<div class="launchPreview" align="center">
+													<a href="FYP_statsEvent.html">
+														<button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">See Statistics</button>
+													</a>
+													</div>
+												</td>
+												
+											</tr>
+											<tr>
+												<td><b>Challenge a friend</b><br><br>
+													<b>Date:</b> 6th August, 2014<br><br>
+													<b>Time:</b> 11am-7pm<br><br>
+													<b>Venue:</b> SMU Admin Building - Sports Hall<br><br>
+												
+													<div class="launchPreview" align="center">
+													<a href="FYP_statsEvent.html">	
+														<button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">See Statistics</button>
+													</a>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+							</div>
+							<div class="col-md-1 pt20">
+							</div>
+							<div class="col-md-5 pt20">
+								<table class="table table-bordered">
+										<tbody align="center" >
+											<tr>
+												<td><b>Find the next coding "GODDESS"</b><br><br>
+													<b>Date:</b> 29th August, 2014<br><br>
+													<b>Time:</b> 5pm-8pm<br><br>
+													<b>Venue:</b> SMU LKCSB Seminar Room 3-3<br><br>
+													<div class="launchPreview" align="center">
+													<a href="FYP_statsEvent.html">
+														<button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">See Statistics</button>
+													</a>
+													</div>
+												</td>
+												
+											</tr>
+											<tr>
+												<td><b>DRUNKEN CODING</b><br><br>
+													<b>Date:</b> 5th September, 2014<br><br>
+													<b>Time:</b> 2pm-5pm<br><br>
+													<b>Venue:</b> SMU Concourse<br><br>
+													<div class="launchPreview" align="center">
+														<button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">See Statistics</button>
+													</div>
+												</td>
+												
+											</tr>
+											<tr>
+												<td><b>Challenge a friend</b><br><br>
+													<b>Date:</b> 6th August, 2014<br><br>
+													<b>Time:</b> 11am-7pm<br><br>
+													<b>Venue:</b> SMU Admin Building - Sports Hall<br><br>
+													<div class="launchPreview" align="center">
+														<button name="submit" type="submit" class="btn btn-primary btn-lg" id="submit">See Statistics</button>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+							</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</section>
+		<!-- header -->
+		<!-- ======================================= content ======================================= -->
+		<!--footer-->
+		<section id="footerRights">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<ul class="socialNetwork">
+							<li><a href="#" class="tips" title="follow me on Facebook"><i class="icon-facebook-1 iconRounded"></i></a></li>
+							<li><a href="#" class="tips" title="follow me on Twitter"><i class="icon-twitter-bird iconRounded"></i></a></li>
+							<li><a href="#" class="tips" title="follow me on Google+"><i class="icon-gplus-1 iconRounded"></i></a></li>
+							<li><a href="#" class="tips" title="follow me on Linkedin"><i class="icon-linkedin-1 iconRounded"></i></a></li>
+							<li><a href="#" class="tips" title="follow me on Dribble"><i class="icon-dribbble iconRounded"></i></a></li>
+						</ul>     
+					</div>
+					<div class="col-md-12">
+						<p>Copyright © 2014 <a href="#" target="blank">1Platform</a> / All rights reserved.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--footer-->
+		<!-- global wrapper -->
+	<!-- End Document 
+	================================================== -->
+	<script type="text/javascript" src="js-plugin/respond/respond.min.js"></script>
+	<script type="text/javascript" src="js-plugin/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="js-plugin/jquery-ui/jquery-ui-1.8.23.custom.min.js"></script>
+	<!-- third party plugins  -->
+	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="js-plugin/easing/jquery.easing.1.3.js"></script>
+	<!-- carousel -->
+	<script type="text/javascript" src="js-plugin/owl.carousel/owl-carousel/owl.carousel.min.js"></script>
+	<!-- pop up -->
+	<script type="text/javascript" src="js-plugin/magnific-popup/jquery.magnific-popup.min.js"></script>
+	<!-- flex slider -->
+	<script type="text/javascript" src="js-plugin/flexslider/jquery.flexslider-min.js"></script>
+	<!-- isotope -->
+	<script type="text/javascript" src="js-plugin/isotope/jquery.isotope.min.js"></script>
+	<!-- form -->
+	<script type="text/javascript" src="js-plugin/neko-contact-ajax-plugin/js/jquery.form.js"></script>
+	<script type="text/javascript" src="js-plugin/neko-contact-ajax-plugin/js/jquery.validate.min.js"></script>
+	<!-- parallax -->
+	<script type="text/javascript" src="js-plugin/parallax/js/jquery.stellar.min.js"></script>
+	<script type="text/javascript" src="js-plugin/parallax/js/jquery.localscroll-1.2.7-min.js"></script>
+	<!-- appear -->
+	<script type="text/javascript" src="js-plugin/appear/jquery.appear.js"></script>	
+	<!-- Custom  -->
+	<script type="text/javascript" src="js/custom.js"></script>
+</body>
+</html>
