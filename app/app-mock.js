@@ -112,7 +112,7 @@
         return [200, null];
       });
 
-      // upadte logged user's info
+      // update logged user's info
       httpBackend.whenPOST(fixtures.url.user).respond(function(m, u, rawData) {
         var data = JSON.parse(rawData), result;
 

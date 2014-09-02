@@ -85,18 +85,29 @@
               return [200, null];
             });
 
+            // update logged user's info
+            $httpBackend.whenPOST(fix.url.user).respond(function(m, u, rawData) {
+              var data = JSON.parse(rawData), result;
+
+              users[chrisId] = _.merge(users[chrisId], data);
+
+              result = _.cloneDeep(users[chrisId]);
+              updateBadges(chrisId);
+              return [200, fix.chris(result)];
+            });
+
             // Users info
             $httpBackend.whenGET(fix.url.users).respond(function(m, url) {
               var match = fix.url.users.exec(url),
                 id = match ? match[1] : null;
 
-              console.log(id);
               if (!id || !users[id]) {
                 return [404, fix.notFound];
               } else {
                 return [200, users[id]];
               }
             });
+
 
             // Code school id validation
             $httpBackend.whenGET(fix.url.codeSchoolCheck).respond(function(m, url) {
@@ -187,6 +198,8 @@
       },
 
       SettingPage = function() {
+        var self = this;
+
         this.url = 'http://0.0.0.0:5557/#/edit';
         this.idInput = element(by.model('ctrl.user.info.id'));
         this.idUniqError = element(by.css('.id-uniq-error'));
@@ -197,7 +210,9 @@
         this.schoolSelect = element(by.model('ctrl.user.info.school'));
         this.codeSchoolInput = element(by.model('ctrl.user.info.services.codeSchool.id'));
         this.treeHouseInput = element(by.model('ctrl.user.info.services.treeHouse.id'));
-        this.saveButton = element(by.partialButtonText('Save'));
+        this.saveButton = element(by.partialButtonText('Register'));
+        this.showMenuLink = element(by.css('.navbar-header .navbar-toggle'));
+        this.homePageLink = element(by.css('#main-nav .home-link'));
 
         this.get = function() {
           return browser.get(this.url);
@@ -246,12 +261,23 @@
         this.save = function() {
           return this.saveButton.click();
         };
+
+        this.showMenu = function() {
+          return this.showMenuLink.isDisplayed().then(function(visible) {
+            if (visible) {
+              return self.showMenuLink.click();
+            }
+          });
+        };
       },
 
       ProfilePage = function() {
+        var self = this;
+
         this.url = 'http://0.0.0.0:5557/#/';
         this.profileTitle = element(by.binding('ctrl.profile.name'));
-        this.editLink = element(by.css('.edit-link'));
+        this.showMenuLink = element(by.css('.navbar-header .navbar-toggle'));
+        this.editLink = element(by.css('#main-nav .edit-link'));
         this.reportCard = {
           codeSchool: element(by.css('.report-card.codeschool')),
           treeHouse: element(by.css('.report-card.treehouse'))
@@ -259,6 +285,14 @@
 
         this.get = function() {
           return browser.get(this.url);
+        };
+
+        this.showMenu = function() {
+          return this.showMenuLink.isDisplayed().then(function(visible) {
+            if (visible) {
+              return self.showMenuLink.click();
+            }
+          });
         };
       };
 
@@ -317,12 +351,9 @@
 
       settingPage.setCodeSchoolId('ChrisBoesch');
       takeScreenShot('register-4');
-      settingPage.save();
-      takeScreenShot('register-5');
 
-
-      expect(browser.getLocationAbsUrl()).toBe(profilePage.url);
-      expect(profilePage.reportCard.codeSchool.isDisplayed()).toBeTruthy();
+      settingPage.homePageLink.click();
+      expect(profilePage.reportCard.codeSchool.isPresent()).toBeTruthy();
     });
 
     it('should let a user add his treehouse id', function() {
@@ -338,11 +369,9 @@
 
       settingPage.setTreeHouseId('chrisboesch');
       takeScreenShot('register-6');
-      settingPage.save();
-      takeScreenShot('register-7');
 
-      expect(browser.getLocationAbsUrl()).toBe(profilePage.url);
-      expect(profilePage.reportCard.treeHouse.isDisplayed()).toBeTruthy();
+      settingPage.homePageLink.click();
+      expect(profilePage.reportCard.treeHouse.isPresent()).toBeTruthy();
     });
 
   });

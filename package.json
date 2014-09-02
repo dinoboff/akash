@@ -52,6 +52,6 @@
     "load-grunt-tasks": "^0.4.0",
     "open": "0.0.4",
     "phantomjs": "^1.9.7-5",
-    "protractor": "^1.0.0"
+    "protractor": "^1.1.0"
   }
 }
