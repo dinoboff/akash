@@ -47,7 +47,7 @@
 
           <ul class="nav navbar-nav">
             <li ng-class="{active: isActive('/')}">
-              <a ng-href="#/">Home</a>
+              <a ng-href="#/" class="home-link">Home</a>
             </li>
             <li ng-class="{active: isActive('/ranks')}">
               <a ng-href="#/ranks">Ranks</a>
@@ -59,7 +59,7 @@
               <a ng-href="#/suggestion">Contact us</a>
             </li>
             <li ng-class="{active: isActive('/edit')}" ng-show="navBar.user.data.isLoggedIn">
-              <a ng-href="#/edit">
+              <a ng-href="#/edit" class="edit-link">
                 <span ng-hide="navBar.user.data.info.id">Register</span>
                 <span ng-show="navBar.user.data.info.id">Settings</span>
               </a>

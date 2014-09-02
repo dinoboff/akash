@@ -29,6 +29,8 @@ exports.onPrepare = function(config) {
       }
       return promise.then(function() {
         return tss(name, res);
+      }).then(function() {
+        return browser.driver.manage().window().setSize(1400, 700);
       });
     });
   };
