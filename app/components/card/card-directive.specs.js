@@ -32,6 +32,18 @@
         httpBackend.flush();
       });
 
+      it('should set model as invalid while the directive waits to validate the card id', function() {
+        httpBackend.whenGET('http://teamtreehouse.com/bob.json').respond(200, {});
+
+        scope.form.userTHId.$setViewValue('bob');
+        expect(scope.form.userTHId.$valid).toBe(false);
+        timeout.flush();
+        httpBackend.flush();
+
+        expect(scope.form.userTHId.$valid).toBe(true);
+        expect(scope.form.userTHId.$error.eopValidTreehouseUsername).toBe(false);
+      });
+
       it('should set model as valid if the report card exist', function() {
         httpBackend.expectGET('http://teamtreehouse.com/bob.json').respond(200, {});
 

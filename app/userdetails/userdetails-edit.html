@@ -39,7 +39,9 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': userDetailsForm.userName.$invalid}">
-                <label class="col-sm-4 control-label" for="user-name">Your screen name:</label>
+                <label class="col-sm-4 control-label" for="user-name">
+                    Your screen name<span ng-show="!ctrl.isNewUser &amp;&amp; userDetailsForm.userName.$dirty">*</span>:
+                </label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control"
                         id="user-name" placeholder="Enter a name"
@@ -47,6 +49,7 @@
                         required="true"
                         ng-maxlength="20"
                         name="userName"
+                        ng-change="ctrl.update(ctrl.user.info, 'name', userDetailsForm.userName)"
                     />
                     <strong class="help-block" ng-show="userDetailsForm.userName.$error.maxlength">
                         Your screen name should be up to 20 characters long.
@@ -55,7 +58,9 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': userDetailsForm.userGender.$invalid}">
-                <label class=" col-sm-4 control-label">Your gender:</label>
+                <label class=" col-sm-4 control-label">
+                    Your gender<span ng-show="!ctrl.isNewUser &amp;&amp; userDetailsForm.userGender.$dirty">*</span>:
+                </label>
                 <div class="col-sm-8">
                     <label ng-repeat="genre in ctrl.options.gender.choices"
                         ng-attr-for="user-gender-{{genre.id}}" class="radio"
@@ -63,6 +68,7 @@
                         <input type="radio" ng-attr-id="user-gender-{{genre.id}}"
                             name="userGender" ng-required="true"
                             ng-model="ctrl.user.info.gender" ng-value="genre.id"
+                            ng-change="ctrl.update(ctrl.user.info, 'gender', userDetailsForm.userGender)"
                         /> {{genre.name}}
                     </label>
                 </div>
@@ -70,7 +76,7 @@
 
             <div class="form-group" ng-class="{'has-error': userDetailsForm.yearOfBirth.$invalid}">
                 <label class="col-sm-4 control-label" for="year-of-birth">
-                    Your year of birth
+                    Your year of birth<span ng-show="!ctrl.isNewUser &amp;&amp; userDetailsForm.yearOfBirth.$dirty">*</span>:
                 </label>
                 <div class="col-sm-8">
                     <select type="text" class="form-control"
@@ -78,6 +84,7 @@
                         ng-model="ctrl.user.info.yearOfBirth"
                         ng-options="opt.id as opt.name for opt in ctrl.options.yearOfBirth.choices"
                         required="true"
+                        ng-change="ctrl.update(ctrl.user.info, 'yearOfBirth', userDetailsForm.yearOfBirth)"
                     >
                         <option value="">
                             Select a year...
@@ -88,7 +95,7 @@
 
             <div class="form-group" ng-class="{'has-error': userDetailsForm.school.$invalid}">
                 <label class="col-sm-4 control-label" for="userSchool">
-                    Your school
+                    Your school<span ng-show="!ctrl.isNewUser &amp;&amp; userDetailsForm.school.$dirty">*</span>:
                 </label>
                 <div class="col-sm-8">
                     <select type="text" class="form-control"
@@ -96,11 +103,24 @@
                         ng-model="ctrl.user.info.school"
                         ng-options="opt.id as opt.name group by opt.group for opt in ctrl.options.schools.choices"
                         required="true"
+                        ng-change="ctrl.update(ctrl.user.info, 'school', userDetailsForm.school)"
                     >
                         <option value="">
                             Select a school...
                         </option>
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="ctrl.isNewUser">
+                <div class="col-sm-offset-4 col-sm-8">
+                    <button
+                        type="submit" class="btn btn-default"
+                        ng-click="ctrl.save(ctrl.user.info)"
+                        ng-disabled="userForm.$invalid || ctrl.saving"
+                    >
+                        Register
+                    </button>
                 </div>
             </div>
         </ng-form>
@@ -110,13 +130,16 @@
         <legend>Report card details</legend>
         <ng-form name="reportCardForm">
             <div class="form-group" ng-class="{'has-error': reportCardForm.userCodeSchooldId.$invalid}">
-                <label class="col-sm-4 control-label" for="user-code-schoold-id">Your Code School username (or id):</label>
+                <label class="col-sm-4 control-label" for="user-code-schoold-id">
+                    Your Code School username (or id)<span ng-show="reportCardForm.userCodeSchooldId.$dirty">*</span>:
+                </label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control"
                         id="user-code-schoold-id" placeholder="Enter you Code School username"
                         ng-model="ctrl.user.info.services.codeSchool.id"
                         eop-valid-code-school-username="true"
                         name="userCodeSchooldId"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.codeSchool.id', reportCardForm.userCodeSchooldId)"
                     />
                     <strong class="help-block" ng-show="reportCardForm.userCodeSchooldId.$error.eopValidCodeSchoolUsername">
                         This username is not valid or
@@ -132,13 +155,16 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': reportCardForm.userTreehouseId.$invalid}">
-                <label class="col-sm-4 control-label" for="user-tree-house-id">Your Treehouse username:</label>
+                <label class="col-sm-4 control-label" for="user-tree-house-id">
+                    Your Treehouse username<span ng-show="reportCardForm.userTreehouseId.$dirty">*</span>:
+                </label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control"
                         id="user-tree-house-id" placeholder="Enter you Treehouse username"
                         ng-model="ctrl.user.info.services.treeHouse.id"
                         eop-valid-treehouse-username="true"
                         name="userTreehouseId"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.treeHouse.id', reportCardForm.userTreehouseId)"
                     />
                     <strong class="help-block" ng-show="reportCardForm.userTreehouseId.$error.eopValidTreehouseUsername">
                         This username is not valid.
@@ -154,7 +180,9 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': reportCardForm.codeCombatName.$invalid}">
-                <label class="col-sm-4 control-label" for="user-code-combat-name">Your Code Combat username:</label>
+                <label class="col-sm-4 control-label" for="user-code-combat-name">
+                    Your Code Combat username<span ng-show="reportCardForm.codeCombatName.$dirty">*</span>:
+                </label>
                 <div class="col-sm-8">
                     <input type="hidden" name="codeCombatId" ng-model="ctrl.user.info.services.codeCombat.id">
                     <input type="text" class="form-control"
@@ -162,6 +190,7 @@
                         ng-model="ctrl.user.info.services.codeCombat.name"
                         eop-valid-code-combat-username="reportCardForm.codeCombatId"
                         name="codeCombatName"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName)"
                     />
                     <strong class="help-block" ng-show="reportCardForm.codeCombatName.$error.eopValidCodeCombatUsername">
                         This username is not valid.
@@ -177,18 +206,169 @@
         </ng-form>
     </fieldset>
 
-    <hr/>
-    <div class="form-group">
-        <div class="col-sm-offset-4 col-sm-8">
-            <button
-                type="submit" class="btn btn-default"
-                ng-click="ctrl.save(ctrl.user.info)"
-                ng-disabled="userForm.$invalid || ctrl.saving"
-            >
-                Save Details
-            </button>
-        </div>
+
+    <div ng-if="!ctrl.isNewUser">
+
+        <h2>Internships</h2>
+        <hr/>
+        <ng-form name="intershipsForm">
+            <div class="form-group" name="intershipsForm">
+                <label for="interested-in-internships" class="col-sm-4 control-label">
+                    Interested in an internship<span ng-show="intershipsForm.interestedInInternships.$dirty">*</span>?
+                </label>
+                <div class="col-sm-8">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                id="interested-in-internships"
+                                ng-model="ctrl.user.info.internship.interested"
+                                name="interestedInInternships"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.interested', intershipsForm.interestedInInternships)"
+                            />
+                            I'm interested in internships.
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="ctrl.user.info.internship.interested">
+                <fieldset>
+                    <legend>Companies</legend>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Which companies would you like to intern at?</label>
+                        <div class="col-sm-8">
+                            <span class="help-block">
+                                You can choose  up to 5 or enter additional companies.
+                            </span>
+                            <div class="checkbox" ng-repeat="name in ctrl.defaultCompanies">
+                                <label>
+                                    <ng-form name="companyForm">
+                                        <input type="checkbox"
+                                            ng-model="ctrl.user.info.internship.companies[name]"
+                                            ng-disabled="!ctrl.user.info.internship.companies[name] &amp;&amp; ctrl.maxedIntership(ctrl.user.info.internship.companies)"
+                                            name="company"
+                                            ng-change="ctrl.update(ctrl.user.info, 'internship.companies['+name+']', companyForm.company)"
+                                            />
+                                        {{name}}<span ng-show="companyForm.company.$dirty">*</span>
+                                    </ng-form>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>When would you like to intern?</legend>
+
+                    <div class="form-group clearfix">
+                        <label for="intership-start-1" class="col-sm-4 control-label">
+                            First internship Start<span ng-show="intershipsForm.intershipStart1.$dirty">*</span>:
+                        </label>
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <input type="date" id="intership-start-1" class="form-control"
+                                ng-model="ctrl.user.info.internship.dates[0].start"
+                                placeholder="yyyy-mm-dd"
+                                min="2014-01-01"
+                                max="2014-12-31"
+                                required="required"
+                                name="intershipStart1"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].start', intershipsForm.intershipStart1)"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group clearfix">
+                        <label for="intership-end-1" class="col-sm-4 control-label">
+                            End<span ng-show="intershipsForm.intershipEnd1.$dirty">*</span>:
+                        </label>
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <input type="date" id="intership-end-1" class="form-control"
+                                ng-model="ctrl.user.info.internship.dates[0].end"
+                                placeholder="yyyy-mm-dd"
+                                min="2014-01-01"
+                                max="2014-12-31"
+                                required="required"
+                                name="intershipEnd1"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].end', intershipsForm.intershipEnd1)"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group clearfix">
+                        <label for="intership-start" class="col-sm-4 control-label">
+                            Second internship Start<span ng-show="intershipsForm.intershipStart2.$dirty">*</span>:
+                        </label>
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <input type="date" id="intership-start-2" class="form-control"
+                                ng-model="ctrl.user.info.internship.dates[1].start"
+                                placeholder="yyyy-mm-dd"
+                                min="2014-01-01"
+                                max="2014-12-31"
+                                required="required"
+                                name="intershipStart2"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].start', intershipsForm.intershipStart2)"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group clearfix">
+                        <label for="intership-end-1" class="col-sm-4 control-label">
+                            End<span ng-show="intershipsForm.intershipEnd2.$dirty">*</span>:
+                        </label>
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <input type="date" id="intership-end-2" class="form-control"
+                                ng-model="ctrl.user.info.internship.dates[1].end"
+                                placeholder="yyyy-mm-dd"
+                                min="2014-01-01"
+                                max="2014-12-31"
+                                required="required"
+                                name="intershipEnd2"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].end', intershipsForm.intershipEnd2)"
+                            />
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>Notifications</legend>
+
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                        ng-model="ctrl.user.info.internship.notification.choices"
+                                        name="notifyChoice"
+                                        ng-change="ctrl.update(ctrl.user.info, 'internship.notification.choices', intershipsForm.notifyChoice)"
+                                        />
+                                    Email me about my internship choices<span ng-show="intershipsForm.notifyChoice.$dirty">*</span>.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                        ng-model="ctrl.user.info.internship.notification.recommendations"
+                                        name="notifyRecommendations"
+                                        ng-change="ctrl.update(ctrl.user.info, 'internship.notification.recommendations', intershipsForm.notifyRecommendations)"
+                                        />
+                                    Email me about recommended internships<span ng-show="intershipsForm.notifyRecommendations.$dirty">*</span>.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+        </ng-form>
     </div>
+
 
 </form>
 
@@ -256,42 +436,3 @@
     </form>
 </div>
 
-<div> <!--<div ng-if="!ctrl.isNewUser">-->
-    <h2>Internships</h2>
-    <hr/>
-     
-          <input type="checkbox" name="interestedInInternships"
-                   ng-model="ctrl.user.internship.interestedInInternshps"/> <b>I'm interested in internships.</b><br>
-        
-        <div ng-show='ctrl.user.internship.interestedInInternshps==true' class="col-sm-8">
-        
-          <div>
-              What companies would you like to intern at? <br>
-              You can choose  up to 5 or enter additional companies.<br>
-              <div ng-repeat="name in ['Accenture','Amazon','Carousel','Cisco','Facebook','Google','HP','IBM','Neo','Nitrous.io','PayPal','RevolutionR','Salesforce','SAP','SAS','Singtel','Viki','Visa']">
-                <input type="checkbox" ng-model="ctrl.user.internship.company[name]"/> {{name}}
-              </div>
-              <input type="checkbox" ng-model="ctrl.user.internship.company.blank1"/> <input type="text"> Add your own company preference.<br>
-              <div ng-show="ctrl.user.internship.company.blank1==true">
-              <input  type="checkbox" ng-model="ctrl.user.internship.company.blank2"/> <input type="text"> Add your own company preference.
-            </div>
-
-            <b> When would you like to intern?</b><br>
-            Start: <input type="date" id="exampleInput" name="input" ng-model="internship.startdate"
-                      placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
-            Stop: <input type="date" id="exampleInput" name="input" ng-model="internship.stopdate"
-                     placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required /><br>
-            
-            Start: <input type="date" id="exampleInput" name="input" ng-model="internship.startdate2"
-                      placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
-            Stop: <input type="date" id="exampleInput" name="input" ng-model="internship.stopdate2"
-                     placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required /><br>
-        </div>
-                    
-            <input type="checkbox" name="emailMeAboutInternships"
-                   ng-model="ctrl.user.internship.emailMeAboutInternshps"/> Email me about my internship choices.<br>  
-            <input type="checkbox" name="emailMeAboutRecommendedInternships"
-                   ng-model="ctrl.user.internship.emailMeAboutRecommendedInternshps"/> Email me about recommended internships.<br>   
-
-          
-</div>

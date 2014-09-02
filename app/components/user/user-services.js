@@ -257,7 +257,7 @@
          */
         save: function(data) {
           var info = _.pick(
-            data, ['id', 'name', 'gender', 'yearOfBirth', 'school', 'services']
+            data, ['id', 'name', 'gender', 'yearOfBirth', 'school', 'services', 'internship']
           );
 
           info.services = _.pick(
@@ -265,6 +265,14 @@
           );
 
           return oepApi.one('user').customPUT(info);
+        },
+
+        /**
+         * Update one or many of the user properties
+         *
+         */
+        update: function(info) {
+          return oepApi.one('user').customPOST(info);
         },
 
         /**

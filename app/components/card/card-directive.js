@@ -12,50 +12,6 @@
 (function() {
   'use strict';
 
-  /**
-   * Third party username validator factory.
-   *
-   * Uses eopReportCardApi service to check that a user name exists.
-   *
-   * Note that the validator is "debounced". I will only run after one
-   * second has passed since the last change to the ngModel value.
-   *
-   */
-  function validator(ns, service) {
-    return ['oepDebounce', 'eopReportCardApi', '$q',
-      function(debounce, reportCardApi, $q) {
-        return {
-          require: 'ngModel',
-          link: function(s, e, a, ctrl) {
-            var lastQuery = $q.when(true),
-              delayedChecker = debounce(function(value) {
-                if (!value) {
-                  ctrl.$setValidity(ns, true);
-                  return;
-                }
-                lastQuery = lastQuery.then(function() {
-                  return reportCardApi.check[service](value).then(function(exist) {
-                    if (exist) {
-                      ctrl.$setValidity(ns, true);
-                    } else {
-                      ctrl.$setValidity(ns, false);
-                    }
-                  });
-                });
-              }, 1000),
-              checker = function(value) {
-                delayedChecker(value);
-                return value;
-              };
-
-            ctrl.$parsers.push(checker);
-            ctrl.$formatters.push(checker);
-          }
-        };
-
-      }
-    ];
-  }
 
   angular.module(
     'eop.card.directives', [
@@ -65,6 +21,114 @@
       'oep.utils.filters'
     ]
   ).
+
+  /**
+   * Debounce validation
+   *
+   * TODO: Move it to debounce component.
+   *
+   */
+  service('OepDebounceValidator', ['$window', '$q', 'oepDebounce',
+    function OepServiceIdValidatorFactory($window, $q, oepDebounce) {
+      var _ = $window._;
+
+      return function OepServiceIdValidator(opts) {
+        var requestCount = 0,
+          delayedChecker,
+          checker;
+
+        _.defaults(opts, {
+          checker: $q.when(false),
+          ns: 'delayedValidation',
+          successCB: angular.noop,
+          errorCB: angular.noop
+        });
+
+        function delayValidation(ctrl, value) {
+          // no need to validate an empty value
+          if (ctrl.$isEmpty(value)) {
+            ctrl.$setValidity(opts.ns, true);
+            return;
+          }
+
+          ctrl.$setValidity(opts.ns + 'ValidationStarted', false);
+          delayedChecker(value);
+        }
+
+
+        function checkModelValue(ctrl, value) {
+          if (ctrl.$isEmpty(ctrl.$modelValue)) {
+            ctrl.$setValidity(opts.ns, true);
+            return false;
+          }
+
+          return ctrl.$modelValue === value;
+        }
+
+
+        function startValidation(ctrl, value) {
+          if (!checkModelValue(ctrl, value)) {
+            return false;
+          }
+
+          ctrl.$setValidity(opts.ns + 'ValidationStarted', true);
+          ctrl.$setValidity(opts.ns + 'ValidationCompleted', false);
+          requestCount++;
+          return true;
+        }
+
+        function completeValidation(ctrl) {
+          if (--requestCount === 0) {
+            ctrl.$setValidity(opts.ns + 'ValidationCompleted', true);
+          }
+        }
+
+        this.require = 'ngModel';
+        this.link = function(scope, e, attr, ctrl) {
+          delayedChecker = oepDebounce(function(value) {
+            if (!startValidation(ctrl, value)) {
+              return $q.reject('Model value has changes');
+            }
+
+            return opts.checker(value).then(function(success) {
+              if (!checkModelValue(ctrl, value)) {
+                return $q.reject('Model value has changes');
+              }
+
+              if (!success) {
+                ctrl.$setValidity(opts.ns, false);
+                return $q.reject('Model Value Invalid');
+              }
+
+              ctrl.$setValidity(opts.ns, true);
+              if (attr.ngChange) {
+                scope.$eval(attr.ngChange);
+              }
+
+              return {
+                attr: attr,
+                ctrl: ctrl,
+                data: success,
+                scope: scope
+              };
+
+            })['finally'](function() {
+              completeValidation(ctrl);
+            }).then(opts.successCB, opts.errorCB);
+
+          }, 1000);
+
+          checker = function(value) {
+            delayValidation(ctrl, value);
+            return value;
+          };
+
+          ctrl.$parsers.push(checker);
+          ctrl.$formatters.push(checker);
+        };
+      };
+    }
+  ]).
 
   /**
    * oepTreehouseReportCard - Directive displaying a user Treehouse badges.
@@ -126,9 +190,14 @@
    * property set to `true` when the username doesn't exist.
    *
    */
-  directive('eopValidTreehouseUsername', validator(
-    'eopValidTreehouseUsername', 'treeHouse'
-  )).
+  directive('eopValidTreehouseUsername', ['OepDebounceValidator', 'eopReportCardApi',
+    function eopValidTreehouseUsernameDirective(OepDebounceValidator, reportCardApi) {
+      return new OepDebounceValidator({
+        ns: 'eopValidTreehouseUsername',
+        checker: reportCardApi.check.treeHouse,
+      });
+    }
+  ]).
 
   /**
    * eopValidCodeSchoolUsername - Validator a text input (associated to a ngModel).
@@ -139,9 +208,14 @@
    * property set to `true` when the username doesn't exist.
    *
    */
-  directive('eopValidCodeSchoolUsername', validator(
-    'eopValidCodeSchoolUsername', 'codeSchool'
-  )).
+  directive('eopValidCodeSchoolUsername', ['OepDebounceValidator', 'eopReportCardApi',
+    function eopValidCodeSchoolUsernameDirective(OepDebounceValidator, reportCardApi) {
+      return new OepDebounceValidator({
+        ns: 'eopValidCodeSchoolUsername',
+        checker: reportCardApi.check.codeSchool,
+      });
+    }
+  ]).
 
   /**
    * eopValidCodeCombatUsername - Validator a text input (associated to a ngModel).
@@ -163,69 +237,31 @@
    *   </form>
    *
    */
-  directive('eopValidCodeCombatUsername', ['oepDebounce', 'eopReportCardApi', '$q',
-    function(debounce, reportCardApi, $q) {
-      var updateUserId = function(scope, idPath, userId) {
-        var idModel = scope;
+  directive('eopValidCodeCombatUsername', ['OepDebounceValidator', 'eopReportCardApi',
+    function eopValidCodeCombatUsernameDirective(OepDebounceValidator, reportCardApi) {
+      return new OepDebounceValidator({
+        ns: 'eopValidCodeCombatUsername',
+        checker: reportCardApi.check.codeCombat,
+        successCB: function(args) {
+          var idModel;
 
-        if (idPath.length < 2) {
-          return;
-        }
-
-        for (var i = 0; i < idPath.length; i++) {
-          if (!idModel[idPath[i]]) {
-            return;
-          }
-          idModel = idModel[idPath[i]];
-        }
-
-        if (!idModel.$setViewValue) {
-          return;
-        }
-
-        idModel.$setViewValue(userId);
-      };
-
-      return {
-        require: 'ngModel',
-        link: function(scope, e, attr, ctrl) {
-          var idPath, delayedChecker, checker, lastQuery = $q.when(true);
-
-          if (!attr || !attr.eopValidCodeCombatUsername) {
+          if (
+            !args.attr ||
+            !args.attr.eopValidCodeCombatUsername ||
+            !args.scope ||
+            !args.scope.$eval
+          ) {
             return;
           }
 
-          idPath = attr.eopValidCodeCombatUsername.split('.');
+          idModel = args.scope.$eval(args.attr.eopValidCodeCombatUsername);
+          if (!idModel.$setViewValue) {
+            return;
+          }
 
-          delayedChecker = debounce(function(value) {
-            if (!value) {
-              ctrl.$setValidity('eopValidCodeCombatUsername', true);
-              return;
-            }
-
-            lastQuery = lastQuery.then(function() {
-              return reportCardApi.check.codeCombat(value).then(function(userId) {
-                if (userId) {
-                  ctrl.$setValidity('eopValidCodeCombatUsername', true);
-                  updateUserId(scope, idPath, userId);
-                } else {
-                  ctrl.$setValidity('eopValidCodeCombatUsername', false);
-                }
-              });
-            });
-
-          }, 1000);
-
-          checker = function(value) {
-            delayedChecker(value);
-            return value;
-          };
-
-          ctrl.$parsers.push(checker);
-          ctrl.$formatters.push(checker);
-
+          idModel.$setViewValue(args.data);
         }
-      };
+      });
     }
   ])
 

@@ -91,7 +91,7 @@
         }
       });
 
-      // Updating logged user's info
+      // Save logged user's info
       httpBackend.whenPUT(fixtures.url.user).respond(function(_, __, rawData) {
         var data = JSON.parse(rawData);
 
@@ -111,6 +111,19 @@
         users[data.id] = data;
         return [200, null];
       });
+
+      // upadte logged user's info
+      httpBackend.whenPOST(fixtures.url.user).respond(function(m, u, rawData) {
+        var data = JSON.parse(rawData), result;
+
+        users[chrisId] = _.merge(users[chrisId], data);
+
+        result = _.cloneDeep(users[chrisId]);
+        result.services = detailledServices(result);
+        updateBadges(chrisId);
+        return [200, fixtures.chris(result)];
+      });
+
 
       // Users info
       httpBackend.whenGET(fixtures.url.users).respond(function(m, url) {
@@ -149,8 +162,7 @@
           }];
         } else {
           console.log(
-            'The only valid code school ids are: ' +
-            _.keys(['dinoboff']).join(', ')
+            'The only valid code school ids are: ' + ['dinoboff'].join(', ')
           );
           return [404, fixtures.notFound];
         }
@@ -337,7 +349,7 @@
 
         return [200, suggestion];
       });
-      
+
       // New event
       httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
         var event = JSON.parse(body);

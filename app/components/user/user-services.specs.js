@@ -258,6 +258,20 @@
 
       });
 
+      it('should update the user info', function() {
+        var data;
+
+        $httpBackend.expectPOST('/api/v1/user').respond(function(m, u, body) {
+          data = JSON.parse(body);
+          return [200, {}];
+        });
+
+        currentUserApi.update({name: 'boby'});
+        $httpBackend.flush();
+        expect(data).toEqual({name: 'boby'});
+
+      });
+
     });
 
 
