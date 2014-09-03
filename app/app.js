@@ -29,6 +29,7 @@
     'oep', [
       'oep.navbar.controllers',
       'ngRoute',
+      'angular-loading-bar',
       'oep.admin.controllers',
       'oep.admin.directives',
       'oep.controllers',
@@ -42,8 +43,8 @@
     ]
   ).
 
-  config(['$routeProvider',
-    function($routeProvider) {
+  config(['$routeProvider', 'cfpLoadingBarProvider',
+    function($routeProvider, cfpLoadingBarProvider) {
       var rankResolver = {
           'currentUser': ['oepCurrentUserApi',
             function(oepCurrentUserApi) {
@@ -240,6 +241,8 @@
       otherwise({
         redirectTo: '/'
       });
+
+      cfpLoadingBarProvider.includeSpinner = false;
     }
   ])
 
