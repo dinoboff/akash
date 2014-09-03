@@ -197,6 +197,28 @@
         return this.saving;
       };
 
+      function setFormPristine(form) {
+        var isPristine = true;
+
+        _.keys(form).forEach(function(key){
+          if (key[0] === '$') {
+            return;
+          }
+
+          if (form[key].$addControl) {
+            setFormPristine(form[key]);
+          }
+
+          if (form[key].$dirty) {
+            isPristine = false;
+          }
+        });
+
+        if (isPristine) {
+          form.$setPristine();
+        }
+      }
+
       /**
        * Update some attributes of the user info.
        *
@@ -205,7 +227,7 @@
        * 1000 ms.
        *
        */
-      this.update = function(userInfo, prop, input) {
+      this.update = function(userInfo, prop, input, form) {
         var updater = updaters[prop];
 
         if (self.isNewUser) {
@@ -213,11 +235,11 @@
         }
 
         if (updater) {
-          updater(userInfo, prop, input);
+          updater(userInfo, prop, input, form);
           return;
         }
 
-        updater = updaters[prop] = oepDebounce(function(userInfo, prop, input) {
+        updater = updaters[prop] = oepDebounce(function(userInfo, prop, input, form) {
           if (input.$invalid) {
             return;
           }
@@ -226,6 +248,7 @@
             return oepCurrentUserApi.update(pick(userInfo, prop));
           }).then(function(user) {
             input.$setPristine();
+            setFormPristine(form);
             oepCurrentUserApi.reset();
             return user;
           })['finally'](function() {
@@ -233,7 +256,7 @@
           });
         }, 1000);
 
-        updater(userInfo, prop, input);
+        updater(userInfo, prop, input, form);
       };
 
       /**
