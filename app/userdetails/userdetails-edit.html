@@ -49,7 +49,7 @@
                         required="true"
                         ng-maxlength="20"
                         name="userName"
-                        ng-change="ctrl.update(ctrl.user.info, 'name', userDetailsForm.userName)"
+                        ng-change="ctrl.update(ctrl.user.info, 'name', userDetailsForm.userName, userForm)"
                     />
                     <strong class="help-block" ng-show="userDetailsForm.userName.$error.maxlength">
                         Your screen name should be up to 20 characters long.
@@ -57,22 +57,27 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': userDetailsForm.userGender.$invalid}">
-                <label class=" col-sm-4 control-label">
-                    Your gender<span ng-show="!ctrl.isNewUser &amp;&amp; userDetailsForm.userGender.$dirty">*</span>:
-                </label>
-                <div class="col-sm-8">
-                    <label ng-repeat="genre in ctrl.options.gender.choices"
-                        ng-attr-for="user-gender-{{genre.id}}" class="radio"
-                    >
-                        <input type="radio" ng-attr-id="user-gender-{{genre.id}}"
-                            name="userGender" ng-required="true"
-                            ng-model="ctrl.user.info.gender" ng-value="genre.id"
-                            ng-change="ctrl.update(ctrl.user.info, 'gender', userDetailsForm.userGender)"
-                        /> {{genre.name}}
+            <ng-form name="genderForm">
+                <div class="form-group" ng-class="{'has-error': genderForm.$invalid}">
+                    <label class=" col-sm-4 control-label">
+                        Your gender<span ng-show="!ctrl.isNewUser &amp;&amp; genderForm.$dirty">*</span>:
                     </label>
+                    <div class="col-sm-8">
+                        <label ng-repeat="genre in ctrl.options.gender.choices"
+                            ng-attr-for="user-gender-{{genre.id}}" class="radio"
+                        >
+                            <ng-form name="genderChoiceForm">
+                                <input type="radio" ng-attr-id="user-gender-{{genre.id}}"
+                                    name="userGender" ng-required="true"
+                                    ng-model="ctrl.user.info.gender" ng-value="genre.id"
+                                    ng-change="ctrl.update(ctrl.user.info, 'gender', genderChoiceForm.userGender, userForm)"
+                                /> {{genre.name}}
+                            </ng-form>
+
+                        </label>
+                    </div>
                 </div>
-            </div>
+            </ng-form>
 
             <div class="form-group" ng-class="{'has-error': userDetailsForm.yearOfBirth.$invalid}">
                 <label class="col-sm-4 control-label" for="year-of-birth">
@@ -84,7 +89,7 @@
                         ng-model="ctrl.user.info.yearOfBirth"
                         ng-options="opt.id as opt.name for opt in ctrl.options.yearOfBirth.choices"
                         required="true"
-                        ng-change="ctrl.update(ctrl.user.info, 'yearOfBirth', userDetailsForm.yearOfBirth)"
+                        ng-change="ctrl.update(ctrl.user.info, 'yearOfBirth', userDetailsForm.yearOfBirth, userForm)"
                     >
                         <option value="">
                             Select a year...
@@ -103,7 +108,7 @@
                         ng-model="ctrl.user.info.school"
                         ng-options="opt.id as opt.name group by opt.group for opt in ctrl.options.schools.choices"
                         required="true"
-                        ng-change="ctrl.update(ctrl.user.info, 'school', userDetailsForm.school)"
+                        ng-change="ctrl.update(ctrl.user.info, 'school', userDetailsForm.school, userForm)"
                     >
                         <option value="">
                             Select a school...
@@ -139,7 +144,7 @@
                         ng-model="ctrl.user.info.services.codeSchool.id"
                         eop-valid-code-school-username="true"
                         name="userCodeSchooldId"
-                        ng-change="ctrl.update(ctrl.user.info, 'services.codeSchool.id', reportCardForm.userCodeSchooldId)"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.codeSchool.id', reportCardForm.userCodeSchooldId, userForm)"
                     />
                     <strong class="help-block" ng-show="reportCardForm.userCodeSchooldId.$error.eopValidCodeSchoolUsername">
                         This username is not valid or
@@ -164,7 +169,7 @@
                         ng-model="ctrl.user.info.services.treeHouse.id"
                         eop-valid-treehouse-username="true"
                         name="userTreehouseId"
-                        ng-change="ctrl.update(ctrl.user.info, 'services.treeHouse.id', reportCardForm.userTreehouseId)"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.treeHouse.id', reportCardForm.userTreehouseId, userForm)"
                     />
                     <strong class="help-block" ng-show="reportCardForm.userTreehouseId.$error.eopValidTreehouseUsername">
                         This username is not valid.
@@ -190,7 +195,7 @@
                         ng-model="ctrl.user.info.services.codeCombat.name"
                         eop-valid-code-combat-username="reportCardForm.codeCombatId"
                         name="codeCombatName"
-                        ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName)"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName, userForm)"
                     />
                     <strong class="help-block" ng-show="reportCardForm.codeCombatName.$error.eopValidCodeCombatUsername">
                         This username is not valid.
@@ -223,7 +228,7 @@
                                 id="interested-in-internships"
                                 ng-model="ctrl.user.info.internship.interested"
                                 name="interestedInInternships"
-                                ng-change="ctrl.update(ctrl.user.info, 'internship.interested', intershipsForm.interestedInInternships)"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.interested', intershipsForm.interestedInInternships, userForm)"
                             />
                             I'm interested in internships.
                         </label>
@@ -248,7 +253,7 @@
                                             ng-model="ctrl.user.info.internship.companies[name]"
                                             ng-disabled="!ctrl.user.info.internship.companies[name] &amp;&amp; ctrl.maxedIntership(ctrl.user.info.internship.companies)"
                                             name="company"
-                                            ng-change="ctrl.update(ctrl.user.info, 'internship.companies['+name+']', companyForm.company)"
+                                            ng-change="ctrl.update(ctrl.user.info, 'internship.companies['+name+']', companyForm.company, userForm)"
                                             />
                                         {{name}}<span ng-show="companyForm.company.$dirty">*</span>
                                     </ng-form>
@@ -263,7 +268,7 @@
 
                     <div class="form-group clearfix">
                         <label for="intership-start-1" class="col-sm-4 control-label">
-                            First internship Start<span ng-show="intershipsForm.intershipStart1.$dirty">*</span>:
+                            First internship start<span ng-show="intershipsForm.intershipStart1.$dirty">*</span>:
                         </label>
                         <div class="col-sm-4 col-md-3 col-lg-2">
                             <input type="date" id="intership-start-1" class="form-control"
@@ -273,7 +278,7 @@
                                 max="2014-12-31"
                                 required="required"
                                 name="intershipStart1"
-                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].start', intershipsForm.intershipStart1)"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].start', intershipsForm.intershipStart1, userForm)"
                             />
                         </div>
                     </div>
@@ -290,14 +295,14 @@
                                 max="2014-12-31"
                                 required="required"
                                 name="intershipEnd1"
-                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].end', intershipsForm.intershipEnd1)"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].end', intershipsForm.intershipEnd1, userForm)"
                             />
                         </div>
                     </div>
 
                     <div class="form-group clearfix">
                         <label for="intership-start" class="col-sm-4 control-label">
-                            Second internship Start<span ng-show="intershipsForm.intershipStart2.$dirty">*</span>:
+                            Second internship start<span ng-show="intershipsForm.intershipStart2.$dirty">*</span>:
                         </label>
                         <div class="col-sm-4 col-md-3 col-lg-2">
                             <input type="date" id="intership-start-2" class="form-control"
@@ -307,7 +312,7 @@
                                 max="2014-12-31"
                                 required="required"
                                 name="intershipStart2"
-                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].start', intershipsForm.intershipStart2)"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].start', intershipsForm.intershipStart2, userForm)"
                             />
                         </div>
                     </div>
@@ -324,7 +329,7 @@
                                 max="2014-12-31"
                                 required="required"
                                 name="intershipEnd2"
-                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].end', intershipsForm.intershipEnd2)"
+                                ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].end', intershipsForm.intershipEnd2, userForm)"
                             />
                         </div>
                     </div>
@@ -341,7 +346,7 @@
                                     <input type="checkbox"
                                         ng-model="ctrl.user.info.internship.notification.choices"
                                         name="notifyChoice"
-                                        ng-change="ctrl.update(ctrl.user.info, 'internship.notification.choices', intershipsForm.notifyChoice)"
+                                        ng-change="ctrl.update(ctrl.user.info, 'internship.notification.choices', intershipsForm.notifyChoice, userForm)"
                                         />
                                     Email me about my internship choices<span ng-show="intershipsForm.notifyChoice.$dirty">*</span>.
                                 </label>
@@ -356,7 +361,7 @@
                                     <input type="checkbox"
                                         ng-model="ctrl.user.info.internship.notification.recommendations"
                                         name="notifyRecommendations"
-                                        ng-change="ctrl.update(ctrl.user.info, 'internship.notification.recommendations', intershipsForm.notifyRecommendations)"
+                                        ng-change="ctrl.update(ctrl.user.info, 'internship.notification.recommendations', intershipsForm.notifyRecommendations, userForm)"
                                         />
                                     Email me about recommended internships<span ng-show="intershipsForm.notifyRecommendations.$dirty">*</span>.
                                 </label>
