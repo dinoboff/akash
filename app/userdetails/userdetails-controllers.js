@@ -245,11 +245,12 @@
           }
 
           self.saving = $q.when(self.saving).then(function() {
-            return oepCurrentUserApi.update(pick(userInfo, prop));
+            var payload = pick(userInfo, prop);
+            console.log(userInfo, prop, payload);
+            return oepCurrentUserApi.update(payload);
           }).then(function(user) {
             input.$setPristine();
             setFormPristine(form);
-            oepCurrentUserApi.reset();
             return user;
           })['finally'](function() {
             self.saving = false;

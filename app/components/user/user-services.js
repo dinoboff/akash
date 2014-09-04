@@ -272,7 +272,10 @@
          *
          */
         update: function(info) {
-          return oepApi.one('user').customPOST(info);
+          return oepApi.one('user').customPOST(info).then(function(resp) {
+            api.data.info = _.merge(api.data.info, info);
+            return resp;
+          });
         },
 
         /**

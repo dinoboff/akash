@@ -124,7 +124,6 @@
           };
 
           ctrl.$parsers.push(checker);
-          ctrl.$formatters.push(checker);
         };
       };
     }
