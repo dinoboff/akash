@@ -1,0 +1,12 @@
+{
+  "name": "reportcard",
+  "homepage": "https://github.com/dinoboff/reportcard",
+  "_release": "cd9d3cc24c",
+  "_resolution": {
+    "type": "commit",
+    "commit": "cd9d3cc24c413561bbe102016cb7d0f2a76679be"
+  },
+  "_source": "https://github.com/dinoboff/reportcard.git",
+  "_target": "cd9d3cc24c413561bbe102016cb7d0f2a76679be",
+  "_originalSource": "https://github.com/dinoboff/reportcard.git"
+}

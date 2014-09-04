@@ -1,0 +1,106 @@
+<div class="row">
+
+    <div class="col-sm-4 profile">
+        <img ng-src="{{ctrl.profile.gravatar}}?s=200&amp;r=g&amp;d=mm" alt="user avatar" class="img-thumbnail">
+        <h2>
+            <span ng-if="ctrl.profile.isCurrentUser">Hello </span>
+            {{ctrl.profile.name}}
+        </h2>
+
+        <div ng-if="ctrl.profile.isCurrentUser">
+            <p>
+                Share OEP with your friends using this link:
+            </p>
+            <p>
+                <input
+                    class="form-control"
+                    type="url" disabled="disabled"
+                    ng-model="ctrl.currentUser.refUrl"
+                />
+            </p>
+        </div>
+    </div>
+
+    <div class="col-sm-8">
+
+        <oep-treehouse-report-card
+            oep-badges="ctrl.profile.services.treeHouse"
+            oep-is-current-user="ctrl.profile.isCurrentUser"
+        >
+        </oep-treehouse-report-card>
+
+        <oep-code-school-report-card
+            oep-badges="ctrl.profile.services.codeSchool"
+            oep-is-current-user="ctrl.profile.isCurrentUser"
+        >
+        </oep-code-school-report-card>
+
+        <oep-code-combat-report-card
+            oep-badges="ctrl.profile.services.codeCombat"
+            oep-is-current-user="ctrl.profile.isCurrentUser"
+        >
+        </oep-code-combat-report-card>
+
+
+        <p class="well" ng-if="!ctrl.profile.isCurrentUser &amp;&amp; !ctrl.profile.services.treeHouse.id &amp;&amp; !ctrl.profile.services.codeSchool.id &amp;&amp; !ctrl.profile.services.codeCombat.id">
+            {{ctrl.profile.name}} is not yet registered at
+            <a href="http://www.teamtreehouse.com/signup_code/singapore">Treehouse</a>,
+            <a href="https://www.codeschool.com/">Code School</a> or
+            <a href="http://codecombat.com/">Code Combat</a>.
+        </p>
+
+
+        <div
+            id="register-codeschool" class="well clearfix"
+            ng-if="ctrl.profile.isCurrentUser &amp;&amp; !ctrl.profile.services.treeHouse.id"
+        >
+            <h2>Treehouse</h2>
+
+            <p>
+                Learn HTML, CSS, iPhone apps &amp; more at <a href="http://www.teamtreehouse.com/signup_code/singapore">Treehouse</a>.
+                Treehouse offers a 14 days free trial.
+            </p>
+
+            <p>
+                Once you’ve registered on TreeHouse, visit
+                <a href="#/edit" class="edit-link">our setting page</a>
+                and enter your Treehouse username.
+            </p>
+        </div>
+
+        <div
+            id="register-codeschool" class="well clearfix"
+            ng-if="ctrl.profile.isCurrentUser &amp;&amp; !ctrl.profile.services.codeSchool.id"
+        >
+            <h2>Code School</h2>
+            <p>
+                <a href="https://www.codeschool.com/">Code School</a>
+                teaches web technologies in the comfort of your browser with
+                video lessons, coding challenges, and screencasts. Registering is free,
+                and the provides free content to try out.
+
+            </p>
+            <p>
+                Once you’ve registered on Code School, visit
+                <a href="#/edit" class="edit-link">our setting page</a>
+                and enter your Code School username.
+            </p>
+        </div>
+
+        <div
+            id="register-codecombat" class="well clearfix"
+            ng-if="ctrl.profile.isCurrentUser &amp;&amp; !ctrl.profile.services.codeCombat.id"
+        >
+            <h2>Code Combat</h2>
+            <p>
+                <a href="http://codecombat.com/">Code Combat</a>,
+                learn to Code JavaScript by Playing a Game.
+            </p>
+            <p>
+                Once you’ve registered on Code Combat, visit
+                <a href="#/edit" class="edit-link">our setting page</a>
+                and enter your Code Combat username.
+            </p>
+        </div>
+    </div>
+</div>

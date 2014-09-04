@@ -1,0 +1,31 @@
+/**
+ * Style for Ranks subsection.
+ *
+ */
+.ranks .sort {
+  position: relative;
+}
+
+.ranks .sort-icon {
+  display: none;
+  position: absolute;
+  left: -1.5em;
+  font-size: 75%;
+  top: 5px;
+}
+
+.ranks .selected .sort-icon {
+  display: inline-block;
+}
+
+.ranks a:hover .sort-icon {
+  display: inline-block;
+}
+
+.badge-list {
+  max-width: 128px;
+}
+
+.badge-thumbnail {
+  width: 16px;
+}

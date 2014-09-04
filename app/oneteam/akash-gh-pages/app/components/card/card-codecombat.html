@@ -1,0 +1,53 @@
+<div class="well clearfix" ng-if="info">
+    <div class="report-card codecombat">
+
+
+        <h1>
+            <span ng-if="isCurrentUser">Your </span>
+            Code Combat
+        </h1>
+
+        <p ng-if="(info.courses.inProgress|oepEmpty) &amp;&amp; (info.badges|oepEmpty)">No progress yet.</p>
+
+        <div ng-if="!(info.badges|oepEmpty)" class="badges">
+            <h2>Levels completed:</h2>
+            <div class="row">
+                <div ng-repeat="badge in info.badges" class="col-xs-4 col-md-2">
+                    <a ng-href="{{badge.url}}" class="thumbnail"
+                        title="earned the {{badge.name}} badge."
+                        target="_blank"
+                    >
+                        <img class="codecombat"
+                            ng-src="{{badge.iconUrl}}"
+                            alt="{{badge.name}}"
+                            title="earned the {{badge.name}} badge."
+                        />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="!(info.courses.inProgress|oepEmpty)">
+            <h2>Arena:</h2>
+            <div class="row">
+                <div ng-repeat="(name, arena) in info.courses.inProgress"
+                    class="col-xs-12 col-md-6 arena"
+                >
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <img alt="{{arena.name}}"
+                                ng-src="{{arena.iconUrl}}"
+                                title="participating to {{arena.name}}"
+                            />
+                        </div>
+                        <div class="col-xs-8">
+                            <h4>{{arena.name}}</h4>
+                            <p>{{arena.points}} points</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-sm-8">
+        <h1>Suggestions</h1>
+        <hr/>
+
+        <ul class="list-unstyled">
+            <li ng-repeat="s in ctrl.suggestions track by s.id">
+                <p>from {{s.from}} on {{s.createdAt}}</p>
+
+                <pre ng-bind="s.message"></pre>
+
+                <hr/>
+            </li>
+        </ul>
+
+        <button
+            type="button"
+            class="btn btn-primary btn-lg btn-block"
+            ng-disabled="!ctrl.suggestions.cursor"
+            ng-click="ctrl.next(ctrl.suggestions.cursor)"
+        >
+            Next
+        </button>
+    </div>
+
+    <div class="col-sm-4 well">
+        <oep-admin-menu oep-items="ctrl.menu"></oep-admin-menu>
+    </div>
+</div>
