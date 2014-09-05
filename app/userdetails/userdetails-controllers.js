@@ -30,11 +30,35 @@
     return n.replace(userIdFilterPattern, '');
   }
 
+
   /**
    * Convert a gmail account nickname to a name.
    */
   function defaultName(name) {
     return googleNickNamePattern.exec(name)[1];
+  }
+
+
+  function _pad(number) {
+    var r = number + '';
+
+    if (r.length === 1) {
+      r = '0' + r;
+    }
+
+    return r;
+  }
+
+
+  /**
+   * Return an ISO date
+   */
+  function isoDate(date) {
+    date = date || new Date();
+
+    return date.getUTCFullYear() +
+      '-' + _pad(date.getUTCMonth() + 1) +
+      '-' + _pad(date.getUTCDate());
   }
 
   /**
@@ -122,7 +146,9 @@
         match = refPattern.exec(search),
         self = this,
         pick = $filter('oepPick'),
-        updaters = {};
+        updaters = {},
+        today=new Date(),
+        nextYear=new Date(today.getFullYear() +1, 11, 31);
 
       this.saving = false;
       this.userIdPattern = /^[-\w\d.]+$/;
@@ -133,6 +159,8 @@
       this.options.schools = {
         choices: availableSchools
       };
+      this.today = isoDate(today);
+      this.nextYear = isoDate(nextYear);
 
       this.newCourse = {
         selected: {},
@@ -162,19 +190,6 @@
         if (this.ref) {
           this.user.info.referredBy = this.ref;
         }
-
-        _.defaults(this.user.info, {
-          'internship': {},
-          'id': defaultId(user.name),
-          'name': defaultName(user.name)
-        });
-
-        _.defaults(this.user.info.internship, {
-          'interested': false,
-          'companies': {},
-          'dates': [{}, {}],
-          'notification': {}
-        });
       };
 
       /**
@@ -200,7 +215,7 @@
       function setFormPristine(form) {
         var isPristine = true;
 
-        _.keys(form).forEach(function(key){
+        _.keys(form).forEach(function(key) {
           if (key[0] === '$') {
             return;
           }
@@ -246,7 +261,7 @@
 
           self.saving = $q.when(self.saving).then(function() {
             var payload = pick(userInfo, prop);
-            console.log(userInfo, prop, payload);
+
             return oepCurrentUserApi.update(payload);
           }).then(function(user) {
             input.$setPristine();
@@ -291,7 +306,6 @@
         var count = _.reduce(companies, function(sum, selected) {
           return selected ? sum + 1 : sum;
         }, 0);
-        console.log(count);
         return count >= 5;
       };
 
@@ -306,6 +320,23 @@
         this.newUserInfo();
       }
 
+      _.defaults(this.user.info, {
+        'internship': {},
+        'id': defaultId(user.name),
+        'name': defaultName(user.name)
+      });
+
+      _.defaults(this.user.info.internship, {
+        'interested': false,
+        'companies': {},
+        'dates': _.range(2).map(function() {
+          return {
+            start: '',
+            end: ''
+          };
+        }),
+        'notification': {}
+      });
     }
   ]);
 
