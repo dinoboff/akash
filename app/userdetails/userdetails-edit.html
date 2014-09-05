@@ -274,8 +274,8 @@
                             <input type="date" id="intership-start-1" class="form-control"
                                 ng-model="ctrl.user.info.internship.dates[0].start"
                                 placeholder="yyyy-mm-dd"
-                                min="2014-01-01"
-                                required="required"
+                                ng-attr-min="{{ctrl.today}}"
+                                ng-attr-max="{{ctrl.nextYear}}"
                                 name="intershipStart1"
                                 ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].start', intershipsForm.intershipStart1, userForm)"
                             />
@@ -290,15 +290,15 @@
                             <input type="date" id="intership-end-1" class="form-control"
                                 ng-model="ctrl.user.info.internship.dates[0].end"
                                 placeholder="yyyy-mm-dd"
-                                min="2014-01-01"
-                                required="required"
+                                ng-attr-min="{{ctrl.user.info.internship.dates[0].start}}"
+                                ng-attr-max="{{ctrl.nextYear}}"
                                 name="intershipEnd1"
                                 ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].end', intershipsForm.intershipEnd1, userForm)"
                             />
                         </div>
                     </div>
 
-                    <div class="form-group clearfix">
+                    <div class="form-group clearfix" ng-if="ctrl.user.info.internship.dates[0].end">
                         <label for="intership-start" class="col-sm-4 control-label">
                             Second internship start<span ng-show="intershipsForm.intershipStart2.$dirty">*</span>:
                         </label>
@@ -306,15 +306,15 @@
                             <input type="date" id="intership-start-2" class="form-control"
                                 ng-model="ctrl.user.info.internship.dates[1].start"
                                 placeholder="yyyy-mm-dd"
-                                min="2014-01-01"
-                                required="required"
+                                ng-attr-min="{{ctrl.today}}"
+                                ng-attr-max="{{ctrl.nextYear}}"
                                 name="intershipStart2"
                                 ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].start', intershipsForm.intershipStart2, userForm)"
                             />
                         </div>
                     </div>
 
-                    <div class="form-group clearfix">
+                    <div class="form-group clearfix" ng-if="ctrl.user.info.internship.dates[0].end">
                         <label for="intership-end-1" class="col-sm-4 control-label">
                             End<span ng-show="intershipsForm.intershipEnd2.$dirty">*</span>:
                         </label>
@@ -322,8 +322,8 @@
                             <input type="date" id="intership-end-2" class="form-control"
                                 ng-model="ctrl.user.info.internship.dates[1].end"
                                 placeholder="yyyy-mm-dd"
-                                min="2014-01-01"
-                                required="required"
+                                ng-attr-min="{{ctrl.user.info.internship.dates[1].start}}"
+                                ng-attr-max="{{ctrl.nextYear}}"
                                 name="intershipEnd2"
                                 ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].end', intershipsForm.intershipEnd2, userForm)"
                             />
