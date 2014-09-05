@@ -162,19 +162,6 @@
         if (this.ref) {
           this.user.info.referredBy = this.ref;
         }
-
-        _.defaults(this.user.info, {
-          'internship': {},
-          'id': defaultId(user.name),
-          'name': defaultName(user.name)
-        });
-
-        _.defaults(this.user.info.internship, {
-          'interested': false,
-          'companies': {},
-          'dates': [{}, {}],
-          'notification': {}
-        });
       };
 
       /**
@@ -200,7 +187,7 @@
       function setFormPristine(form) {
         var isPristine = true;
 
-        _.keys(form).forEach(function(key){
+        _.keys(form).forEach(function(key) {
           if (key[0] === '$') {
             return;
           }
@@ -291,7 +278,6 @@
         var count = _.reduce(companies, function(sum, selected) {
           return selected ? sum + 1 : sum;
         }, 0);
-        console.log(count);
         return count >= 5;
       };
 
@@ -306,6 +292,23 @@
         this.newUserInfo();
       }
 
+      _.defaults(this.user.info, {
+        'internship': {},
+        'id': defaultId(user.name),
+        'name': defaultName(user.name)
+      });
+
+      _.defaults(this.user.info.internship, {
+        'interested': false,
+        'companies': {},
+        'dates': _.range(2).map(function() {
+          return {
+            start: '',
+            end: ''
+          };
+        }),
+        'notification': {}
+      });
     }
   ]);
 
