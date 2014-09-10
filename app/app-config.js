@@ -56,6 +56,9 @@
             id: 'schoolType',
             name: 'School Type',
             choices: [{
+              id: 'Secondary',
+              name: 'Secondary'
+            }, {
               id: 'Junior College',
               name: 'Junior College'
             }, {
