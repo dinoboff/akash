@@ -118,8 +118,6 @@
     }
   ]);
 
-
-
   /**
    * OepUserFormListCtrl - Controller for the user settings form.
    *
@@ -129,6 +127,8 @@
   module.controller('OepUserFormListCtrl', [
     '$location',
     '$q',
+    '$http',
+    '$scope',
     '$filter',
     '$window',
     'oepCurrentUserApi',
@@ -138,7 +138,7 @@
     'user',
     'availableSchools',
     'availableCourses',
-    function OepUserFormListCtrl($location, $q, $filter, $window, oepCurrentUserApi, oepUsersApi, oepSettings, oepDebounce, user, availableSchools, availableCourses) {
+    function OepUserFormListCtrl($location, $q, $http, $scope,$filter, $window, oepCurrentUserApi, oepUsersApi, oepSettings, oepDebounce, user, availableSchools, availableCourses) {
       var $ = $window.jQuery,
         _ = $window._,
         search = $window.location.search,
@@ -192,6 +192,25 @@
         }
       };
 
+       this.check_for_codecombat = function() {
+            $http({
+                url: 'http://codecombat.com/auth/whoami?callback=JSON_CALLBACK',
+                method: "JSONP"
+              }).then(function(response) {
+                  // success
+                  console.log(response.data.name);
+                  $scope.mycodecombat = response.data.name;
+                  //alert("Your codecombat name is "+response.data.name);
+                  //this.mycodecombat= response;
+                }, 
+                function(response) { // optional
+                  // failed
+                  console.log("Code Combat data not found.");
+                }
+              );
+      }
+          
+    
       /**
        * Save/create user info.
        *

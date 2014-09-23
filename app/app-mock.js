@@ -456,6 +456,8 @@
 
       // Everything else (like html templates) should go through
       httpBackend.whenGET(/.*/).passThrough();
+      httpBackend.whenJSONP('http://codecombat.com/auth/whoami?callback=JSON_CALLBACK').passThrough();
+
     }
   ])
 
