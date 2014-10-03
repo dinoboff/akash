@@ -192,23 +192,23 @@
         }
       };
 
-       this.check_for_codecombat = function() {
+      this.checkForCodecombat = function() {
             $http({
                 url: 'http://codecombat.com/auth/whoami?callback=JSON_CALLBACK',
-                method: "JSONP"
+                method: 'JSONP'
               }).then(function(response) {
                   // success
                   console.log(response.data.name);
                   $scope.mycodecombat = response.data.name;
                   //alert("Your codecombat name is "+response.data.name);
                   //this.mycodecombat= response;
-                }, 
+                },
                 function(response) { // optional
                   // failed
-                  console.log("Code Combat data not found.");
+                  console.log('Code Combat data not found.\nError: '+response);
                 }
               );
-      }
+          };
           
     
       /**

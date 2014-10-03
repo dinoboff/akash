@@ -28,6 +28,43 @@
 
 
   /**
+   * OepAdminEventsCtrl - Controller for the events partials.
+   *
+   * Assuming the current user is an admin, it populate the controller
+   * with the list of events, queried from the OEP API.
+   *
+   */
+  function OepAdminEventsCtrl(oepEventsApi, menu, events) {
+    var self = this;
+
+    // oepEventsApi.get()
+    this.events = events;
+    this.menu = menu;
+
+    /**
+     * OepAdminEventsCtrl.next - query more events and add them
+     * to the list of events.
+     *
+     */
+    this.next = function(cursor) {
+      oepEventsApi.get(cursor).then(function(events) {
+        if (!self.events) {
+          self.events = [];
+        }
+
+        self.events = self.events.concat(events);
+        self.events.cursor = events.cursor;
+      });
+    };
+  }
+
+  module.controller('OepAdminEventsCtrl', [
+    'oepEventsApi', 'menu', 'events', OepAdminEventsCtrl
+  ]);
+  
+  
+  
+  /**
    * OepAdminSuggestionsCtrl - Controller for the suggestions partials.
    *
    * Assuming the current user is an admin, it populate the controller

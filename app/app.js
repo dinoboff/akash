@@ -12,7 +12,12 @@
       url: '/admin/metrics',
       title: 'Metrics'
     },
-
+    
+    events: {
+      url: '/admin/events',
+      title: 'Events'
+    },
+    
     suggestions: {
       url: '/admin/suggestions',
       title: 'Suggestions'
@@ -91,6 +96,19 @@
           menu: adminMenuResolver
         }
       }).
+      when(adminMenu.events.url, {
+        templateUrl: 'admin/admin-events.html',
+        controller: 'OepAdminEventsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          menu: adminMenuResolver,
+          events: ['oepEventsApi',
+            function(oepEventsApi) {
+              return oepEventsApi.get();
+            }
+          ]
+        }
+      }).
       when(adminMenu.suggestions.url, {
         templateUrl: 'admin/admin-suggestions.html',
         controller: 'OepAdminSuggestionsCtrl',
@@ -117,6 +135,12 @@
           ]
         }
       }).
+      when('/events', {
+        templateUrl: 'events/events-form.html',
+        controller: 'OepEventFormCtrl',
+        controllerAs: 'ctrl',
+        resolve: rankResolver
+      }).
       when('/suggestion', {
         templateUrl: 'suggestions/sugestions-form.html',
         controller: 'OepSuggestionFormCtrl',
@@ -141,12 +165,6 @@
         templateUrl: 'oneteam/d.html',
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
-      }).
-      when('/events', {
-        templateUrl: 'events/events-form.html',
-        controller: 'OepEventFormCtrl',
-        controllerAs: 'ctrl',
-        resolve: rankResolver
       }).
       when('/ranks', {
         templateUrl: 'ranks/ranks.html',

@@ -40,7 +40,7 @@
         var results;
 
         httpBackend.expectGET('/api/v1/events').respond(
-          '{"events":[{"eventName":"My Event","school":"Any","count":40,"criteria":"Earn 1 badge","service":"Any","reward":"Earn a letter of recommendation for university applications","comments":"Have fun.","from":"me@example.com"}], ' +
+          '{"events":[{"eventName": "My Event", "school": "Any", "count":40, "criteria": "Earn 1 badge", "service": "Any", "reward": "Earn a letter of recommendation for university applications", "comments": "Have fun.", "from": "me@example.com"}], ' +
           '"cursor": "abcd"}'
         );
 

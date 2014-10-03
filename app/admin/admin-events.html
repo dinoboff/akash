@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-sm-8">
+        <h1>Events</h1>
+        <hr/>
+
+        <ul class="list-unstyled">
+            <li ng-repeat="e in ctrl.events track by e.id">
+                <p>from {{e.from}} on {{e.createdAt}}</p>
+
+                <pre>
+                Event Name: {{e.eventName}} <br>
+                Number of Students: {{e.count}} <br>
+                School: {{e.school}} <br>
+                Platform: {{e.service}} <br>
+                Criteria: {{e.criteria}} <br>
+                Reward: {{e.reward}} <br>
+                Additional Comments: {{e.comments}} <br>
+                </pre>
+
+                <hr/>
+            </li>
+        </ul>
+
+        <button
+            type="button"
+            class="btn btn-primary btn-lg btn-block"
+            ng-disabled="!ctrl.events.cursor"
+            ng-click="ctrl.next(ctrl.events.cursor)"
+        >
+            Next
+        </button>
+    </div>
+
+    <div class="col-sm-4 well">
+        <oep-admin-menu oep-items="ctrl.menu"></oep-admin-menu>
+    </div>
+</div>
