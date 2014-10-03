@@ -5,18 +5,18 @@
 
         <ul class="list-unstyled">
             <li ng-repeat="e in ctrl.events track by e.id">
-                <p>from {{e.from}} on {{e.createdAt}}</p>
-
                 <pre>
-                Event Name: {{e.eventName}} <br>
-                Number of Students: {{e.count}} <br>
-                School: {{e.school}} <br>
-                Platform: {{e.service}} <br>
-                Criteria: {{e.criteria}} <br>
-                Reward: {{e.reward}} <br>
-                Additional Comments: {{e.comments}} <br>
+                  Event Name: {{e.eventName}} <br />
+                  Visibility: {{e.visibility}} <br />
+                  Password: {{e.password}} <br />
+                  Platform: {{e.services}} <br />
+                  Minimum number of badges required: {{e.criteria}} <br />
+                  Reward: {{e.reward}} <br />
+                  Additional Comments: {{e.comments}} <br />
+                  Creator: {{e.from}} <br />
+                  Creation Time: {{e.createdAt}} <br />
+                  Users: {{e.users}}
                 </pre>
-
                 <hr/>
             </li>
         </ul>

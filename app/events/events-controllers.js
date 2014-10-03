@@ -26,13 +26,13 @@
       id: 'services',
       name: 'Services',
       choices: [{
-        'id': '1',
+        'id': 'Code School',
         'name': 'Code School'
       }, {
-        'id': '2',
+        'id': 'Treehouse',
         'name': 'Treehouse'
       }, {
-        'id': '3',
+        'id': 'Code Combat',
         'name': 'Code Combat'
       }]
     };
@@ -76,26 +76,18 @@
    *
    */
   OepEventFormCtrl.prototype.reset = function() {
-    var self = this;
-
     this.saving = false;
     this.saved = false;
     this.event = {};
     this.event.eventName = 'My Event';
-    this.event.school = 'Any';
-    this.event.count = 40;
-    this.event.criteria = 'Earn 1 badge';
-    this.event.service = 'Any';
-    this.event.reward = 'Earn a letter of recommendation for university applications';
+    this.event.visibility = 'public';
+    this.event.password = '';
+    this.event.criteria = 1;
+    this.event.services = {'Code School': false, 'Treehouse': false, 'Code Combat': false};
+    this.event.reward = 'Learn coding!';
     this.event.comments = 'Have fun!';
-
-    this.currentUser.auth().then(function(data) {
-      if (!data || !data.info || !data.info.email) {
-        return;
-      }
-
-      self.event.from = data.info.email;
-    });
+    this.event.users = [];
+    this.event.from = this.currentUser.data.info.id;
   };
 
   angular.module('oep.events.controllers', [
