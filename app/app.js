@@ -12,7 +12,12 @@
       url: '/admin/metrics',
       title: 'Metrics'
     },
-
+    
+    events: {
+      url: '/admin/events',
+      title: 'Events'
+    },
+    
     suggestions: {
       url: '/admin/suggestions',
       title: 'Suggestions'
@@ -35,6 +40,7 @@
       'oep.controllers',
       'oep.ranks.controllers',
       'oep.events.controllers',
+      'oep.eventsView.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
@@ -91,6 +97,19 @@
           menu: adminMenuResolver
         }
       }).
+      when(adminMenu.events.url, {
+        templateUrl: 'admin/admin-events.html',
+        controller: 'OepAdminEventsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          menu: adminMenuResolver,
+          events: ['oepEventsApi',
+            function(oepEventsApi) {
+              return oepEventsApi.get();
+            }
+          ]
+        }
+      }).
       when(adminMenu.suggestions.url, {
         templateUrl: 'admin/admin-suggestions.html',
         controller: 'OepAdminSuggestionsCtrl',
@@ -113,6 +132,24 @@
           courses: ['oepUsersApi',
             function(oepUsersApi) {
               return oepUsersApi.courses.all();
+            }
+          ]
+        }
+      }).
+      when('/events', {
+        templateUrl: 'events/events-form.html',
+        controller: 'OepEventFormCtrl',
+        controllerAs: 'ctrl',
+        resolve: rankResolver
+      }).
+      when('/viewEvents', {
+        templateUrl: 'events/events-view.html',
+        controller: 'OepEventsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          events: ['oepEventsApi',
+            function(oepEventsApi) {
+              return oepEventsApi.get();
             }
           ]
         }
@@ -141,12 +178,6 @@
         templateUrl: 'oneteam/d.html',
         controller: 'OepRanksShowRanks',
         controllerAs: 'ctrl',
-      }).
-      when('/events', {
-        templateUrl: 'events/events-form.html',
-        controller: 'OepEventFormCtrl',
-        controllerAs: 'ctrl',
-        resolve: rankResolver
       }).
       when('/ranks', {
         templateUrl: 'ranks/ranks.html',

@@ -26,7 +26,6 @@
           if (cursor) {
             param.cursor = cursor;
           }
-
           return api.all('events').getList(param);
         },
 

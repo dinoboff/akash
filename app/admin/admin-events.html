@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-sm-8">
+        <h1>Events</h1>
+        <hr/>
+
+        <ul class="list-unstyled">
+            <li ng-repeat="e in ctrl.events track by e.id">
+                <pre>
+                  Event Name: {{e.eventName}} <br />
+                  Visibility: {{e.visibility}} <br />
+                  Password: {{e.password}} <br />
+                  Platform: {{e.services}} <br />
+                  Minimum number of badges required: {{e.criteria}} <br />
+                  Reward: {{e.reward}} <br />
+                  Additional Comments: {{e.comments}} <br />
+                  Creator: {{e.from}} <br />
+                  Creation Time: {{e.createdAt}} <br />
+                  Users: {{e.users}}
+                </pre>
+                <hr/>
+            </li>
+        </ul>
+
+        <button
+            type="button"
+            class="btn btn-primary btn-lg btn-block"
+            ng-disabled="!ctrl.events.cursor"
+            ng-click="ctrl.next(ctrl.events.cursor)"
+        >
+            Next
+        </button>
+    </div>
+
+    <div class="col-sm-4 well">
+        <oep-admin-menu oep-items="ctrl.menu"></oep-admin-menu>
+    </div>
+</div>

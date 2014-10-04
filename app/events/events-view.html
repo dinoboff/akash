@@ -1,0 +1,22 @@
+<div class="row">
+  <h1>Events</h1>
+  <hr/>
+  
+  <ul class="list-unstyled">
+    <li ng-repeat="e in ctrl.events track by e.id">
+      <pre>
+        Event Name: {{e.eventName}} <br />
+        Visibility: {{e.visibility}} <br />
+        Password: {{e.password}} <br />
+        Platform: {{e.services}} <br />
+        Minimum number of badges required: {{e.criteria}} <br />
+        Reward: {{e.reward}} <br />
+        Additional Comments: {{e.comments}} <br />
+        Creator: {{e.from}} <br />
+        Creation Time: {{e.createdAt}} <br />
+        Users: {{e.users}}
+      </pre>
+      <hr/>
+    </li>
+  </ul>
+</div>

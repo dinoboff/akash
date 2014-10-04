@@ -7,8 +7,7 @@
                 <legend>Event Creation Form</legend>
 
                 <p class="alert alert-success" ng-if="ctrl.saved">
-                    Event created on {{ctrl.event.created_at}}
-                    (event id: #{{ctrl.event.id}}).
+                    Event created successfully!
                     <br/>
                     Thanks for creating the event.
                 </p>
@@ -22,51 +21,52 @@
                     />
                 </div>
               
+                <label>Visibility:</label>
                 <div class="form-group">
-                    <label for="count">Number of Students:</label>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="visiblity" value="public" 
+                        ng-model="ctrl.event.visibility" ng-checked="true"
+                      />Public
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="visiblity" value="private"
+                        ng-model="ctrl.event.visibility"
+                      />Private (Password Protected)
+                    </label>
+                  </div>
+                </div>
+              
+                <div class="form-group" ng-if="ctrl.event.visibility==='private'">
+                  <label for="password">Password:</label>
                     <input
-                        name="count"
-                        type="number" min="1" step="1" pattern="\d+"
-                        class="form-control" id="count"
-                        ng-model="ctrl.event.count" required="true"
+                        name="password"
+                        type="password" class="form-control" id="password"
+                        ng-model="ctrl.event.password" required="true"
                     />
                 </div>
-              
+                
+                <label>Platform:</label>
                 <div class="form-group">
-                    <label for="school">School:</label>
-                    <select
-                        name="school"
-                        class="form-control" id="school"
-                        ng-model="ctrl.event.school" required="true"
-                        ng-options="choice.id as choice.name group by choice.group for choice in ctrl.schools.choices"
-                    >
-                      <option value="">Any</option>
-                    </select>
+                  <label class="checkbox-inline" ng-repeat="choice in ctrl.services.choices">
+                    <input type="checkbox" value="{{choice.name}}"
+                      ng-model="ctrl.event.services[choice.name]"
+                      name="platform" />
+                    {{choice.name}}
+                  </label>
                 </div>
               
                 <div class="form-group">
-                    <label for="platform">Platform:</label>
-                    <select
-                        name="platform"
-                        class="form-control" id="platform"
-                        ng-model="ctrl.event.service" required="true"
-                        ng-options="choice.id as choice.name for choice in ctrl.services.choices"
-                    >
-                      <option value="">Any</option>
-                    </select>
+                  <label for="criteria">Minimum number of badges required:</label>
+                  <input
+                    name="criteria"
+                    type="number" min="1" step="1" pattern="\d+"
+                    class="form-control" id="criteria"
+                    ng-model="ctrl.event.criteria" required="true"
+                  />
                 </div>
-              
-                <div class="form-group">
-                    <label for="criteria">Criteria:</label>
-                    <select
-                        name="criteria"
-                        class="form-control" id="criteria"
-                        ng-model="ctrl.event.criteria" required="true"
-                        ng-options="choice.id as choice.name for choice in ctrl.criteria.choices"
-                    >
-                      <option value="">Earn 1 badge</option>
-                    </select>
-                </div>         
                  
                 <div class="form-group">
                     <label for="reward">Reward:</label>
@@ -81,8 +81,8 @@
                     <label for="add-comment">Additional Comments:</label>
                     <textarea
                         name="add-comment"
-                        class="form-control" id="add-comment" rows="10"
-                        ng-model="ctrl.event.comments" required="true"
+                        class="form-control" id="add-comment" rows="1"
+                        ng-model="ctrl.event.comments"
                     ></textarea>
                 </div>
             </fieldset>
@@ -107,4 +107,3 @@
 
     </div>
 </div>
-

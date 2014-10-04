@@ -332,6 +332,23 @@
 
         return [200, _.sortBy(services, sort)];
       });
+      
+      // Events list
+      httpBackend.whenGET(fixtures.url.events).respond({
+        events: events,
+        cursor: ''
+      });
+
+      // New event  
+      httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
+        var event = JSON.parse(body);
+        
+        events.push(event);
+        event.id = events.length;
+        event.createdAt = new Date().toUTCString();
+
+        return [200, event];
+      });
 
       // Suggestions list
       httpBackend.whenGET(fixtures.url.suggestions).respond({
@@ -348,17 +365,6 @@
         suggestion.createdAt = new Date().toUTCString();
 
         return [200, suggestion];
-      });
-
-      // New event
-      httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
-        var event = JSON.parse(body);
-
-        events.push(event);
-        event.id = events.length;
-        event.createdAt = new Date().toUTCString();
-
-        return [200, event];
       });
 
       // Courses
