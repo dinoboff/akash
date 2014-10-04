@@ -89,7 +89,7 @@
     this.event.users = [];
     this.event.from = this.currentUser.data.info.id;
   };
-
+  
   angular.module('oep.events.controllers', [
     'oep.events.services',
     'oep.user.services'
@@ -100,8 +100,6 @@
     'oepEventsApi',
     'availableSchools',
     OepEventFormCtrl
-  ])
-
-  ;
+  ]);
 
 })();

@@ -40,6 +40,7 @@
       'oep.controllers',
       'oep.ranks.controllers',
       'oep.events.controllers',
+      'oep.eventsView.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
@@ -140,6 +141,18 @@
         controller: 'OepEventFormCtrl',
         controllerAs: 'ctrl',
         resolve: rankResolver
+      }).
+      when('/viewEvents', {
+        templateUrl: 'events/events-view.html',
+        controller: 'OepEventsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          events: ['oepEventsApi',
+            function(oepEventsApi) {
+              return oepEventsApi.get();
+            }
+          ]
+        }
       }).
       when('/suggestion', {
         templateUrl: 'suggestions/sugestions-form.html',
