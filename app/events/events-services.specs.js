@@ -40,7 +40,7 @@
         var results;
 
         httpBackend.expectGET('/api/v1/events').respond(
-          '{"events":[{"eventName": "My Event", "visibility": "public", "password": "", "criteria": 1, "service":{"Code School": false, "Treehouse": false, "Code Combat": false}, "reward": "Learn coding!", "comments": "Have fun.", "users": [], "from": "me"}], ' +
+          '{"events":[{"eventName": "My Event", "visibility": "public", "password": "", "criteria": 1, "service":{"Code School": true, "Treehouse": false, "Code Combat": false}, "start": "2014-10-08", "end": "2014-10-15", "reward": "Learn coding!", "comments": "Have fun.", "users": [], "from": "me"}], ' +
           '"cursor": "abcd"}'
         );
 
@@ -61,7 +61,7 @@
       });
 
       it('should post new events', function() {
-        var data, event = {'eventName':'My Event','visibility':'public','password':'','criteria':1,'services':{'Code School':false,'Treehouse':false,'Code Combat':false},'reward':'Learn coding!','comments':'Have fun.','users':[],'from':'me'};
+        var data, event = {'eventName':'My Event','visibility':'public','password':'','criteria':1,'services':{'Code School':true,'Treehouse':false,'Code Combat':false},'start':'2014-10-08','end':'2014-10-15','reward':'Learn coding!','comments':'Have fun.','users':[],'from':'me'};
 
         httpBackend.expectPOST('/api/v1/events').respond(function(m, u, body) {
           data = JSON.parse(body);
