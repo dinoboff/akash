@@ -4,18 +4,43 @@
   
   <ul class="list-unstyled">
     <li ng-repeat="e in ctrl.events track by e.id">
-      <pre>
-        Event Name: {{e.eventName}} <br />
-        Visibility: {{e.visibility}} <br />
-        Password: {{e.password}} <br />
-        Platform: {{e.services}} <br />
-        Minimum number of badges required: {{e.criteria}} <br />
-        Reward: {{e.reward}} <br />
-        Additional Comments: {{e.comments}} <br />
-        Creator: {{e.from}} <br />
-        Creation Time: {{e.createdAt}} <br />
-        Users: {{e.users}}
-      </pre>
+        <h3>{{e.eventName}}</h3>
+      
+        <h5>Platforms:
+          <tag ng-repeat="(key, value) in e.services" ng-if="value===true">
+              {{key}}
+          </tag>
+        </h5>
+      
+        <h5>Minimum number of badges required: {{e.criteria}} </h5>
+      
+        <h5>Start Date: {{e.start}} </h5>
+      
+        <h5>End Date: {{e.end}}</h5>
+      
+        <h5>Reward: {{e.reward}}</h5>
+      
+        <h5>Additional Comments: {{e.comments}}</h5>
+      
+        <h5 ng-if="e.visibility==='private'">Event Password:
+          <input name="eventPassword" type="password" 
+            id="password" ng-model="e.passwordGuess" required="true"/>
+        </h5>
+      
+        <button
+          type="submit" class="btn btn-default"
+          ng-disabled="e.visibility==='private' && e.password!=e.passwordGuess"
+          ng-click="ctrl.add(e)"
+          ng-hide="e.users.indexOf(ctrl.currentUser.data.info.id) >= 0"
+        >Join Event
+        </button>
+      
+        <button
+          type="submit" class="btn btn-default"
+          ng-click="ctrl.remove(e)"
+          ng-show="e.users.indexOf(ctrl.currentUser.data.info.id) >= 0"
+        >Leave Event
+        </button>
       <hr/>
     </li>
   </ul>

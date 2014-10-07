@@ -40,7 +40,6 @@
       'oep.controllers',
       'oep.ranks.controllers',
       'oep.events.controllers',
-      'oep.eventsView.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',

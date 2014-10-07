@@ -7,6 +7,32 @@
 
 (function() {
   'use strict';
+  
+  var module = angular.module('oep.events.controllers', [
+    'oep.events.services',
+    'oep.user.services'
+  ]);
+  
+  function _pad(number) {
+    var r = number + '';
+
+    if (r.length === 1) {
+      r = '0' + r;
+    }
+
+    return r;
+  }
+  
+  /**
+   * Return an ISO date
+   */
+  function isoDate(date) {
+    date = date || new Date();
+
+    return date.getUTCFullYear() +
+      '-' + _pad(date.getUTCMonth() + 1) +
+      '-' + _pad(date.getUTCDate());
+  }
 
   /**
    * OepEventFormCtrl - Controller for the events subsection.
@@ -14,92 +40,169 @@
    * Populate the scope currentUser property with current user info.
    *
    */
-  function OepEventFormCtrl(currentUser, eventApi, availableSchools) {
-    this.api = eventApi;
-    this.currentUser = currentUser;
-    this.schools = {
-      id: 'schools',
-      name: 'Schools',
-      choices: availableSchools
-    };
-    this.services = {
-      id: 'services',
-      name: 'Services',
-      choices: [{
-        'id': 'Code School',
-        'name': 'Code School'
-      }, {
-        'id': 'Treehouse',
-        'name': 'Treehouse'
-      }, {
-        'id': 'Code Combat',
-        'name': 'Code Combat'
-      }]
-    };
-    this.criteria = {
-      id: 'criteria',
-      name: 'Criteria',
-      choices: [{
-        'id': '1',
-        'name': 'Earn 2 badges'
-      }, {
-        'id': '2',
-        'name': 'Earn 5 badges'
-      }, {
-        'id': '3',
-        'name': 'Earn maximum badges'
-      }]
-    };
-    this.reset();
-  }
-  
-  /**
-   * Request the OEP API to save the current user event.
-   *
-   */
-  OepEventFormCtrl.prototype.save = function(event) {
-    var self = this;
-    
-    this.saving = true;
-    this.saved = false;
-
-    return this.api.create(event).then(function(event) {
-      self.event = event;
-      self.saved = true;
-    })['finally'](function() {
-      self.saving = false;
-    });
-  };
-
-  /**
-   * Reset the scope initial values (Event with default values).
-   *
-   */
-  OepEventFormCtrl.prototype.reset = function() {
-    this.saving = false;
-    this.saved = false;
-    this.event = {};
-    this.event.eventName = 'My Event';
-    this.event.visibility = 'public';
-    this.event.password = '';
-    this.event.criteria = 1;
-    this.event.services = {'Code School': false, 'Treehouse': false, 'Code Combat': false};
-    this.event.reward = 'Learn coding!';
-    this.event.comments = 'Have fun!';
-    this.event.users = [];
-    this.event.from = this.currentUser.data.info.id;
-  };
-  
-  angular.module('oep.events.controllers', [
-    'oep.events.services',
-    'oep.user.services'
-  ]).
-
-  controller('OepEventFormCtrl', [
+  module.controller('OepEventFormCtrl', [
     'oepCurrentUserApi',
     'oepEventsApi',
     'availableSchools',
-    OepEventFormCtrl
+    function OepEventFormCtrl(currentUser, eventApi, availableSchools) {
+
+      var today = new Date(),
+          nextYear=new Date(today.getFullYear() +1, 11, 31);
+      this.api = eventApi;
+      this.currentUser = currentUser;
+      this.schools = {
+        id: 'schools',
+        name: 'Schools',
+        choices: availableSchools
+      };
+      this.services = {
+        id: 'services',
+        name: 'Services',
+        choices: [{
+          'id': 'Code School',
+          'name': 'Code School'
+        }, {
+          'id': 'Treehouse',
+          'name': 'Treehouse'
+        }, {
+          'id': 'Code Combat',
+          'name': 'Code Combat'
+        }]
+      };
+      this.criteria = {
+        id: 'criteria',
+        name: 'Criteria',
+        choices: [{
+          'id': '1',
+          'name': 'Earn 2 badges'
+        }, {
+          'id': '2',
+          'name': 'Earn 5 badges'
+        }, {
+          'id': '3',
+          'name': 'Earn maximum badges'
+        }]
+      };
+      this.today = isoDate(today);
+      this.nextYear = isoDate(nextYear);
+
+      /**
+       * Request the OEP API to save the current user event.
+       *
+       */
+      this.save = function(event) {
+        var self = this;
+
+        if(!this.event.services['Code School'] && !this.event.services.Treehouse && !this.event.services['Code Combat']) {
+          this.event.services['Code School'] = true;
+          this.event.services.Treehouse = true;
+          this.event.services['Code Combat'] = true;
+        }
+
+        this.saving = true;
+        this.saved = false;
+
+        return this.api.create(event).then(function(event) {
+          self.event = event;
+          self.saved = true;
+        })['finally'](function() {
+          self.saving = false;
+        });
+      };
+
+      /**
+       * Reset the scope initial values (Event with default values).
+       *
+       */
+      this.reset = function() {
+        this.saving = false;
+        this.saved = false;
+        this.event = {};
+        this.event.eventName = 'My Event';
+        this.event.visibility = 'public';
+        this.event.password = '';
+        this.event.criteria = 1;
+        this.event.services = {'Code School': true, 'Treehouse': false, 'Code Combat': false};
+        this.event.start = this.today;
+        this.event.end = this.today;
+        this.event.reward = 'Learn coding!';
+        this.event.comments = 'Have fun!';
+        this.event.users = [];
+        this.event.from = this.currentUser.data.info.id;
+      };
+      
+      this.reset();
+    }
+  ]);
+  
+  /**
+   * OepEventsCtrl - Controller for the events partials.
+   *
+   * It populates the controller with the list of events,
+   * queried from the OEP API.
+   *
+   */
+  module.controller('OepEventsCtrl', [
+    'oepCurrentUserApi',
+    'oepEventsApi',
+    'events',
+    function OepEventsCtrl(currentUser, oepEventsApi, events) {
+      this.currentUser = currentUser;
+      this.api = oepEventsApi;
+      
+      // oepEventsApi.get()
+      this.events = events;
+      
+      this.add = function(event) {
+        var self = this;
+        
+        this.event = event;
+        this.event.users.push(this.currentUser.data.info.id);
+
+        this.saving = true;
+        this.saved = false;
+
+        return this.api.create(event).then(function(event) {
+          self.event = event;
+          self.saved = true;
+        })['finally'](function() {
+          self.saving = false;
+        });
+        
+      };
+      
+      this.remove = function(event) {
+        var self = this;
+        
+        this.event = event;
+        for(var i = 0; i < event.users.length; i++){
+          if(event.users[i] === this.currentUser.data.info.id) {
+            event.users.splice(i,1);
+            i--;
+          }
+        }
+
+        this.saving = true;
+        this.saved = false;
+
+        return this.api.create(event).then(function(event) {
+          self.event = event;
+          self.saved = true;
+        })['finally'](function() {
+          self.saving = false;
+        });
+        
+      };
+    }
+    /**
+    function formatDate(dateString) {
+      var day = dateString.substring(8),
+          month = dateString.substring(5,7),
+          year = dateString.substring(0,4);
+
+      return day+' '+month+' '+year;
+    }
+    */
   ]);
 
 })();

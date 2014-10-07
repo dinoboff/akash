@@ -293,6 +293,51 @@
 
         updater(userInfo, prop, input, form);
       };
+      
+      /**
+       * Get Number of Pull Requests
+       *
+       */
+      this.getPulls = function() {
+        var self = this;
+        
+        this.user.info.services.github.pulls = 0;
+        
+        /**
+        var repositories = [
+          'https://api.github.com/repos/Khan/KaTex/pulls',
+          'https://api.github.com/repos/Khan/khan-exercises/pulls'
+        ];
+        */
+        var repository = 'https://api.github.com/repos/Khan/KaTex/pulls';
+        
+        $http({
+          method: 'JSONP',
+          url: repository + '?state=closed' + '&callback=JSON_CALLBACK'
+        }).then(function(response) {
+            // success
+            console.log(response.data.length);
+            self.user.info.services.github.pulls = response.data.length;
+          },
+          function(response) { // optional
+            // failed
+            console.log(response.status);
+            console.log('Github data not found.\nError: '+response);
+          }
+        );
+        
+        /**
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', 'https://api.github.com/repos/Khan/KaTex/pulls?state=closed', false);
+        xhr.setRequestHeader('Authorization', 'Basic YWthc2hrZWRpYTpIYXNBSzk2NzQz');
+
+        xhr.send('');
+        var data = xhr.responseText;
+        console.log(data.length);
+        self.user.info.services.github.pulls = (data.split('"login": "'+self.user.info.services.github.id+'",').length - 1) / 3;
+        */
+      };
 
       /**
        * Join a course.

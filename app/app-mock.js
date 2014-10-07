@@ -343,9 +343,19 @@
       httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
         var event = JSON.parse(body);
         
-        events.push(event);
-        event.id = events.length;
-        event.createdAt = new Date().toUTCString();
+        var i = 0;
+        for(i = 0; i < events.length; i++) {
+          if(event.id === events[i].id) {
+            events[i] = event;
+            break;
+          }
+        }
+        
+        if(i === events.length) {
+          events.push(event);
+          event.id = events.length;
+          event.createdAt = new Date().toUTCString();
+        }
 
         return [200, event];
       });
@@ -463,6 +473,7 @@
       // Everything else (like html templates) should go through
       httpBackend.whenGET(/.*/).passThrough();
       httpBackend.whenJSONP('http://codecombat.com/auth/whoami?callback=JSON_CALLBACK').passThrough();
+      httpBackend.whenJSONP('https://api.github.com/repos/Khan/KaTex/pulls?state=closed&callback=JSON_CALLBACK').passThrough();
 
     }
   ])

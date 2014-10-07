@@ -102,5 +102,34 @@
                 and enter your Code Combat username.
             </p>
         </div>
+      
+        <div
+            id="register-github" class="well clearfix"
+            ng-if="ctrl.profile.isCurrentUser &amp;&amp; !ctrl.profile.services.github.id"
+        >
+            <h2>Github</h2>
+            <p>
+                <a href="http://github.com/">Github</a>
+                is a web-based hosting service which offers all of the
+                distributed revision control and source code management
+                functionalities of Git.
+            </p>
+            <p>
+                Once you’ve registered on Github, visit
+                <a href="#/edit" class="edit-link">our setting page</a>
+                and enter your Github username.
+            </p>
+        </div>
+        
+        <div
+            id="view-github" class="well clearfix"
+            ng-if="ctrl.profile.isCurrentUser &amp;&amp; ctrl.profile.services.github.id"
+        >
+            <h2>Github</h2>
+            <p>
+                Your <a href="http://github.com/">Github</a> username: {{ctrl.profile.services.github.id}} <br />
+                Number of pull requests landed: {{ctrl.profile.services.github.pulls}}
+            </p>
+        </div>
     </div>
 </div>
