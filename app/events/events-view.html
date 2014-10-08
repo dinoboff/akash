@@ -26,19 +26,18 @@
           <input name="eventPassword" type="password"
             id="password" ng-model="e.passwordGuess" required="true"/>
         </h5>
-
         <button
           type="submit" class="btn btn-default"
           ng-disabled="e.visibility==='private' && e.password!=e.passwordGuess"
           ng-click="ctrl.add(e)"
-          ng-hide="e.users.indexOf(ctrl.currentUser.data.info.id) >= 0"
+          ng-hide="e.participants.indexOf(ctrl.currentUser.data.info.id) >= 0"
         >Join Event
         </button>
 
         <button
           type="submit" class="btn btn-default"
           ng-click="ctrl.remove(e)"
-          ng-show="e.users.indexOf(ctrl.currentUser.data.info.id) >= 0"
+          ng-show="e.participants.indexOf(ctrl.currentUser.data.info.id) >= 0"
         >Leave Event
         </button>
       <hr/>

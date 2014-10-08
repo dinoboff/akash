@@ -164,6 +164,7 @@
         this.saved = false;
 
         return this.api.addParticipant(event, this.currentUser.data.info.id).then(function() {
+          event.participants = event.participants || [];
           event.participants.push(self.currentUser.data.info.id);
           self.saved = true;
         })['finally'](function() {
