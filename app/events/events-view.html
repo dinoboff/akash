@@ -1,32 +1,32 @@
 <div class="row">
   <h1>Events</h1>
   <hr/>
-  
+
   <ul class="list-unstyled">
     <li ng-repeat="e in ctrl.events track by e.id">
-        <h3>{{e.eventName}}</h3>
-      
+        <h3>{{e.name}}</h3>
+
         <h5>Platforms:
           <tag ng-repeat="(key, value) in e.services" ng-if="value===true">
               {{key}}
           </tag>
         </h5>
-      
+
         <h5>Minimum number of badges required: {{e.criteria}} </h5>
-      
-        <h5>Start Date: {{e.start}} </h5>
-      
-        <h5>End Date: {{e.end}}</h5>
-      
+
+        <h5>Start Date: {{e.startDate}} </h5>
+
+        <h5>End Date: {{e.endDate}}</h5>
+
+        <h5>Description: {{e.description}}</h5>
+
         <h5>Reward: {{e.reward}}</h5>
-      
-        <h5>Additional Comments: {{e.comments}}</h5>
-      
+
         <h5 ng-if="e.visibility==='private'">Event Password:
-          <input name="eventPassword" type="password" 
+          <input name="eventPassword" type="password"
             id="password" ng-model="e.passwordGuess" required="true"/>
         </h5>
-      
+
         <button
           type="submit" class="btn btn-default"
           ng-disabled="e.visibility==='private' && e.password!=e.passwordGuess"
@@ -34,7 +34,7 @@
           ng-hide="e.users.indexOf(ctrl.currentUser.data.info.id) >= 0"
         >Join Event
         </button>
-      
+
         <button
           type="submit" class="btn btn-default"
           ng-click="ctrl.remove(e)"
