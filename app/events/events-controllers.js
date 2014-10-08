@@ -7,12 +7,12 @@
 
 (function() {
   'use strict';
-  
+
   var module = angular.module('oep.events.controllers', [
     'oep.events.services',
     'oep.user.services'
   ]);
-  
+
   function _pad(number) {
     var r = number + '';
 
@@ -22,7 +22,7 @@
 
     return r;
   }
-  
+
   /**
    * Return an ISO date
    */
@@ -118,23 +118,23 @@
         this.saving = false;
         this.saved = false;
         this.event = {};
-        this.event.eventName = 'My Event';
+        this.event.name = 'My Event';
         this.event.visibility = 'public';
         this.event.password = '';
         this.event.criteria = 1;
         this.event.services = {'Code School': true, 'Treehouse': false, 'Code Combat': false};
-        this.event.start = this.today;
-        this.event.end = this.today;
+        this.event.startDate = this.today;
+        this.event.endDate = this.today;
         this.event.reward = 'Learn coding!';
-        this.event.comments = 'Have fun!';
-        this.event.users = [];
-        this.event.from = this.currentUser.data.info.id;
+        this.event.description = 'Have fun!';
+        this.event.participants = [];
+        this.event.editor = this.currentUser.data.info.id;
       };
-      
+
       this.reset();
     }
   ]);
-  
+
   /**
    * OepEventsCtrl - Controller for the events partials.
    *
@@ -149,13 +149,13 @@
     function OepEventsCtrl(currentUser, oepEventsApi, events) {
       this.currentUser = currentUser;
       this.api = oepEventsApi;
-      
+
       // oepEventsApi.get()
       this.events = events;
-      
+
       this.add = function(event) {
         var self = this;
-        
+
         this.event = event;
         this.event.users.push(this.currentUser.data.info.id);
 
@@ -168,12 +168,12 @@
         })['finally'](function() {
           self.saving = false;
         });
-        
+
       };
-      
+
       this.remove = function(event) {
         var self = this;
-        
+
         this.event = event;
         for(var i = 0; i < event.users.length; i++){
           if(event.users[i] === this.currentUser.data.info.id) {
@@ -191,7 +191,7 @@
         })['finally'](function() {
           self.saving = false;
         });
-        
+
       };
     }
     /**
