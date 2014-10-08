@@ -35,6 +35,20 @@
          */
         create: function(event) {
           return api.all('events').post(event);
+        },
+
+        /**
+         * Add participant to event
+         */
+        addParticipant: function(event, userId) {
+          return api.one('events', event.id).one('participants', userId).put();
+        },
+
+        /**
+         * Remove a participant from an event
+         */
+        removeParticipant: function(event, userId) {
+          return api.one('events', event.id).one('participants', userId).remove();
         }
       };
     }

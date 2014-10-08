@@ -332,17 +332,17 @@
 
         return [200, _.sortBy(services, sort)];
       });
-      
+
       // Events list
       httpBackend.whenGET(fixtures.url.events).respond({
         events: events,
         cursor: ''
       });
 
-      // New event  
+      // New event
       httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
         var event = JSON.parse(body);
-        
+
         var i = 0;
         for(i = 0; i < events.length; i++) {
           if(event.id === events[i].id) {
@@ -350,7 +350,7 @@
             break;
           }
         }
-        
+
         if(i === events.length) {
           events.push(event);
           event.id = events.length;
@@ -359,6 +359,27 @@
 
         return [200, event];
       });
+
+      // New participant
+      httpBackend.whenPUT(fixtures.url.eventParticipants).respond(function(m, url) {
+        var parts = fixtures.url.eventParticipants.exec(url),
+          eventId = parseInt(parts[1], 10),
+          userId = parts[2];
+
+        console.log('TODO: add participant ' + userId + ' to event with id ' + eventId);
+        return [200, {}];
+      });
+
+      // Remove participant
+      httpBackend.whenPUT(fixtures.url.eventParticipants).respond(function(m, url) {
+        var parts = fixtures.url.eventParticipants.exec(url),
+          eventId = parseInt(parts[1], 10),
+          userId = parts[2];
+
+        console.log('TODO: remove participant ' + userId + ' to event with id ' + eventId);
+        return [200, {}];
+      });
+
 
       // Suggestions list
       httpBackend.whenGET(fixtures.url.suggestions).respond({

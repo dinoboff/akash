@@ -74,6 +74,24 @@
         expect(data).toEqual(event);
       });
 
+      it('should add new participants', function() {
+        httpBackend.expectPUT('/api/v1/events/foo/participants/bar').respond({});
+        api.addParticipant({id: 'foo'}, 'bar');
+        httpBackend.flush();
+      });
+
+      it('should remove participants', function() {
+        var req;
+
+        httpBackend.expectDELETE('/api/v1/events/foo/participants/bar').respond(function(m, u, body){
+          req = body;
+          return [200, {}];
+        });
+        api.removeParticipant({id: 'foo'}, 'bar');
+        httpBackend.flush();
+        expect(req).toBe(null);
+      });
+
     });
 
   });
