@@ -121,6 +121,7 @@
       ranks: /api\/v1\/ranks(?:\?(.+))?$/,
       suggestions: /api\/v1\/suggestions$/,
       events: /api\/v1\/events$/,
+      eventParticipants: /api\/v1\/events\/([^\/]+)\/participants\/([^\/]+)$/,
       schools: /api\/v1\/schools/,
       summary: /api\/v1\/summary/,
       courses: /api\/v1\/courses(?:\?(.+))?$/,

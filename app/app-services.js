@@ -6,21 +6,33 @@
 (function() {
   'use strict';
 
-  var interceptor = function(data, operation, what) {
-    var resp;
+  var respInterceptor = function(data, operation, what) {
+      var resp;
 
-    if (operation !== 'getList') {
-      return data;
-    }
+      if (operation !== 'getList') {
+        return data;
+      }
 
-    if (angular.isArray(data)) {
-      return data;
-    }
+      if (angular.isArray(data)) {
+        return data;
+      }
 
-    resp = data[what] ? data[what] : [];
-    resp.cursor = data.cursor ? data.cursor : null;
-    return resp;
-  };
+      resp = data[what] ? data[what] : [];
+      resp.cursor = data.cursor ? data.cursor : null;
+      return resp;
+    },
+    reqInterceptor = function(element, operation, route, url, headers, params) {
+      if (operation === 'remove') {
+        element = null;
+      }
+
+      return {
+        headers: headers,
+        params: params,
+        element: element,
+        httpConfig: {}
+      };
+    };
 
   angular.module('oep.services', ['restangular', 'oep.config']).
 
@@ -34,7 +46,8 @@
     function(Restangular, oepSettings) {
       return Restangular.withConfig(function(RestangularConfigurer) {
         RestangularConfigurer.setBaseUrl(oepSettings.apiPath);
-        RestangularConfigurer.addResponseInterceptor(interceptor);
+        RestangularConfigurer.setFullRequestInterceptor(reqInterceptor);
+        RestangularConfigurer.addResponseInterceptor(respInterceptor);
       });
     }
   ])

@@ -47,7 +47,7 @@
     function OepEventFormCtrl(currentUser, eventApi, availableSchools) {
 
       var today = new Date(),
-          nextYear=new Date(today.getFullYear() +1, 11, 31);
+        nextYear = new Date(today.getFullYear() + 1, 11, 31);
       this.api = eventApi;
       this.currentUser = currentUser;
       this.schools = {
@@ -93,7 +93,7 @@
       this.save = function(event) {
         var self = this;
 
-        if(!this.event.services['Code School'] && !this.event.services.Treehouse && !this.event.services['Code Combat']) {
+        if (!this.event.services['Code School'] && !this.event.services.Treehouse && !this.event.services['Code Combat']) {
           this.event.services['Code School'] = true;
           this.event.services.Treehouse = true;
           this.event.services['Code Combat'] = true;
@@ -122,7 +122,11 @@
         this.event.visibility = 'public';
         this.event.password = '';
         this.event.criteria = 1;
-        this.event.services = {'Code School': true, 'Treehouse': false, 'Code Combat': false};
+        this.event.services = {
+          'Code School': true,
+          'Treehouse': false,
+          'Code Combat': false
+        };
         this.event.startDate = this.today;
         this.event.endDate = this.today;
         this.event.reward = 'Learn coding!';
@@ -156,38 +160,33 @@
       this.add = function(event) {
         var self = this;
 
-        this.event = event;
-        this.event.users.push(this.currentUser.data.info.id);
-
         this.saving = true;
         this.saved = false;
 
-        return this.api.create(event).then(function(event) {
-          self.event = event;
+        return this.api.addParticipant(event, this.currentUser.data.info.id).then(function() {
+          event.participants.push(self.currentUser.data.info.id);
           self.saved = true;
         })['finally'](function() {
           self.saving = false;
         });
-
       };
 
       this.remove = function(event) {
         var self = this;
 
-        this.event = event;
-        for(var i = 0; i < event.users.length; i++){
-          if(event.users[i] === this.currentUser.data.info.id) {
-            event.users.splice(i,1);
-            i--;
-          }
-        }
-
         this.saving = true;
         this.saved = false;
 
-        return this.api.create(event).then(function(event) {
-          self.event = event;
+        return this.api.removeParticipant(event, this.currentUser.data.info.id).then(function() {
           self.saved = true;
+
+          for (var i = 0; i < event.participants.length; i++) {
+            if (event.participants[i] === self.currentUser.data.info.id) {
+              event.participants.splice(i, 1);
+              i--;
+            }
+          }
+
         })['finally'](function() {
           self.saving = false;
         });

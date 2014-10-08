@@ -25,6 +25,7 @@ module.exports = {
     'app/ranks/*.js',
     'app/suggestions/*.js',
     'app/userdetails/*.js',
+    'app/events/*.js',
     'app/components/**/*.js'
   ],
 
