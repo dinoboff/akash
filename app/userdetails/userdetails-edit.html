@@ -185,50 +185,29 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': reportCardForm.codeCombatName.$invalid}">
-    
-             
-
-    <span class="col-sm-4" ng-hide="mycodecombat">
-        
-       Please login to Code Combat in another tab to register and then <br>
-        <input type="submit" value="click to check for Code Combat screen name" ng-click="ctrl.checkForCodecombat()">  
-    </span>
-    
-    <span class="col-sm-4" ng-show ="mycodecombat">
-        You are logged in to CodeCombat as <b>{{mycodecombat}}</b> <br>
-        Put this name in the CodeCombat username box.<br>
-        <!--
-           <input type="submit" value="Click to enable Code Combat tracking"
-       ng-click="alert('hi');"><br>
-   -->
-    </span>
-
                 <label class="col-sm-4 control-label" for="user-code-combat-name">
                     Your Code Combat username<span ng-show="reportCardForm.codeCombatName.$dirty">*</span>:
-
-
                 </label>
                 <div class="col-sm-8">
                     <input type="hidden" name="codeCombatId" ng-model="ctrl.user.info.services.codeCombat.id">
-                    <input type="text" class="form-control"
-                        id="user-code-combat-name" placeholder="Enter your Code Combat username {{mycodecombat}}"
-                        ng-model="ctrl.user.info.services.codeCombat.name"
-                        eop-valid-code-combat-username="reportCardForm.codeCombatId"
-                        name="codeCombatName"
-                        ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName, userForm)"
-                    />
+                    <input type="text" class="form-control" id="user-code-combat-name" placeholder="Enter your Code Combat username {{mycodecombat}}" ng-model="ctrl.user.info.services.codeCombat.name" eop-valid-code-combat-username="reportCardForm.codeCombatId" name="codeCombatName" ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName, userForm)" />
                     <strong class="help-block" ng-show="reportCardForm.codeCombatName.$error.eopValidCodeCombatUsername">
                         This username is not valid.
                     </strong>
-                    <span class="help-block">
-                        You can find your username on you
-                        <a href="http://codecombat.com/account/settings">
-                            Code Combat account page.
-                        </a>
-                    </span>
+                    <div class="help-block">
+                        <p>We can find it for you:</p>
+                        <ol>
+                            <li>Please visit <a href="" target="_blank">Code Combat</a> and register or login.</li>
+                            <li>
+                                <button type="submit" class="btn btn-default" ng-click="ctrl.checkForCodecombat(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName, userForm)">
+                                    Find my Code Combat username!
+                                </button>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-          
+
             <div class="form-group" ng-class="{'has-error': reportCardForm.userGithubId.$invalid}">
                 <label class="col-sm-4 control-label" for="user-github-id">
                     Your Github username<span ng-show="reportCardForm.userGithubId.$dirty">*</span>:
@@ -482,4 +461,3 @@
         </div>
     </form>
 </div>
-
