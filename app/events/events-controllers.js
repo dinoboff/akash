@@ -41,20 +41,13 @@
    *
    */
   module.controller('OepEventFormCtrl', [
-    'oepCurrentUserApi',
+    '$timeout',
     'oepEventsApi',
-    'availableSchools',
-    function OepEventFormCtrl(currentUser, eventApi, availableSchools) {
-
+    'oepSettings',
+    function OepEventFormCtrl($timeout, oepEventsApi, oepSettings) {
       var today = new Date(),
         nextYear = new Date(today.getFullYear() + 1, 11, 31);
-      this.api = eventApi;
-      this.currentUser = currentUser;
-      this.schools = {
-        id: 'schools',
-        name: 'Schools',
-        choices: availableSchools
-      };
+
       this.services = {
         id: 'services',
         name: 'Services',
@@ -69,20 +62,7 @@
           'name': 'Code Combat'
         }]
       };
-      this.criteria = {
-        id: 'criteria',
-        name: 'Criteria',
-        choices: [{
-          'id': '1',
-          'name': 'Earn 2 badges'
-        }, {
-          'id': '2',
-          'name': 'Earn 5 badges'
-        }, {
-          'id': '3',
-          'name': 'Earn maximum badges'
-        }]
-      };
+      this.rankingOptions = oepSettings.rankingOptions;
       this.today = isoDate(today);
       this.nextYear = isoDate(nextYear);
 
@@ -90,21 +70,20 @@
        * Request the OEP API to save the current user event.
        *
        */
-      this.save = function(event) {
+      this.save = function(event, editor) {
         var self = this;
 
-        if (!this.event.services['Code School'] && !this.event.services.Treehouse && !this.event.services['Code Combat']) {
-          this.event.services['Code School'] = true;
-          this.event.services.Treehouse = true;
-          this.event.services['Code Combat'] = true;
-        }
-
+        this.event.editor = editor.id;
         this.saving = true;
         this.saved = false;
 
-        return this.api.create(event).then(function(event) {
+        return oepEventsApi.create(event).then(function(event) {
           self.event = event;
           self.saved = true;
+          self.reset();
+          return $timeout(function() {
+            self.saved = false;
+          }, 5000);
         })['finally'](function() {
           self.saving = false;
         });
@@ -117,27 +96,41 @@
       this.reset = function() {
         this.saving = false;
         this.saved = false;
-        this.event = {};
-        this.event.name = 'My Event';
-        this.event.visibility = 'public';
-        this.event.password = '';
-        this.event.criteria = 1;
-        this.event.services = {
-          'Code School': true,
-          'Treehouse': false,
-          'Code Combat': false
+        this.event = {
+          name: '',
+          description: '',
+          visibility: 'public',
+          password: '',
+          rankedBy: oepSettings.rankingOptions[0].id,
+          cutoffDate: null,
+          startDate: null,
+          endDate: null
         };
-        this.event.startDate = this.today;
-        this.event.endDate = this.today;
-        this.event.reward = 'Learn coding!';
-        this.event.description = 'Have fun!';
-        this.event.participants = [];
-        this.event.editor = this.currentUser.data.info.id;
       };
 
       this.reset();
     }
   ]);
+
+
+
+  /**
+   * OepEventsCtrl and its resolver.
+   *
+   */
+  module.factory('oepEventsCtrlInitialData', [
+    '$q',
+    'oepEventsApi',
+    'oepCurrentUserApi',
+    function oepEventsCtrlInitialDataFactory($q, oepEventsApi, oepCurrentUserApi) {
+      return function oepEventsCtrlInitialData() {
+        return $q.all({
+          events: oepEventsApi.get(),
+          currentUser: oepCurrentUserApi.auth()
+        });
+      };
+    }
+  ]).
 
   /**
    * OepEventsCtrl - Controller for the events partials.
@@ -146,26 +139,30 @@
    * queried from the OEP API.
    *
    */
-  module.controller('OepEventsCtrl', [
-    'oepCurrentUserApi',
+  controller('OepEventsCtrl', [
+    '$window',
     'oepEventsApi',
-    'events',
-    function OepEventsCtrl(currentUser, oepEventsApi, events) {
-      this.currentUser = currentUser;
-      this.api = oepEventsApi;
+    'initialData',
+    function OepEventsCtrl($window, oepEventsApi, initialData) {
+      var self = this,
+        _ = $window._;
 
-      // oepEventsApi.get()
-      this.events = events;
+      this.events = initialData.events;
+      this.currentUser = initialData.currentUser;
+
+
+      this.hasJoined = function(user, event) {
+        return _.find(user.events, {
+          id: event.id
+        }) !== undefined;
+      };
 
       this.add = function(event) {
-        var self = this;
-
         this.saving = true;
         this.saved = false;
 
-        return this.api.addParticipant(event, this.currentUser.data.info.id).then(function() {
-          event.participants = event.participants || [];
-          event.participants.push(self.currentUser.data.info.id);
+        return oepEventsApi.addParticipant(event, this.currentUser.info.id).then(function() {
+          self.currentUser.info.events.push(event);
           self.saved = true;
         })['finally'](function() {
           self.saving = false;
@@ -173,36 +170,65 @@
       };
 
       this.remove = function(event) {
-        var self = this;
-
         this.saving = true;
         this.saved = false;
 
-        return this.api.removeParticipant(event, this.currentUser.data.info.id).then(function() {
+        return oepEventsApi.removeParticipant(event, this.currentUser.info.id).then(function() {
           self.saved = true;
-
-          for (var i = 0; i < event.participants.length; i++) {
-            if (event.participants[i] === self.currentUser.data.info.id) {
-              event.participants.splice(i, 1);
-              i--;
-            }
-          }
-
+          _.remove(self.currentUser.info.events, {
+            id: event.id
+          });
         })['finally'](function() {
           self.saving = false;
         });
-
       };
     }
-    /**
-    function formatDate(dateString) {
-      var day = dateString.substring(8),
-          month = dateString.substring(5,7),
-          year = dateString.substring(0,4);
-
-      return day+' '+month+' '+year;
-    }
-    */
   ]);
+
+  /**
+   * `OepEventDetailsCtrl` and its resolver.
+   *
+   */
+  module.factory('oepEventDetailsCtrlInitialData', [
+    '$route',
+    '$q',
+    'oepEventsApi',
+    'oepCurrentUserApi',
+    function oepEventDetailsCtrlInitialDataFactory($route, $q, oepEventsApi, oepCurrentUserApi) {
+      return function oepEventDetailsCtrlInitialData() {
+        return $q.all({
+          event: oepEventsApi.getDetails($route.current.params.eventId),
+          currentUser: oepCurrentUserApi.auth()
+        });
+      };
+    }
+  ]).
+
+  /**
+   * OepEventDetailsCtrl
+   *
+   */
+  controller('OepEventDetailsCtrl', [
+    '$window',
+    'oepSettings',
+    'initialData',
+    function OepEventDetailsCtrl($window, oepSettings, initialData) {
+      var _ = $window._;
+
+      this.event = initialData.event;
+      this.currentUser = initialData.currentUser;
+      this.rankedBy = _.find(oepSettings.rankingOptions, {
+        id: this.event.rankedBy
+      });
+
+      this.isRanked = function(userServices) {
+        return _.find(this.event.stats, {
+          id: userServices.id
+        }) !== undefined;
+      };
+    }
+  ])
+
+  ;
 
 })();

@@ -1,0 +1,72 @@
+<div oep-event="ctrl.event" oep-user="ctrl.currentUser.info"></div>
+
+
+<h3>Participants Ranked by {{ctrl.rankedBy.label}}</h3>
+<table class="table table-striped ranks">
+    <thead>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Total Badges</th>
+        <th>Total Score</th>
+        <th>Threehouse badges</th>
+        <th>Threehouse points</th>
+        <th>Code School badges</th>
+        <th>Code School points</th>
+        <th>Code Combat points</th>
+        <th>Badges</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="10" ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
+                Nobody joined this event yet.
+            </td>
+        </tr>
+        <tr ng-repeat="student in ctrl.event.stats">
+            <td>{{$index + 1}}</td>
+            <td>
+                <a ng-href="#/user/{{student.id}}">
+                    {{student.name | limitTo: 20}}
+                </a>
+            </td>
+            <td>{{student.totalBadges}}</td>
+            <td>{{student.score}}</td>
+            <td>{{student.treeHouse.badges.length || 0}}</td>
+            <td>{{student.treeHouse.points || 0}}</td>
+            <td>{{student.codeSchool.badges.length || 0}}</td>
+            <td>{{student.codeSchool.points || 0}}</td>
+            <td>{{student.codeCombat.points || 0}}</td>
+            <td class="badge-list">
+                <img ng-repeat="badge in student.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <br ng-if="student.treeHouse.badges.length > 0" />
+                <img ng-repeat="badge in student.codeSchool.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <br ng-if="student.codeSchool.badges.length > 0" />
+                <img ng-repeat="badge in student.codeCombat.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+            </td>
+        </tr>
+
+        <tr ng-if="!ctrl.isRanked(ctrl.currentUser.info.services)">
+            <td>You</td>
+            <td>
+                <a ng-href="#/user/{{ctrl.currentUser.info.services.id}}">
+                    {{ctrl.currentUser.info.services.name | limitTo: 20}}
+                </a>
+            </td>
+            <td>{{ctrl.currentUser.info.services.totalBadges}}</td>
+            <td>{{ctrl.currentUser.info.services.score}}</td>
+            <td>{{ctrl.currentUser.info.services.treeHouse.badges.length || 0}}</td>
+            <td>{{ctrl.currentUser.info.services.treeHouse.points || 0}}</td>
+            <td>{{ctrl.currentUser.info.services.codeSchool.badges.length || 0}}</td>
+            <td>{{ctrl.currentUser.info.services.codeSchool.points || 0}}</td>
+            <td>{{ctrl.currentUser.info.services.codeCombat.points || 0}}</td>
+            <td class="badge-list">
+                <img ng-repeat="badge in ctrl.currentUser.info.services.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <br ng-if="ctrl.currentUser.info.services.treeHouse.badges.length > 0" />
+                <img ng-repeat="badge in ctrl.currentUser.info.services.codeSchool.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <br ng-if="ctrl.currentUser.info.services.codeSchool.badges.length > 0" />
+                <img ng-repeat="badge in ctrl.currentUser.info.services.codeCombat.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+            </td>
+        </tr>
+
+
+    </tbody>
+</table>

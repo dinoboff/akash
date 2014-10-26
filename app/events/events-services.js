@@ -40,8 +40,14 @@
         /**
          * Add participant to event
          */
-        addParticipant: function(event, userId) {
-          return api.one('events', event.id).one('participants', userId).put();
+        addParticipant: function(event, userId, pw) {
+          var payload = {};
+
+          if (pw) {
+            payload.password = pw;
+          }
+
+          return api.one('events', event.id).one('participants', userId).customPUT(payload);
         },
 
         /**
@@ -49,7 +55,13 @@
          */
         removeParticipant: function(event, userId) {
           return api.one('events', event.id).one('participants', userId).remove();
+        },
+
+        getDetails: function(eventId) {
+          console.log('Getting event ', eventId);
+          return api.one('events', eventId).get();
         }
+
       };
     }
   ])
