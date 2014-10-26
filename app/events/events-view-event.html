@@ -1,0 +1,37 @@
+<h3>
+    <a ng-href="#/events/{{event.id}}">{{event.name}}</a>
+</h3>
+
+<dl class="dl-horizontal" ng-switch on="ctrl.hasJoined(user)">
+
+    <dt>Description</dt>
+    <dd>{{event.description}}</dd>
+
+
+    <dt>Date</dt>
+    <dd ng-if="event.cutoffDate">Cut-off on <strong>{{event.cutoffDate|date:mediumDate}}</strong></dd>
+    <dd ng-if="event.startDate == event.endDate">Event on <strong>{{event.startDate|date:mediumDate}}</strong></dd>
+    <dd ng-if="event.startDate != event.endDate">Starts on <strong>{{event.startDate|date:mediumDate}}</strong></dd>
+    <dd ng-if="event.startDate != event.endDate &amp;&amp; event.endDate">Ends on <strong>{{event.endDate|date:mediumDate}}</strong></dd>
+
+    <dt></dt>
+    <dd ng-switch-when="false">
+        <form role="form" class="form-inline" name="joinForm">
+            <div class="form-group" ng-if="event.visibility == 'private'">
+                <label class="sr-only" for="exampleInputEmail2">password</label>
+                <input name="password" type="password" id="password" class="form-control" ng-model="ctrl.password" required="true" placeholder="password" ng-change="ctrl.wrongPassword = false"/>
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="ctrl.add(user, ctrl.password)">
+                Join Event
+            </button>
+            <p class="text-danger" ng-if="ctrl.wrongPassword">
+                Wrong password!
+            </p>
+        </form>
+    </dd>
+    <dd ng-switch-when="true">
+        <button type="submit" class="btn btn-default" ng-click="ctrl.remove(user)">
+            Leave Event
+        </button>
+    </dd>
+</dl>
