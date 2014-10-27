@@ -17,21 +17,17 @@
       url: '/admin/events',
       title: 'Events'
     },
-<<<<<<< HEAD
-=======
-
->>>>>>> upstream/gh-pages
     suggestions: {
       url: '/admin/suggestions',
       title: 'Suggestions'
     },
-    internships: {
-      url: '/admin/internships',
-      title: 'Internships'
-    },
     courses: {
       url: '/admin/courses',
       title: 'Courses'
+    },
+    internships: {
+      url: '/admin/internships',
+      title: 'Internships'
     }
 
   };
