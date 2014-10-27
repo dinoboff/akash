@@ -2,6 +2,7 @@
  * Style for Ranks subsection.
  *
  */
+
 .ranks .sort {
   position: relative;
 }
@@ -23,9 +24,16 @@
 }
 
 .badge-list {
-  max-width: 256px;
+  max-width: 208px;
 }
 
 .badge-thumbnail {
   width: 16px;
+}
+
+@media (min-width: 992px) {
+  .badge-list {
+    min-width: 208px;
+    max-width: inherit;
+  }
 }
