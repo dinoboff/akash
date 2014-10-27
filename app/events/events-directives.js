@@ -19,11 +19,11 @@
     }
   }
 
-  angular.module('oep.events.directives', []).
+  angular.module('oep.events.directives', ['oep.date.services']).
 
   directive('oepEvent', [
-
-    function oepEventFactory() {
+    'oepDate',
+    function oepEventFactory(oepDate) {
       return {
         templateUrl: 'events/events-view-event.html',
         restrict: 'A',
@@ -38,13 +38,12 @@
           function OepEventCtrl($scope, $window, oepEventsApi) {
             var self = this,
               _ = $window._,
-              moment = $window.moment,
               today = function() {
-                return moment.utc().toArray().slice(0, 3);
+                return oepDate().toArray().slice(0, 3);
               };
 
             this.canJoin = function() {
-              var eventCutoff = moment.utc($scope.event.cutoffDate).toArray().slice(0, 3);
+              var eventCutoff = oepDate($scope.event.cutoffDate).toArray().slice(0, 3);
 
               return compareArray(eventCutoff, today()) >= 0;
             };

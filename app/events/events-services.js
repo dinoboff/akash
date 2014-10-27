@@ -58,7 +58,6 @@
         },
 
         getDetails: function(eventId) {
-          console.log('Getting event ', eventId);
           return api.one('events', eventId).get();
         }
 

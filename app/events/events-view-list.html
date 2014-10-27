@@ -5,6 +5,7 @@
         <hr/>
 
         <ul class="list-unstyled">
+            <li ng-show="!ctrl.events || ctrl.events.length == 0">No event.</li>
             <li ng-repeat="e in ctrl.events track by e.id">
                 <div oep-event="e" oep-user="ctrl.currentUser.info"></div>
                 <hr/>
@@ -75,7 +76,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <button type="submit" class=" btn btn-primary btn-lg btn-block" ng-click="formCtrl.save(formCtrl.event, ctrl.currentUser.info)" ng-disabled="eventForm.$invalid || formCtrl.saving || formCtrl.saved">Create Event</button>
+                    <button type="submit" class=" btn btn-primary btn-lg btn-block" ng-click="formCtrl.save(formCtrl.event, ctrl.currentUser.info, ctrl.reload)" ng-disabled="eventForm.$invalid || formCtrl.saving || formCtrl.saved">Create Event</button>
                 </div>
                 <div class="col-md-6">
                     <button class="btn btn-default btn-lg btn-block" ng-click="formCtrl.reset()" ng-disabled="formCtrl.saving || eventForm.$pristine">Reset</button>
