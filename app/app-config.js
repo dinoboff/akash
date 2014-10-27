@@ -25,6 +25,31 @@
 
       return {
         apiPath: '/api/v1',
+        rankingOptions: [{
+          id: 'totalBadges',
+          label: 'Total Badges'
+        }, {
+          id: 'score',
+          label: 'Total Score'
+        }, {
+          id: 'treeHouse',
+          label: 'Treehouse Badges'
+        }, {
+          id: 'codeSchool',
+          label: 'Code School Badges'
+        }, {
+          id: 'codeCombat',
+          label: 'Code Combat Badges'
+        }, {
+          id: 'treeHousePoints',
+          label: 'Threehouse Score'
+        }, {
+          id: 'codeSchoolPoints',
+          label: 'Code School Score'
+        }, {
+          id: 'codeCombatPoints',
+          label: 'Code Combat Score'
+        }],
         userOptions: {
           gender: {
             id: 'gender',

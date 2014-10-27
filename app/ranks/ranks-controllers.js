@@ -49,6 +49,7 @@
         choices: allCourses
       };
 
+
       this.filterBy = null;
       this.rankOpts = $.extend({sortBy: 'totalBadges'}, $routeParams);
       this.ranks = null;

@@ -12,11 +12,15 @@
       url: '/admin/metrics',
       title: 'Metrics'
     },
-    
+
     events: {
       url: '/admin/events',
       title: 'Events'
     },
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/gh-pages
     suggestions: {
       url: '/admin/suggestions',
       title: 'Suggestions'
@@ -34,20 +38,22 @@
 
   angular.module(
     'oep', [
-      'oep.navbar.controllers',
-      'ngRoute',
       'angular-loading-bar',
+      'ngRoute',
       'oep.admin.controllers',
       'oep.admin.directives',
       'oep.controllers',
-      'oep.ranks.controllers',
       'oep.events.controllers',
-      'oep.internships.controllers',
+      'oep.events.directives',
+      'oep.navbar.controllers',
+      'oep.ranks.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
       'oep.user.services',
-      'oep.userdetails.controllers'
+      'oep.userdetails.controllers',
+      'oep.internships.controllers',
+ 
     ]
   ).
 
@@ -151,24 +157,33 @@
           ]
         }
       }).
+
       when('/events', {
-        templateUrl: 'events/events-form.html',
-        controller: 'OepEventFormCtrl',
-        controllerAs: 'ctrl',
-        resolve: rankResolver
-      }).
-      when('/viewEvents', {
-        templateUrl: 'events/events-view.html',
+        templateUrl: 'events/events-view-list.html',
         controller: 'OepEventsCtrl',
         controllerAs: 'ctrl',
         resolve: {
-          events: ['oepEventsApi',
-            function(oepEventsApi) {
-              return oepEventsApi.get();
+          initialData: ['oepEventsCtrlInitialData',
+            function(oepEventsCtrlInitialData) {
+              return oepEventsCtrlInitialData();
             }
           ]
         }
       }).
+      when('/events/:eventId', {
+        templateUrl: 'events/events-view-details.html',
+        controller: 'OepEventDetailsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepEventDetailsCtrlInitialData',
+            function(oepEventDetailsCtrlInitialData) {
+              return oepEventDetailsCtrlInitialData();
+            }
+          ]
+        }
+      }).
+
       when('/suggestion', {
         templateUrl: 'suggestions/sugestions-form.html',
         controller: 'OepSuggestionFormCtrl',

@@ -54,10 +54,7 @@
               <a ng-href="#/ranks">Ranks</a>
             </li>
             <li ng-class="{active: isActive('/events')}">
-              <a ng-href="#/events">Create Events</a>
-            </li>
-            <li ng-class="{active: isActive('/events')}">
-              <a ng-href="#/viewEvents">View Events</a>
+              <a ng-href="#/events">Events</a>
             </li>
             <li ng-class="{active: isActive('/suggestion')}">
               <a ng-href="#/suggestion">Contact us</a>
@@ -114,6 +111,7 @@
   <script src="lib/bootstrap/js/collapse.js"></script>
   <script src="lib/bootstrap/js/tooltip.js"></script>
   <script src="lib/angular-loading-bar/build/loading-bar.js"></script>
+  <script src="lib/moment/moment.js"></script>
   <!-- Add denpencies scripts here -->
 
   <!-- endbuild -->
@@ -130,10 +128,11 @@
   <script src="components/user/user-directives.js"></script>
   <script src="components/user/user-services.js"></script>
   <script src="components/utils/utils-filters.js"></script>
+  <script src="events/events-controllers.js"></script>
+  <script src="events/events-directives.js"></script>
+  <script src="events/events-services.js"></script>
   <script src="navbar/navbar-controllers.js"></script>
   <script src="ranks/ranks-controllers.js"></script>
-  <script src="events/events-controllers.js"></script>
-  <script src="events/events-services.js"></script>
   <script src="suggestions/suggestions-controllers.js"></script>
   <script src="suggestions/suggestions-services.js"></script>
   <script src="userdetails/userdetails-controllers.js"></script>

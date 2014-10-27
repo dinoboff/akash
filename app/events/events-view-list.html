@@ -1,0 +1,88 @@
+<h1>Events</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <hr/>
+
+        <ul class="list-unstyled">
+            <li ng-repeat="e in ctrl.events track by e.id">
+                <div oep-event="e" oep-user="ctrl.currentUser.info"></div>
+                <hr/>
+            </li>
+            <li ng-show="ctrl.events.cursor"><a ng-click="ctrl.getMore()">Show more events</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+
+        <form role="form" name="eventForm" ng-controller="OepEventFormCtrl as formCtrl" ng-if="ctrl.currentUser.isLoggedIn">
+            <fieldset>
+                <legend>New Event</legend>
+
+                <p class="alert alert-success" ng-if="formCtrl.saved">
+                    Event created successfully!
+                    <br/>Thanks for creating the event.
+                </p>
+
+                <div class="form-group">
+                    <label for="event-name">Event Name:</label>
+                    <input name="event-name" type="text" class="form-control" id="event-name" ng-model="formCtrl.event.name" required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea name="description" class="form-control" id="description" rows="3" ng-model="formCtrl.event.description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="visiblity">Visibility:</label>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="visiblity" value="public" ng-model="formCtrl.event.visibility" ng-checked="true" />Public
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="visiblity" value="private" ng-model="formCtrl.event.visibility" />Private (Password Protected)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-if="formCtrl.event.visibility === 'private'">
+                    <label for="password">Password:</label>
+                    <input name="password" type="password" class="form-control" id="password" ng-model="formCtrl.event.password" required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="rank-by">Rank participants by</label>
+                    <select name="rankedBy" id="rank-by" class="form-control" ng-model="formCtrl.event.rankedBy" ng-options="opt.id as opt.label for opt in formCtrl.rankingOptions"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cutoff">Cut-Off Date:</label>
+                    <input name="cutoff" type="date" class="form-control" id="cutoff" ng-attr-min="{{formCtrl.today}}" ng-attr-max="{{formCtrl.nextYear}}" ng-model="formCtrl.event.cutoffDate" required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="start">Start Date:</label>
+                    <input name="start" type="date" class="form-control" id="start" ng-attr-min="{{formCtrl.today}}" ng-attr-max="{{formCtrl.nextYear}}" ng-model="formCtrl.event.startDate" required="true" />
+                </div>
+
+                <div class="form-group" ng-if="formCtrl.event.startDate">
+                    <label for="end">End Date:</label>
+                    <input name="end" type="date" class="form-control" id="end" ng-attr-min="{{formCtrl.event.startDate}}" ng-attr-max="{{formCtrl.nextYear}}" ng-model="formCtrl.event.endDate" required="true" />
+                </div>
+            </fieldset>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="submit" class=" btn btn-primary btn-lg btn-block" ng-click="formCtrl.save(formCtrl.event, ctrl.currentUser.info)" ng-disabled="eventForm.$invalid || formCtrl.saving || formCtrl.saved">Create Event</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-default btn-lg btn-block" ng-click="formCtrl.reset()" ng-disabled="formCtrl.saving || eventForm.$pristine">Reset</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>

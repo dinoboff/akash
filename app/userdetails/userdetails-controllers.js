@@ -192,16 +192,24 @@
         }
       };
 
-      this.checkForCodecombat = function() {
+      /**
+       * Fetch the code combat username of the current user and update
+       * userInfo.services.codeCombat.name with it.
+       *
+       * The user should be logged in on Code Combat.
+       *
+       * TODO: Move business logic to a service out of the controller.
+       */
+      this.checkForCodecombat = function(userInfo, prop, input, form) {
             $http({
                 url: 'http://codecombat.com/auth/whoami?callback=JSON_CALLBACK',
                 method: 'JSONP'
               }).then(function(response) {
                   // success
-                  console.log(response.data.name);
-                  $scope.mycodecombat = response.data.name;
-                  //alert("Your codecombat name is "+response.data.name);
-                  //this.mycodecombat= response;
+                  userInfo.services = userInfo.services || {};
+                  userInfo.services.codeCombat = userInfo.services.codeCombat || {};
+                  userInfo.services.codeCombat.name = response.data.name;
+                  self.update(userInfo, prop, input, form);
                 },
                 function(response) { // optional
                   // failed
@@ -209,8 +217,8 @@
                 }
               );
           };
-          
-    
+
+
       /**
        * Save/create user info.
        *
@@ -293,16 +301,18 @@
 
         updater(userInfo, prop, input, form);
       };
-      
+
       /**
        * Get Number of Pull Requests
        *
+       * TODO: Move business logic to a service out of the controller.
+       * TODO: should be debounced.
        */
       this.getPulls = function() {
         var self = this;
-        
+
         this.user.info.services.github.pulls = 0;
-        
+
         /**
         var repositories = [
           'https://api.github.com/repos/Khan/KaTex/pulls',
@@ -310,7 +320,7 @@
         ];
         */
         var repository = 'https://api.github.com/repos/Khan/KaTex/pulls';
-        
+
         $http({
           method: 'JSONP',
           url: repository + '?state=closed' + '&callback=JSON_CALLBACK'
@@ -325,7 +335,7 @@
             console.log('Github data not found.\nError: '+response);
           }
         );
-        
+
         /**
         var xhr = new XMLHttpRequest();
 

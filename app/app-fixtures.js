@@ -131,7 +131,8 @@
       coursePassword: /api\/v1\/courses\/([^\/]+)\/password$/,
       courseOpen: /api\/v1\/courses\/([^\/]+)\/opened$/,
       courseClose: /api\/v1\/courses\/([^\/]+)\/closed$/,
-      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/
+      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/,
+      oneEvent: /api\/v1\/events\/([^\/]+)$/
     },
     summary: {
       'numSchools': 4,
