@@ -80,7 +80,7 @@
         return oepEventsApi.create(event).then(function(event) {
           self.event = event;
           self.saved = true;
-          self.reset();
+          self.reset(true);
           return $timeout(function() {
             self.saved = false;
           }, 5000);
@@ -93,9 +93,9 @@
        * Reset the scope initial values (Event with default values).
        *
        */
-      this.reset = function() {
+      this.reset = function(saved) {
         this.saving = false;
-        this.saved = false;
+        this.saved = saved || false;
         this.event = {
           name: '',
           description: '',
@@ -140,46 +140,26 @@
    *
    */
   controller('OepEventsCtrl', [
-    '$window',
+    '$q',
     'oepEventsApi',
     'initialData',
-    function OepEventsCtrl($window, oepEventsApi, initialData) {
-      var self = this,
-        _ = $window._;
+    function OepEventsCtrl($q, oepEventsApi, initialData) {
+      var self = this;
 
+      this.loading = true;
       this.events = initialData.events;
       this.currentUser = initialData.currentUser;
 
+      this.getMore = function() {
+        if (!this.events.cursor) {
+          return $q.reject(new Error('No cursor.'));
+        }
 
-      this.hasJoined = function(user, event) {
-        return _.find(user.events, {
-          id: event.id
-        }) !== undefined;
-      };
-
-      this.add = function(event) {
-        this.saving = true;
-        this.saved = false;
-
-        return oepEventsApi.addParticipant(event, this.currentUser.info.id).then(function() {
-          self.currentUser.info.events.push(event);
-          self.saved = true;
-        })['finally'](function() {
-          self.saving = false;
-        });
-      };
-
-      this.remove = function(event) {
-        this.saving = true;
-        this.saved = false;
-
-        return oepEventsApi.removeParticipant(event, this.currentUser.info.id).then(function() {
-          self.saved = true;
-          _.remove(self.currentUser.info.events, {
-            id: event.id
+        self.loading = $q.when(self.loading).then(function() {
+          return oepEventsApi.get(self.events.cursor).then(function(events) {
+            self.events = self.events.concat(events);
+            self.events.cursor = events.cursor;
           });
-        })['finally'](function() {
-          self.saving = false;
         });
       };
     }
