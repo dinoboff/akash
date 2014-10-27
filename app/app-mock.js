@@ -27,6 +27,7 @@
       var users = fixtures.users, // List of user info,
         suggestions = [],
         events = [],
+        internships = [],
         chrisId = null, // Id of Chris, our logged in user.
         _ = window._,
         updateBadges = function(id) {
@@ -360,6 +361,28 @@
         return [200, event];
       });
 
+      httpBackend.whenGET(fixtures.url.internships).respond({
+        internships: internships,
+        cursor: ''
+      });
+      
+      //New Internship
+      httpBackend.whenPOST(fixtures.url.internships).respond(function(m, u, body) {
+        var internship = JSON.parse(body);
+        for(var i=0;i<internships.length;i++){
+          var temp = internships[i];
+          if(temp.user===internship.user){
+            internships.splice(i,1);
+            break;
+          }
+        }
+        internships.push(internship);
+        //console.log(internships);
+        internship.id = internships.length;
+        internship.createdAt = new Date().toUTCString();
+
+        return [200, internship];
+      });
       // New participant
       httpBackend.whenPUT(fixtures.url.eventParticipants).respond(function(m, url) {
         var parts = fixtures.url.eventParticipants.exec(url),
@@ -379,8 +402,6 @@
         console.log('TODO: remove participant ' + userId + ' to event with id ' + eventId);
         return [200, {}];
       });
-
-
       // Suggestions list
       httpBackend.whenGET(fixtures.url.suggestions).respond({
         suggestions: suggestions,

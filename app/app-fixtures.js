@@ -120,6 +120,7 @@
       updateBadges: /api\/v1\/users\/([^\/]+)\/stats/,
       ranks: /api\/v1\/ranks(?:\?(.+))?$/,
       suggestions: /api\/v1\/suggestions$/,
+      internships: /api\/v1\/internships$/,
       events: /api\/v1\/events$/,
       eventParticipants: /api\/v1\/events\/([^\/]+)\/participants\/([^\/]+)$/,
       schools: /api\/v1\/schools/,

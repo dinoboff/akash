@@ -17,12 +17,14 @@
       url: '/admin/events',
       title: 'Events'
     },
-    
     suggestions: {
       url: '/admin/suggestions',
       title: 'Suggestions'
     },
-
+    internships: {
+      url: '/admin/internships',
+      title: 'Internships'
+    },
     courses: {
       url: '/admin/courses',
       title: 'Courses'
@@ -40,6 +42,7 @@
       'oep.controllers',
       'oep.ranks.controllers',
       'oep.events.controllers',
+      'oep.internships.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
@@ -109,6 +112,19 @@
           ]
         }
       }).
+      when(adminMenu.internships.url, {
+        templateUrl: 'admin/admin-internships.html',
+        controller: 'OepAdminInternshipsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          menu: adminMenuResolver,
+          internships: ['oepInternshipsApi',
+            function(oepInternshipsApi) {
+              return oepInternshipsApi.get();
+            }
+          ]
+        }
+      }).
       when(adminMenu.suggestions.url, {
         templateUrl: 'admin/admin-suggestions.html',
         controller: 'OepAdminSuggestionsCtrl',
@@ -156,6 +172,11 @@
       when('/suggestion', {
         templateUrl: 'suggestions/sugestions-form.html',
         controller: 'OepSuggestionFormCtrl',
+        controllerAs: 'ctrl',
+      }).
+      when('/internship', {
+        templateUrl: 'internships/internships.html',
+        controller: 'OepInternships',
         controllerAs: 'ctrl',
       }).
       when('/a', {

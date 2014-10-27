@@ -97,6 +97,10 @@ hr {
   -moz-box-sizing: content-box;
        box-sizing: content-box;
 }
+hr {	color: #7FA423;
+background-color: #7FA423;
+height: 2px;
+}
 pre {
   overflow: auto;
 }
