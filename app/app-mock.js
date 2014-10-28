@@ -361,7 +361,7 @@
         return [200, events[eventId - 1]];
       });
       
-       httpBackend.whenGET(fixtures.url.internships).respond({
+      httpBackend.whenGET(fixtures.url.internships).respond({
         internships: internships,
         cursor: ''
       });
