@@ -50,8 +50,10 @@
    * Return a date in an ISO 8601 format
    */
   factory('oepIsoDate', [
-    function(){
+    'oepDate',
+    function oepIsoDate(oepDate){
       return function(date) {
+        date = date || oepDate();
         return date.toISOString().split('T')[0];
       };
     }

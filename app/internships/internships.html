@@ -1,81 +1,73 @@
 <div class="row">
-  <form role="form" name="internship">
-    <legend>Internship Details Form</legend>
-      <p class="alert alert-success" ng-if="ctrl.saved">
-      Your Internship Settings have been saved on {{ctrl.internship.createdAt}}
-      <br/>
-      We will contact you if we match you to a suitable company.
-      </p>
-    <div class="form-group">
-      <label for="selectOption">Do you want us to reccomend you to companies?</label>
-        <select id="selectOption" ng-model="ctrl.internship.selectedValue" >
-        <option value="Y">Yes</option>
-        <option value="N">No</option>
-      </select><br />
-    </div>  
-    <div ng-if="ctrl.internship.selectedValue">
-      <div class="form-group">
-        <label>Please select upto 5 Companies that you are interested in :</label>
-        <span ng-repeat="company in ctrl.companies"> 
-        <br/>
-        <input type="checkbox" value="{{company.name}}" 
-        ng-change="ctrl.checkChanged(company)" 
-        ng-disabled="ctrl.checked==ctrl.limit && !internship.company.selected" 
-        ng-model=company.selected>            
-        &nbsp; {{company.name}}
-        </span>
-      </div>
-      <div class="row">
-        <div class="form-group col-sm-3">
-          <label>When would you like to intern :</label><br/>
-          <b>First Internship Start Date</b> <br/>
-          <input type="date" name="startDate" ng-model="ctrl.internship.sDate"                         placeholder="DD-MM-YYYY" class="form-control" min={{ctrl.StartDate}} 
-                 required > 
-          <br/>
-          <b>End Date</b><br/> 
-          <input type="date" name="endDate" class="form-control"                                        ng-model="ctrl.internship.eDate" placeholder="DD-MM-YYYY" 
-                 min={{ctrl.internship.sDate}}
-                 required > 
+    <form role="form" name="internship">
+        <legend>Internship Details Form</legend>
+        <p class="alert alert-success" ng-if="ctrl.saved">
+            Your Internship Settings have been saved on {{ctrl.internship.createdAt}}
+            <br/>We will contact you if we match you to a suitable company.
+        </p>
+        {{ctrl.internship}}
+        <div class="form-group">
+            <label for="selectOption">Do you want us to reccomend you to companies?</label>
+            <select id="selectOption" ng-model="ctrl.internship.interested">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <br />
         </div>
-      </div>
-      <div class="row" ng-if="ctrl.internship.eDate && ctrl.internship.sDate">
-        <div class="form-group col-sm-3">
-          <b>Second Internship Start Date</b> <br/>
-          <input type="date" name="startDate" ng-model="ctrl.internship.sDate2"                         placeholder="DD-MM-YYYY" class="form-control" min={{ctrl.internship.eDate}} 
-                > 
-          <br/>
-          <b>End Date</b><br/> 
-          <input type="date" name="endDate" class="form-control"                                        ng-model="ctrl.internship.eDate2" placeholder="DD-MM-YYYY" 
-                 min={{ctrl.internship.sDate2}}
-                 > 
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="selectNotification">Would you want to be notified via email about new 
-          opportunities?</label>
-        <select id="selectNotification" ng-model="ctrl.internship.notifications" >
-          <option value="Y">Yes</option>
-          <option value="N">No</option>
-        </select>
-      </div> 
-      <div class="form-group">
-        <label for="public/private">Would you like to be anonymous in internship rankings?</label>
-        <select id="public/private" ng-model="ctrl.internship.public" >
-          <option value="Y">Yes</option>
-          <option value="N">No</option>
-        </select>
-      </div> 
-      <br/>
-      <button class="btn btn-default"  
-              ng-click="ctrl.save(ctrl.internship,ctrl.companies)"
-              ng-disabled="internship.$invalid || ctrl.saving || ctrl.saved">
-              Save Settings</button>
-      <button
-                class="btn btn-default"
-                ng-click="ctrl.reset()"
-                ng-disabled="ctrl.saving || internship.$pristine">
+        <div ng-if="ctrl.internship.interested">
+            <div class="form-group">
+                <label>Please select upto 5 Companies that you are interested in :</label>
+                <div class="checkbox" ng-repeat="name in ctrl.companies">
+                    <label>
+                        <input type="checkbox" ng-model="ctrl.internship.companies[name]" ng-disabled="!ctrl.internship.companies[name] &amp;&amp; ctrl.maxedIntership(ctrl.internship.companies)"/>{{name}}
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-3">
+                    <label>When would you like to intern :</label>
+                    <br/>
+                    <b>First Internship Start Date</b>
+                    <br/>
+                    <input type="date" name="startDate" ng-model="ctrl.internship.dates[0].start" placeholder="DD-MM-YYYY" class="form-control" min={{ctrl.StartDate}} required>
+                    <br/>
+                    <b>End Date</b>
+                    <br/>
+                    <input type="date" name="endDate" class="form-control" ng-model="ctrl.internship.dates[0].end" placeholder="DD-MM-YYYY" min={{ctrl.internship.dates[0].start}} required>
+                </div>
+            </div>
+            <div class="row" ng-if="ctrl.internship.dates[0].end && ctrl.internship.dates[0].start">
+                <div class="form-group col-sm-3">
+                    <b>Second Internship Start Date</b>
+                    <br/>
+                    <input type="date" name="startDate" ng-model="ctrl.internship.dates[1].start" placeholder="DD-MM-YYYY" class="form-control" min={{ctrl.internship.dates[0].end}}>
+                    <br/>
+                    <b>End Date</b>
+                    <br/>
+                    <input type="date" name="endDate" class="form-control" ng-model="ctrl.internship.dates[1].end" placeholder="DD-MM-YYYY" min={{ctrl.internship.dates[1].start}}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="selectNotification">Would you want to be notified via email about new opportunities?
+                </label>
+                <select id="selectNotification" ng-model="ctrl.internship.notifications.recommendations">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="public/private">Would you like to be anonymous in internship rankings?</label>
+                <select id="public/private" ng-model="ctrl.internship.public">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <br/>
+            <button class="btn btn-default" ng-click="ctrl.save(ctrl.internship)" ng-disabled="internship.$invalid || ctrl.saving || ctrl.saved">
+                Save Settings</button>
+            <button class="btn btn-default" ng-click="ctrl.reset()" ng-disabled="ctrl.saving || internship.$pristine">
                 Reset
-      </button>
-    </div>
-  </form>
+            </button>
+        </div>
+    </form>
 </div>
