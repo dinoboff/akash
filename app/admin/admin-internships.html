@@ -1,0 +1,144 @@
+<div class="row">
+    <div class="col-sm-8">
+        <h1>Internship Data</h1>
+        <hr/>
+    <div ng-if="ctrl.show && !ctrl.calendarView">
+      <table class="table-bordered table-striped table-hover table-condensed">
+        <th class="text-center col-sm-2">Companies</th>
+        <th class="text-center col-sm-2">Number of Users Interested</th>
+        <th class="text-center col-sm-2"> View User Details</th>
+        <tr ng-repeat="company in ctrl.internshipSummary1 ">
+          <td class="text-center">{{company.name}}</td>
+          <td class="text-center">{{company.users.length}}</td>
+          <td><button class="btn btn-default btn-block" ng-click="ctrl.change(company)">View User Details  
+          </button>
+        </tr>
+      </table>
+      <br/>
+      <br/>
+      <button class="btn btn-group-lg btn-info" ng-click="ctrl.view()">
+        Show Calendar View </button>
+     </div>
+     <div ng-if="!ctrl.show && !ctrl.calendarView"> 
+         <table class="table-bordered table-striped table-hover">
+           <th class="text-center col-sm-2">UserName</th>
+           <th class="text-center col-sm-2"> Start Date : Period 1</th>
+           <th class="text-center col-sm-2"> End Date :   &nbsp Period 1 </th>
+           <th class="text-center col-sm-2"> Start Date : Period 2</th>
+           <th class="text-center col-sm-2"> End Date :   &nbsp Period 2</th>
+           <tr ng-repeat="u in ctrl.userDetails">
+             <td class="text-center">{{u.user}}</td>
+             <td class="text-center">{{u.StartDate1}}</td>
+             <td class="text-center">{{u.EndDate1}}</td>
+             <td class="text-center">{{u.StartDate2}}</td>
+             <td class="text-center">{{u.EndDate2}}</td>
+           </tr>
+         </table> 
+       <br/>
+       <button class="btn btn-default btn-lg" ng-click="ctrl.changeBack()">Back  
+       </button>
+     </div>
+     <br/>
+      <div ng-if="ctrl.calendarView"> 
+       <form role="form" class="form-inline filter-selectors">
+         <select type="text" class="form-control"
+                        name="companyFilter" id="company-filter"
+                        ng-model="ctrl.filterBy"
+                        ng-options="company.name for company in
+                                    ctrl.internshipSummary1"
+                        ng-change=ctrl.update();
+                        required="true">
+                        <option value="">
+                            Select a company...
+                        </option>
+        </select>
+         <select type="text" class="form-control"
+                        name="dateFilter" id="date-filter"
+                        ng-model="ctrl.dateFilter"
+                        ng-options="o as o for o in ctrl.dateOptions"
+                        ng-change=ctrl.update();
+                        required="true">
+                        <option value="">
+                            Select a period...
+                        </option>
+        </select>
+         <select type="text" class="form-control"
+                        name="yearFilter" id="year-filter"
+                        ng-model="ctrl.year"
+                        ng-options="o as o for o in ctrl.yearOptions"
+                        ng-change=ctrl.update();
+                        required="true">
+                        <option value="">
+                            Select a year...
+                        </option>
+        </select>
+         <div class="form-group" ng-if="ctrl.filterBy">
+         </div>
+        </form>
+        
+        <br/>
+       <table class="table-bordered table-striped table-hover"> 
+         <th class="text-center col-sm-2">Users</th>
+        <th ng-repeat="month in ctrl.monthList" class="text-center col-sm-1">
+          {{month}} {{ctrl.year}}</th>
+        <tr ng-repeat="obj in ctrl.userDetailsInMonths">
+          <td class="text-center col-sm-2">{{obj.user}}</td>
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,-1)">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,-1)">
+             </td>
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,0)">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,0)">
+             </td>
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,1)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,1)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,2)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,2)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,3)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,3)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,4)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,4)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,5)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,5)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,6)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,6)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,7) " class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,7)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,8)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,8)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,9)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,9)">
+             </td>  
+          <td ng-if="ctrl.showLine(obj,ctrl.monthList,10)" class="success">
+             <hr></td>
+          <td ng-if="!ctrl.showLine(obj,ctrl.monthList,10)" class="success">
+          </td>  
+         </tr>
+        </table> 
+        <br/>
+         <button class="btn btn-default btn-lg" ng-click="ctrl.changeBack()">Back  
+       </button>
+      </div>
+  </div> 
+      <div ng-if="!ctrl.calendarView" class="col-sm-4 well">
+        <oep-admin-menu oep-items="ctrl.menu"></oep-admin-menu>
+      </div>
+  </div>
