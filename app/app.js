@@ -43,6 +43,7 @@
       'oep.events.directives',
       'oep.navbar.controllers',
       'oep.ranks.controllers',
+      'oep.research.controllers',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
@@ -269,6 +270,19 @@
           availableCourses: ['oepUsersApi',
             function(oepUsersApi) {
               return oepUsersApi.courses.all(true);
+            }
+          ]
+        }
+      }).
+      when('/research', {
+        templateUrl: 'research/research-view.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
             }
           ]
         }

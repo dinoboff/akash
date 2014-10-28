@@ -9,30 +9,10 @@
   'use strict';
 
   var module = angular.module('oep.events.controllers', [
+    'oep.date.services',
     'oep.events.services',
     'oep.user.services'
   ]);
-
-  function _pad(number) {
-    var r = number + '';
-
-    if (r.length === 1) {
-      r = '0' + r;
-    }
-
-    return r;
-  }
-
-  /**
-   * Return an ISO date
-   */
-  function isoDate(date) {
-    date = date || new Date();
-
-    return date.getUTCFullYear() +
-      '-' + _pad(date.getUTCMonth() + 1) +
-      '-' + _pad(date.getUTCDate());
-  }
 
   /**
    * OepEventFormCtrl - Controller for the events subsection.
@@ -43,10 +23,12 @@
   module.controller('OepEventFormCtrl', [
     '$timeout',
     'oepEventsApi',
+    'oepDate',
+    'oepIsoDate',
     'oepSettings',
-    function OepEventFormCtrl($timeout, oepEventsApi, oepSettings) {
-      var today = new Date(),
-        nextYear = new Date(today.getFullYear() + 1, 11, 31);
+    function OepEventFormCtrl($timeout, oepEventsApi, oepDate, oepIsoDate, oepSettings) {
+      var today = oepDate(),
+        nextYear = oepDate([today.year() + 1, 11, 31]);
 
       this.services = {
         id: 'services',
@@ -63,15 +45,17 @@
         }]
       };
       this.rankingOptions = oepSettings.rankingOptions;
-      this.today = isoDate(today);
-      this.nextYear = isoDate(nextYear);
+      this.today = oepIsoDate(today);
+      this.nextYear = oepIsoDate(nextYear);
 
       /**
        * Request the OEP API to save the current user event.
        *
        */
-      this.save = function(event, editor) {
+      this.save = function(event, editor, onsuccess) {
         var self = this;
+
+        onsuccess = onsuccess || angular.noop;
 
         this.event.editor = editor.id;
         this.saving = true;
@@ -81,11 +65,13 @@
           self.event = event;
           self.saved = true;
           self.reset(true);
+          return event;
+        })['finally'](function() {
+          self.saving = false;
+        }).then(onsuccess).then(function(){
           return $timeout(function() {
             self.saved = false;
           }, 5000);
-        })['finally'](function() {
-          self.saving = false;
         });
       };
 
@@ -149,6 +135,12 @@
       this.loading = true;
       this.events = initialData.events;
       this.currentUser = initialData.currentUser;
+
+      this.reload = function() {
+        oepEventsApi.get().then(function(events){
+          self.events = events;
+        });
+      };
 
       this.getMore = function() {
         if (!this.events.cursor) {

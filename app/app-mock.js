@@ -109,6 +109,10 @@
           data.courses = [];
         }
 
+        if (!data.events) {
+          data.events = [];
+        }
+
         users[data.id] = data;
         return [200, null];
       });
@@ -344,24 +348,20 @@
       httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
         var event = JSON.parse(body);
 
-        var i = 0;
-        for(i = 0; i < events.length; i++) {
-          if(event.id === events[i].id) {
-            events[i] = event;
-            break;
-          }
-        }
-
-        if(i === events.length) {
-          events.push(event);
-          event.id = events.length;
-          event.createdAt = new Date().toUTCString();
-        }
+        events.push(event);
+        event.id = events.length;
+        event.createdAt = new Date().toUTCString();
 
         return [200, event];
       });
+      // One event
+      httpBackend.whenGET(fixtures.url.oneEvent).respond(function(m, url) {
+        var eventId = parseInt(fixtures.url.oneEvent.exec(url)[1], 10);
 
-      httpBackend.whenGET(fixtures.url.internships).respond({
+        return [200, events[eventId - 1]];
+      });
+      
+       httpBackend.whenGET(fixtures.url.internships).respond({
         internships: internships,
         cursor: ''
       });

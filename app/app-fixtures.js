@@ -122,6 +122,7 @@
       suggestions: /api\/v1\/suggestions$/,
       internships: /api\/v1\/internships$/,
       events: /api\/v1\/events$/,
+      oneEvent: /api\/v1\/events\/([^\/]+)$/,
       eventParticipants: /api\/v1\/events\/([^\/]+)\/participants\/([^\/]+)$/,
       schools: /api\/v1\/schools/,
       summary: /api\/v1\/summary/,
@@ -131,8 +132,7 @@
       coursePassword: /api\/v1\/courses\/([^\/]+)\/password$/,
       courseOpen: /api\/v1\/courses\/([^\/]+)\/opened$/,
       courseClose: /api\/v1\/courses\/([^\/]+)\/closed$/,
-      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/,
-      oneEvent: /api\/v1\/events\/([^\/]+)$/
+      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/
     },
     summary: {
       'numSchools': 4,
@@ -188,7 +188,8 @@
           id: '2',
           name: 'SMU MITB Cloud and Big Data Analytics 2014',
           opened: true
-        }]
+        }],
+        'events': []
       },
 
       'ProfChris': {
@@ -261,7 +262,8 @@
           id: '1',
           name: 'SMU MITB Cloud and Big Data Analytics 2013',
           opened: false
-        }]
+        }],
+        'events': []
       },
 
       'dinoboff': {
@@ -284,7 +286,8 @@
           id: '2',
           name: 'SMU MITB Cloud and Big Data Analytics 2014',
           opened: true
-        }]
+        }],
+        'events': []
       },
     },
     profiles: {
