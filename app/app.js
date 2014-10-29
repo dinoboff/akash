@@ -41,6 +41,8 @@
       'oep.controllers',
       'oep.events.controllers',
       'oep.events.directives',
+      'oep.form.directives',
+      'oep.internships.controllers',
       'oep.navbar.controllers',
       'oep.ranks.controllers',
       'oep.research.controllers',
@@ -48,8 +50,7 @@
       'oep.templates',
       'oep.user.directives',
       'oep.user.services',
-      'oep.userdetails.controllers',
-      'oep.internships.controllers'
+      'oep.userdetails.controllers'
     ]
   ).
 
