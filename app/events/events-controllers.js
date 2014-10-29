@@ -52,7 +52,7 @@
        * Request the OEP API to save the current user event.
        *
        */
-      this.save = function(event, editor, onsuccess) {
+      this.save = function(event, editor, onsuccess, form) {
         var self = this;
 
         onsuccess = onsuccess || angular.noop;
@@ -64,7 +64,7 @@
         return oepEventsApi.create(event).then(function(event) {
           self.event = event;
           self.saved = true;
-          self.reset(true);
+          self.reset(form, true);
           return event;
         })['finally'](function() {
           self.saving = false;
@@ -79,7 +79,11 @@
        * Reset the scope initial values (Event with default values).
        *
        */
-      this.reset = function(saved) {
+      this.reset = function(form, saved) {
+        if (form && form.$setPristine) {
+          form.$setPristine();
+        }
+
         this.saving = false;
         this.saved = saved || false;
         this.event = {
@@ -88,6 +92,7 @@
           visibility: 'public',
           password: '',
           rankedBy: oepSettings.rankingOptions[0].id,
+          cutoffNumber: null,
           cutoffDate: null,
           startDate: null,
           endDate: null
