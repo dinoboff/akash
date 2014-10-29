@@ -49,8 +49,7 @@
       'oep.user.directives',
       'oep.user.services',
       'oep.userdetails.controllers',
-      'oep.internships.controllers',
- 
+      'oep.internships.controllers'
     ]
   ).
 
@@ -188,8 +187,22 @@
       }).
       when('/internship', {
         templateUrl: 'internships/internships.html',
-        controller: 'OepInternships',
+        controller: 'OepInternshipsCtrl',
         controllerAs: 'ctrl',
+        resolve: {
+          'currentUser': [
+            '$location',
+            'oepCurrentUserApi',
+            function($location, oepCurrentUserApi) {
+              return oepCurrentUserApi.auth().then(function(user) {
+                if (!user.info) {
+                  $location.path('/edit');
+                }
+                return user;
+              });
+            }
+          ]
+        }
       }).
       when('/a', {
         templateUrl: 'oneteam/a.html',

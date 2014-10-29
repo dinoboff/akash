@@ -8,122 +8,79 @@
 (function() {
   'use strict';
 
+  var module = angular.module('oep.internships.controllers', [
+    'oep.date.services',
+    'oep.user.services'
+  ]);
+
   /**
    * OepInternships - Controller for the internships subsection.
-   * 
+   *
    * Populate the scope currentUser property with current user info.
    *
-   *
    */
-  function OepInternships(currentUser, internshipApi) {
-    this.api = internshipApi;
-    this.currentUser = currentUser;
-    this.checked=0;
-    this.limit=5;
-    this.reset();
-    this.companies = [
-      { name:'Visa', selected: false},
-      { name:'Google', selected: false},
-      { name:'Accenture', selected: false},
-      { name:'Amazon', selected: false},
-      { name:'Carousel', selected: false},
-      { name:'Facebook', selected: false},
-      { name:'Cisco', selected: false},
-      { name:'HP', selected: false},
-      { name:'IBM', selected: false},
-      { name:'Nitrous.io', selected: false},
-      { name:'PayPal', selected: false},
-      { name:'RevolutionR', selected: false},
-      { name:'Salesforce', selected: false},
-      { name:'SAP', selected: false},
-      { name:'SAS', selected: false},
-      { name:'Singtel', selected: false},
-      { name:'Viki', selected: false}
-    ];
-    var currentTime = new Date();
-    var month = currentTime.getMonth() + 1;
-    var day = currentTime.getDate();
-    var year = currentTime.getFullYear();
-    this.StartDate = (year + '-' + month + '-' + day);
+  module.controller('OepInternshipsCtrl', [
+    '$window',
+    'oepCurrentUserApi',
+    'oepIsoDate',
+    'currentUser',
+    function OepInternshipsCtrl($window, oepCurrentUserApi, oepIsoDate, currentUser) {
+      var self = this,
+        _ = $window._,
+        limit = 5;
 
-    this.checkChanged = function(company){
-     // console.log(company.name);
-      if(company.selected) {
-        this.checked++;
-      }
-      else {this.checked--;}
-    };
-  }
-  OepInternships.prototype.save = function(internship,companies) {
-    var self = this;
-    this.saving=true;
-    this.saved=false;
-    var selectedCompanies=[];
-    for ( var i=0; i < companies.length;i++){
-      if(companies[i].selected ){
-        selectedCompanies.push(companies[i]);
-      }
+      this.saving = false;
+      this.saved = false;
+      this.StartDate = oepIsoDate();
+
+      this.companies = [
+        'Visa', 'Google', 'Accenture', 'Amazon', 'Carousel', 'Facebook', 'Cisco',
+        'HP', 'IBM', 'Nitrous.io', 'PayPal', 'RevolutionR', 'Salesforce', 'SAP',
+        'SAS', 'Singtel', 'Viki', 'Other'
+      ];
+
+      this.maxedIntership = function(updatedCompanies) {
+        // filter out companies checked out and count the remaining.
+        var count = Object.keys(updatedCompanies).filter(function(key) {
+          return updatedCompanies[key];
+        }).length;
+
+        return count >= limit;
+      };
+
+      /**
+       * Save current user intership data
+       */
+      this.save = function(internship) {
+        this.saving = true;
+        this.saved = false;
+
+        return oepCurrentUserApi.update({
+          'internship': internship
+        }).then(function() {
+          self.saved = true;
+          currentUser.info.internship = internship;
+        })['finally'](function() {
+          self.saving = false;
+        });
+      };
+
+      /**
+       * Reset intership to initial intership data.
+       */
+      this.reset = function() {
+        this.saving = false;
+        this.saved = false;
+
+        this.internship = _.cloneDeep(currentUser.info.internship);
+        _.defaults(this.internship, {
+          companies: {},
+          dates: [],
+          notification: {}
+        });
+      };
+
+      this.reset();
     }
-    internship.selectedCompanies= selectedCompanies;
-    internship.user = this.currentUser.data.name;
-    return this.api.create(internship).then(function(internship) {
-      self.internship = internship;
-      self.saved = true;
-      //console.log(internship); 
-    })['finally'](function() {
-      self.saving = false;
-    });
-      
-  };
-  
-  
-  OepInternships.prototype.reset = function() {
-    var self=this;
-    this.saving = false;
-    this.saved = false;
-    this.internship = {};
-    this.internship.selectedValue = 'No';
-    this.internship.sDate = '';
-    this.internship.eDate = '';
-    this.internship.notifications ='';
-    this.internship.public ='';
-    this.internship.selectedCompanies = '';
-    this.checked=0;
-    this.companies = [
-      { name:'Visa', selected: false},
-      { name:'Google', selected: false},
-      { name:'Accenture', selected: false},
-      { name:'Amazon', selected: false},
-      { name:'Carousel', selected: false},
-      { name:'Facebook', selected: false},
-      { name:'Cisco', selected: false},
-      { name:'HP', selected: false},
-      { name:'IBM', selected: false},
-      { name:'Nitrous.io', selected: false},
-      { name:'PayPal', selected: false},
-      { name:'RevolutionR', selected: false},
-      { name:'Salesforce', selected: false},
-      { name:'SAP', selected: false},
-      { name:'SAS', selected: false},
-      { name:'Singtel', selected: false},
-      { name:'Viki', selected: false},
-      { name: 'Other', selected:false}
-    ];
-    this.currentUser.auth().then(function(data) {
-      if (!data || !data.info || !data.info.email) {
-        return;
-      }
-
-      self.internship.from = data.info.email;
-    });
-  };
-  angular.module('oep.internships.controllers',
-  ['oep.internships.services',
-  'oep.user.services']).
-
-  controller('OepInternships',
-  ['oepCurrentUserApi',
-  'oepInternshipsApi',
-   OepInternships
   ]);
 })();
