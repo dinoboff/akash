@@ -57,8 +57,13 @@
           return api.one('events', event.id).one('participants', userId).remove();
         },
 
-        getDetails: function(eventId) {
-          return api.one('events', eventId).get();
+        getDetails: function(eventId, cursor) {
+          var params = {};
+
+          if (cursor) {
+            params.cursor = cursor;
+          }
+          return api.one('events', eventId).get(params);
         }
 
       };

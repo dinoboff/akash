@@ -4,20 +4,32 @@
 <h3>Participants Ranked by {{ctrl.rankedBy.label}}</h3>
 <table class="table table-striped ranks">
     <thead>
-        <th>Ranking</th>
-        <th>Name</th>
-        <th>Total Badges</th>
-        <th>Total Score</th>
-        <th>Treehouse badges</th>
-        <th>Treehouse points</th>
-        <th>Code School badges</th>
-        <th>Code School points</th>
-        <th>Code Combat points</th>
-        <th>Badges</th>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2">Total</th>
+            <th colspan="2">Treehouse</th>
+            <th colspan="2">Code School</th>
+            <th colspan="2">Code Combat</th>
+            <th colspan="1"></th>
+        </tr>
+        <tr>
+            <th>Ranking</th>
+            <th>Name</th>
+            <th>Badges</th>
+            <th>Score</th>
+            <th>Badges</th>
+            <th>Points</th>
+            <th>Badges</th>
+            <th>Points</th>
+            <th>Badges</th>
+            <th>Points</th>
+            <th>All Badges</th>
+        </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="10" ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
+            <td colspan="11"
+ ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
                 Nobody joined this event yet.
             </td>
         </tr>
@@ -34,6 +46,7 @@
             <td>{{student.treeHouse.points || 0}}</td>
             <td>{{student.codeSchool.badges.length || 0}}</td>
             <td>{{student.codeSchool.points || 0}}</td>
+            <td>{{student.codeCombat.badges.length || 0}}</td>
             <td>{{student.codeCombat.points || 0}}</td>
             <td class="badge-list">
                 <img ng-repeat="badge in student.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
@@ -57,6 +70,7 @@
             <td>{{ctrl.currentUser.info.services.treeHouse.points || 0}}</td>
             <td>{{ctrl.currentUser.info.services.codeSchool.badges.length || 0}}</td>
             <td>{{ctrl.currentUser.info.services.codeSchool.points || 0}}</td>
+            <td>{{ctrl.currentUser.info.services.codeCombat.badges.length || 0}}</td>
             <td>{{ctrl.currentUser.info.services.codeCombat.points || 0}}</td>
             <td class="badge-list">
                 <img ng-repeat="badge in ctrl.currentUser.info.services.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
@@ -67,6 +81,9 @@
             </td>
         </tr>
 
+        <tr ng-if="ctrl.event.cursor" class="more">
+            <td colspan="11"><a class="btn btn-primary" ng-click="ctrl.getMore()">More</a></td>
+        </tr>
 
     </tbody>
 </table>

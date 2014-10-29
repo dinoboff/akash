@@ -68,7 +68,7 @@
           return event;
         })['finally'](function() {
           self.saving = false;
-        }).then(onsuccess).then(function(){
+        }).then(onsuccess).then(function() {
           return $timeout(function() {
             self.saved = false;
           }, 5000);
@@ -141,7 +141,7 @@
       this.currentUser = initialData.currentUser;
 
       this.reload = function() {
-        oepEventsApi.get().then(function(events){
+        oepEventsApi.get().then(function(events) {
           self.events = events;
         });
       };
@@ -185,12 +185,16 @@
    *
    */
   controller('OepEventDetailsCtrl', [
+    '$q',
     '$window',
     'oepSettings',
+    'oepEventsApi',
     'initialData',
-    function OepEventDetailsCtrl($window, oepSettings, initialData) {
-      var _ = $window._;
+    function OepEventDetailsCtrl($q, $window, oepSettings, oepEventsApi, initialData) {
+      var self = this,
+        _ = $window._;
 
+      this.loading = false;
       this.event = initialData.event;
       this.currentUser = initialData.currentUser;
       this.rankedBy = _.find(oepSettings.rankingOptions, {
@@ -201,6 +205,19 @@
         return _.find(this.event.stats, {
           id: userServices.id
         }) !== undefined;
+      };
+
+      this.getMore = function() {
+        if (!this.event.cursor) {
+          return $q.reject(new Error('No cursor.'));
+        }
+
+        self.loading = $q.when(self.loading).then(function() {
+          return oepEventsApi.getDetails(self.event.id, self.event.cursor).then(function(event) {
+            self.event.stats = self.event.stats.concat(event.stats);
+            self.event.cursor = event.cursor;
+          });
+        });
       };
     }
   ])
