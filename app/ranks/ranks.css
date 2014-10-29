@@ -24,7 +24,7 @@
 }
 
 .badge-list {
-  max-width: 208px;
+  max-width: 176px;
 }
 
 .badge-thumbnail {
@@ -33,7 +33,6 @@
 
 @media (min-width: 992px) {
   .badge-list {
-    min-width: 208px;
-    max-width: inherit;
+    width: 176px;
   }
 }
