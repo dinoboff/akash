@@ -32,6 +32,13 @@
       this.saving = false;
       this.saved = false;
       this.StartDate = oepIsoDate();
+      this.booleanOptions = [{
+        value: true,
+        label: 'Yes'
+      }, {
+        value: false,
+        label: 'No'
+      }];
 
       this.companies = [
         'Visa', 'Google', 'Accenture', 'Amazon', 'Carousel', 'Facebook', 'Cisco',
@@ -59,7 +66,6 @@
           'internship': internship
         }).then(function() {
           self.saved = true;
-          currentUser.info.internship = internship;
         })['finally'](function() {
           self.saving = false;
         });

@@ -5,12 +5,10 @@
             Your Internship Settings have been saved on {{ctrl.internship.createdAt}}
             <br/>We will contact you if we match you to a suitable company.
         </p>
-        {{ctrl.internship}}
+
         <div class="form-group">
             <label for="selectOption">Do you want us to reccomend you to companies?</label>
-            <select id="selectOption" ng-model="ctrl.internship.interested">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
+            <select id="selectOption" ng-model="ctrl.internship.interested" ng-options="b.value as b.label for b in ctrl.booleanOptions">
             </select>
             <br />
         </div>
@@ -50,24 +48,19 @@
             <div class="form-group">
                 <label for="selectNotification">Would you want to be notified via email about new opportunities?
                 </label>
-                <select id="selectNotification" ng-model="ctrl.internship.notifications.recommendations">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
+                <select id="selectNotification" ng-model="ctrl.internship.notification.recommendations" ng-options="b.value as b.label for b in ctrl.booleanOptions">
                 </select>
             </div>
             <div class="form-group">
                 <label for="public/private">Would you like to be anonymous in internship rankings?</label>
-                <select id="public/private" ng-model="ctrl.internship.public">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
+                <select id="public/private" ng-model="ctrl.internship.public" ng-options="b.value as b.label for b in ctrl.booleanOptions"></select>
             </div>
             <br/>
-            <button class="btn btn-default" ng-click="ctrl.save(ctrl.internship)" ng-disabled="internship.$invalid || ctrl.saving || ctrl.saved">
-                Save Settings</button>
-            <button class="btn btn-default" ng-click="ctrl.reset()" ng-disabled="ctrl.saving || internship.$pristine">
-                Reset
-            </button>
         </div>
+        <button class="btn btn-default" ng-click="ctrl.save(ctrl.internship)" ng-disabled="internship.$invalid || ctrl.saving">
+            Save Settings</button>
+        <button class="btn btn-default" ng-click="ctrl.reset()" ng-disabled="ctrl.saving || internship.$pristine">
+            Reset
+        </button>
     </form>
 </div>
