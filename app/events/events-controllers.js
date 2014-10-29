@@ -94,8 +94,7 @@
           rankedBy: oepSettings.rankingOptions[0].id,
           cutoffNumber: null,
           cutoffDate: null,
-          startDate: null,
-          endDate: null
+          startDate: null
         };
       };
 
