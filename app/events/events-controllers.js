@@ -201,12 +201,6 @@
         id: this.event.rankedBy
       });
 
-      this.isRanked = function(userServices) {
-        return _.find(this.event.stats, {
-          id: userServices.id
-        }) !== undefined;
-      };
-
       this.getMore = function() {
         if (!this.event.cursor) {
           return $q.reject(new Error('No cursor.'));
