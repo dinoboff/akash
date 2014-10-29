@@ -28,8 +28,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="11"
- ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
+            <td colspan="11" ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
                 Nobody joined this event yet.
             </td>
         </tr>
@@ -57,32 +56,9 @@
             </td>
         </tr>
 
-        <tr ng-if="!ctrl.isRanked(ctrl.currentUser.info.services)">
-            <td>You</td>
-            <td>
-                <a ng-href="#/user/{{ctrl.currentUser.info.services.id}}">
-                    {{ctrl.currentUser.info.services.name | limitTo: 20}}
-                </a>
-            </td>
-            <td>{{ctrl.currentUser.info.services.totalBadges}}</td>
-            <td>{{ctrl.currentUser.info.services.score}}</td>
-            <td>{{ctrl.currentUser.info.services.treeHouse.badges.length || 0}}</td>
-            <td>{{ctrl.currentUser.info.services.treeHouse.points || 0}}</td>
-            <td>{{ctrl.currentUser.info.services.codeSchool.badges.length || 0}}</td>
-            <td>{{ctrl.currentUser.info.services.codeSchool.points || 0}}</td>
-            <td>{{ctrl.currentUser.info.services.codeCombat.badges.length || 0}}</td>
-            <td>{{ctrl.currentUser.info.services.codeCombat.points || 0}}</td>
-            <td class="badge-list">
-                <img ng-repeat="badge in ctrl.currentUser.info.services.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
-                <br ng-if="ctrl.currentUser.info.services.treeHouse.badges.length > 0" />
-                <img ng-repeat="badge in ctrl.currentUser.info.services.codeSchool.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
-                <br ng-if="ctrl.currentUser.info.services.codeSchool.badges.length > 0" />
-                <img ng-repeat="badge in ctrl.currentUser.info.services.codeCombat.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
-            </td>
-        </tr>
-
         <tr ng-if="ctrl.event.cursor" class="more">
-            <td colspan="11"><a class="btn btn-primary" ng-click="ctrl.getMore()">More</a></td>
+            <td colspan="11"><a class="btn btn-primary" ng-click="ctrl.getMore()">More</a>
+            </td>
         </tr>
 
     </tbody>
