@@ -95,20 +95,12 @@
         require: 'ngModel',
         // arguments: scope, iElement, iAttrs, controller
         link: function oepIntegerPostLink(s, e, a, model) {
-
-          function toInteger(value) {
-            value = parseInt(value, 10);
-            return isNaN(value) ? undefined : value;
-          }
-
-          function isInteger(value) {
-            value = toInteger(value);
-            model.$setValidity('oepInteger', value !== undefined);
-            return value;
-          }
-
-          model.$parsers.push(isInteger);
-          model.$formatters.push(toInteger);
+          model.$validators.oepInteger = function oepIntegerValidator(modelValue, viewValue) {
+            if (model.$isEmpty(modelValue)) {
+              return true;
+            }
+            return !isNaN(parseInt(viewValue, 10));
+          };
         }
       };
     }

@@ -134,11 +134,10 @@
     'oepCurrentUserApi',
     'oepUsersApi',
     'oepSettings',
-    'oepDebounce',
     'user',
     'availableSchools',
     'availableCourses',
-    function OepUserFormListCtrl($location, $q, $http, $scope,$filter, $window, oepCurrentUserApi, oepUsersApi, oepSettings, oepDebounce, user, availableSchools, availableCourses) {
+    function OepUserFormListCtrl($location, $q, $http, $scope, $filter, $window, oepCurrentUserApi, oepUsersApi, oepSettings, user, availableSchools, availableCourses) {
       var $ = $window.jQuery,
         _ = $window._,
         search = $window.location.search,
@@ -146,9 +145,24 @@
         match = refPattern.exec(search),
         self = this,
         pick = $filter('oepPick'),
-        updaters = {},
-        today=new Date(),
-        nextYear=new Date(today.getFullYear() +1, 11, 31);
+        today = new Date(),
+        nextYear = new Date(today.getFullYear() + 1, 11, 31);
+
+      this.asyncOptions = {
+        updateOn: 'default blur',
+        debounce: {
+          'default': 1000,
+          'blur': 0
+        }
+      };
+      this.normalOptions = {
+        updateOn: 'default change blur',
+        debounce: {
+          'default': 300,
+          'change': 300,
+          'blur': 0
+        }
+      };
 
       this.saving = false;
       this.userIdPattern = /^[-\w\d.]+$/;
@@ -201,29 +215,33 @@
        * TODO: Move business logic to a service out of the controller.
        */
       this.checkForCodecombat = function(userInfo, prop, input, form) {
-            $http({
-                url: 'http://codecombat.com/auth/whoami?callback=JSON_CALLBACK',
-                method: 'JSONP'
-              }).then(function(response) {
-                  // success
-                  userInfo.services = userInfo.services || {};
-                  userInfo.services.codeCombat = userInfo.services.codeCombat || {};
-                  userInfo.services.codeCombat.name = response.data.name;
-                  self.update(userInfo, prop, input, form);
-                },
-                function(response) { // optional
-                  // failed
-                  console.log('Code Combat data not found.\nError: '+response);
-                }
-              );
-          };
+        $http({
+          url: 'http://codecombat.com/auth/whoami?callback=JSON_CALLBACK',
+          method: 'JSONP'
+        }).then(function(response) {
+            // success
+            userInfo.services = userInfo.services || {};
+            userInfo.services.codeCombat = userInfo.services.codeCombat || {};
+            userInfo.services.codeCombat.name = response.data.name;
+            self.update(userInfo, prop, input, form);
+          },
+          function(response) { // optional
+            // failed
+            console.log('Code Combat data not found.\nError: ' + response);
+          }
+        );
+      };
 
 
       /**
-       * Save/create user info.
+       * Create new user.
        *
        */
       this.save = function(userInfo) {
+        if (!self.isNewUser) {
+          return;
+        }
+
         this.saving = $q.when(this.saving).then(function() {
           return oepCurrentUserApi.save(userInfo);
         }).then(function(user) {
@@ -270,36 +288,25 @@
        *
        */
       this.update = function(userInfo, prop, input, form) {
-        var updater = updaters[prop];
-
         if (self.isNewUser) {
           return;
         }
 
-        if (updater) {
-          updater(userInfo, prop, input, form);
+        if (input.$invalid) {
           return;
         }
 
-        updater = updaters[prop] = oepDebounce(function(userInfo, prop, input, form) {
-          if (input.$invalid) {
-            return;
-          }
+        self.saving = $q.when(self.saving).then(function() {
+          var payload = pick(userInfo, prop);
 
-          self.saving = $q.when(self.saving).then(function() {
-            var payload = pick(userInfo, prop);
-
-            return oepCurrentUserApi.update(payload);
-          }).then(function(user) {
-            input.$setPristine();
-            setFormPristine(form);
-            return user;
-          })['finally'](function() {
-            self.saving = false;
-          });
-        }, 1000);
-
-        updater(userInfo, prop, input, form);
+          return oepCurrentUserApi.update(payload);
+        }).then(function(user) {
+          input.$setPristine();
+          setFormPristine(form);
+          return user;
+        })['finally'](function() {
+          self.saving = false;
+        });
       };
 
       /**
@@ -332,7 +339,7 @@
           function(response) { // optional
             // failed
             console.log(response.status);
-            console.log('Github data not found.\nError: '+response);
+            console.log('Github data not found.\nError: ' + response);
           }
         );
 

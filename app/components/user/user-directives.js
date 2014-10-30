@@ -7,51 +7,42 @@
 (function() {
   'use strict';
 
-  angular.module('oep.user.directives', ['oep.user.services', 'oep.debounce.services']).
+  angular.module('oep.user.directives', ['oep.user.services']).
 
   /**
    * oepUniqId - Validator for input associated to a ngModel checking
    * there's no OEP user an id identical to the ngModel value.
    *
    */
-  directive('oepUniqId', ['oepDebounce', 'oepUsersApi', '$q',
-
-    function(debounce, userApi, $q) {
-
+  directive('oepUniqId', [
+    '$q',
+    'oepUsersApi',
+    function($q, oepUsersApi) {
       return {
         require: 'ngModel',
-        link: function(s, e, a, ctrl) {
-          var lastQuery = $q.when(true),
-            delayedChecker = debounce(function(value) {
-              if (!value) {
-                ctrl.$setValidity('oepUniqId', true);
-                return;
-              }
-
-              lastQuery = lastQuery.then(function(){
-                return userApi.getById(value).then(function() {
-                  ctrl.$setValidity('oepUniqId', false);
-                  return true;
-                }).catch(function(){
-                  ctrl.$setValidity('oepUniqId', true);
-                  return true;
-                });
+        link: function(s, e, a, model) {
+          model.$asyncValidators.oepUniqId = function(id) {
+            return oepUsersApi.getById(id).then(
+              function() {
+                return $q.reject(new Error('this id is already taken'));
+              },
+              function(resp) {
+                if (resp.status !== 404) {
+                  model.$setValidity('eopValidTreehouseUsernameRequest', false);
+                }
+                return true;
               });
-            }, 1000),
-            checker = function(value) {
-              delayedChecker(value);
-              return value;
-            };
-
-          ctrl.$parsers.push(checker);
-          ctrl.$formatters.push(checker);
+          };
         }
       };
     }
   ]).
 
   /**
-   * It will reset the error message after ant edit of model
+   * It will reset the error message after an edit of model.
+   *
+   * TODO: move it to form component
+   *
    */
   directive('oepResetErrors', [function() {
     return {

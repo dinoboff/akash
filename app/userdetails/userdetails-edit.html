@@ -3,7 +3,7 @@
     <span ng-if="ctrl.isNewUser">Register</span>
 </h1>
 
-<form name="userForm" role="form" class="form-horizontal">
+<form name="userForm" role="form" class="form-horizontal" ng-model-options="ctrl.asyncOptions" ng-submit="ctrl.save(ctrl.user.info)">
     <fieldset>
         <legend>Your details</legend>
         <ng-form name="userDetailsForm">
@@ -71,6 +71,7 @@
                                     name="userGender" ng-required="true"
                                     ng-model="ctrl.user.info.gender" ng-value="genre.id"
                                     ng-change="ctrl.update(ctrl.user.info, 'gender', genderChoiceForm.userGender, userForm)"
+                                    ng-model-options="ctrl.normalOptions"
                                 /> {{genre.name}}
                             </ng-form>
 
@@ -90,6 +91,7 @@
                         ng-options="opt.id as opt.name for opt in ctrl.options.yearOfBirth.choices"
                         required="true"
                         ng-change="ctrl.update(ctrl.user.info, 'yearOfBirth', userDetailsForm.yearOfBirth, userForm)"
+                        ng-model-options="ctrl.normalOptions"
                     >
                         <option value="">
                             Select a year...
@@ -109,6 +111,7 @@
                         ng-options="opt.id as opt.name group by opt.group for opt in ctrl.options.schools.choices"
                         required="true"
                         ng-change="ctrl.update(ctrl.user.info, 'school', userDetailsForm.school, userForm)"
+                        ng-model-options="ctrl.normalOptions"
                     >
                         <option value="">
                             Select a school...
@@ -121,8 +124,7 @@
                 <div class="col-sm-offset-4 col-sm-8">
                     <button
                         type="submit" class="btn btn-default"
-                        ng-click="ctrl.save(ctrl.user.info)"
-                        ng-disabled="userForm.$invalid || ctrl.saving"
+                        ng-disabled="!userForm.$valid || ctrl.saving"
                     >
                         Register
                     </button>
@@ -190,7 +192,13 @@
                 </label>
                 <div class="col-sm-8">
                     <input type="hidden" name="codeCombatId" ng-model="ctrl.user.info.services.codeCombat.id">
-                    <input type="text" class="form-control" id="user-code-combat-name" placeholder="Enter your Code Combat username {{mycodecombat}}" ng-model="ctrl.user.info.services.codeCombat.name" eop-valid-code-combat-username="reportCardForm.codeCombatId" name="codeCombatName" ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName, userForm)" />
+                    <input type="text" class="form-control" id="user-code-combat-name"
+                        name="codeCombatName"
+                        placeholder="Enter your Code Combat username {{mycodecombat}}"
+                        ng-model="ctrl.user.info.services.codeCombat.name"
+                        eop-valid-code-combat-username="reportCardForm.codeCombatId"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.codeCombat.id', reportCardForm.codeCombatName, userForm)"
+                    />
                     <strong class="help-block" ng-show="reportCardForm.codeCombatName.$error.eopValidCodeCombatUsername">
                         This username is not valid.
                     </strong>
@@ -218,8 +226,7 @@
                         ng-model="ctrl.user.info.services.github.id"
                         eop-valid-github-username="true"
                         name="userGithubId"
-                        ng-change="ctrl.update(ctrl.user.info, 'services.github.id', reportCardForm.userGithubId, userForm);
-                                   ctrl.getPulls()"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.github.id', reportCardForm.userGithubId, userForm); ctrl.getPulls()"
                     />
                     <strong class="help-block" ng-show="reportCardForm.userGithubId.$error.eopValidGithubUsername">
                         This username is not valid.
@@ -441,7 +448,7 @@
                 <button
                     type="submit" class="btn btn-default"
                     ng-click="ctrl.addCourse(ctrl.newCourse.selected, courseForm.coursePassword)"
-                    ng-disabled="courseForm.$invalid || ctrl.saving"
+                    ng-disabled="!courseForm.$valid || ctrl.saving"
                 >
                     Join Course
                 </button>

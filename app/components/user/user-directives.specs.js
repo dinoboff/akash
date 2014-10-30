@@ -30,7 +30,6 @@
         httpBackend.expectGET('/api/v1/users/bob').respond(404, {});
 
         scope.form.userId.$setViewValue('bob');
-        timeout.flush();
         httpBackend.flush();
       });
 
@@ -38,7 +37,6 @@
         httpBackend.whenGET('/api/v1/users/bob').respond(200, {});
 
         scope.form.userId.$setViewValue('bob');
-        timeout.flush();
         httpBackend.flush();
 
         expect(scope.form.userId.$invalid).toBe(true);
@@ -49,11 +47,9 @@
         httpBackend.whenGET('/api/v1/users/bob').respond(404, {});
 
         scope.form.userId.$setViewValue('bob');
-        timeout.flush();
         httpBackend.flush();
 
         expect(scope.form.userId.$invalid).toBe(false);
-        expect(scope.form.userId.$error.oepUniqId).toBe(false);
       });
 
     });

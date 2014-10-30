@@ -26,21 +26,9 @@
         ].join('\n'))(scope);
       });
 
-      it('Should filter invalid number', function() {
-        scope.some.int = 'foo';
-        scope.$apply();
-        expect(scope.someForm.someInt.$viewValue).toBe(undefined);
-      });
-
-      it('Should filter valid number', function() {
-        scope.some.int = '1';
-        scope.$apply();
-        expect(scope.someForm.someInt.$viewValue).toBe(1);
-      });
-
       it('should validate valid input', function() {
         scope.someForm.someInt.$setViewValue('1');
-        expect(scope.someForm.someInt.$error.oepInteger).toBe(false);
+        expect(scope.someForm.someInt.$error.oepInteger).toBeFalsy();
       });
 
       it('should invalidate invalid input', function() {

@@ -227,12 +227,12 @@
             'http://teamtreehouse.com/bob.json'
           ).respond(404, '<html>failed</html>');
 
-          api.check.treeHouse('bob').then(function(exist) {
-            result = exist;
+          api.check.treeHouse('bob').catch(function(resp) {
+            result = resp.status;
           });
 
           httpBackend.flush();
-          expect(result).toBe(false);
+          expect(result).toBe(404);
         });
 
         it('should check a code school profile exist', function() {
@@ -249,16 +249,16 @@
         });
 
         it('should check a code school profile doesn\'t exist', function() {
-          var result;
+          var status;
 
           httpBackend.expectGET('/api/v1/codeschool/bob').respond(404, '{"exist": false}');
 
-          api.check.codeSchool('bob').then(function(exist) {
-            result = exist;
+          api.check.codeSchool('bob').catch(function(resp) {
+            status = resp.status;
           });
 
           httpBackend.flush();
-          expect(result).toBe(false);
+          expect(status).toBe(404);
         });
       });
 

@@ -112,18 +112,19 @@
           /**
            * Check the tree house profile page exist for that user.
            *
-           * Returns a promise resolving to True if the profile exist,
-           * or false overwise.
+           * Returns a promise, fullfilled if the user exist,
+           * rejected otherwise..
            *
            */
           treeHouse: function(username) {
             var url = 'http://teamtreehouse.com/' + username + '.json';
 
+            if (!username) {
+              return $q.reject(new Error('no treehouse account for that name.'));
+            }
+
             return $http.get(url).then(function() {
               return true;
-            }).
-            catch (function() {
-              return false;
             });
           },
 
@@ -131,34 +132,33 @@
            * Check the code school profile page exist for that user and
            * if public.
            *
-           * Returns a promise resolving to true if the profile exist,
-           * or false overwise.
+           * Returns a promise will be fullfilled if the user exist. If
+           * the user doesn't exist it will be rejected.
            *
            */
           codeSchool: function(username) {
-            return oepApi.one('codeschool', username).get().then(function() {
+            if (!username) {
+              return $q.reject(new Error('no code school account for that name.'));
+            }
+
+            return oepApi.one('codeschool', username).get().then(function(){
               return true;
-            }).
-            catch (function() {
-              return false;
             });
           },
 
           /**
            * Check the code combat user name exist.
            *
-           * Returns a promise resolving to the user if if it does
+           * Returns a promise fullfilled if the user exists, rejected otherwise.
+           * A fullfilled promise will be resolve to the use id
            */
           codeCombat: function(username) {
             if (!username) {
-              return $q.when(false);
+              return $q.reject(new Error('no code combat account for that name.'));
             }
 
             return oepApi.one('codecombat', username).get().then(function(resp) {
               return resp.userId;
-            }).
-            catch (function() {
-              return false;
             });
           }
 
