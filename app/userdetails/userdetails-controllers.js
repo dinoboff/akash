@@ -246,9 +246,7 @@
           return oepCurrentUserApi.save(userInfo);
         }).then(function(user) {
           oepCurrentUserApi.reset();
-          if (self.isNewUser) {
-            $location.path('/');
-          }
+          $location.path('/');
           return user;
         })['finally'](function() {
           self.saving = false;
@@ -282,17 +280,13 @@
       /**
        * Update some attributes of the user info.
        *
-       * The update calls for each properties are debounced and will only be
-       * sent when no concurrent call to update a property had been sent for
-       * 1000 ms.
-       *
        */
       this.update = function(userInfo, prop, input, form) {
         if (self.isNewUser) {
           return;
         }
 
-        if (input.$invalid) {
+        if (!input.$valid) {
           return;
         }
 
