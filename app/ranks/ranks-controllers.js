@@ -11,8 +11,26 @@
       'eop.card.directives', // TODO: rename
       'ngRoute',
       'oep.config',
+      'oep.events.services',
       'oep.user.services'
     ]);
+
+  module.factory('oepRanksShowRanksCtrlInitialData', [
+    '$q',
+    'oepCurrentUserApi',
+    'oepUsersApi',
+    'oepEventsApi',
+    function oepRanksShowRanksCtrlInitialDataFactory($q, oepCurrentUserApi, oepUsersApi, oepEventsApi) {
+      return function oepRanksShowRanksCtrlInitialData() {
+        return $q.all({
+          currentUser: oepCurrentUserApi.auth(),
+          availableSchools: oepUsersApi.availableSchools(),
+          allCourses: oepUsersApi.courses.all(),
+          openedEvents: oepEventsApi.get({limit: 0, opened: true})
+        });
+      };
+    }
+  ]);
 
   /**
    * OepRanksShowRanks - Controller for the ranks subsction
@@ -24,29 +42,32 @@
    * (as `userStats`) If the current user is not part of top ranks.
    *
    */
-  module.controller('OepRanksShowRanks', [
+  module.controller('OepRanksShowRanksCtrl', [
     '$routeParams',
     '$window',
     '$location',
     'oepUsersApi',
     'oepSettings',
-    'currentUser',
-    'availableSchools',
-    'allCourses',
-    function OepRanksShowRanks($routeParams, window, $location, oepUsersApi, settings, currentUser, availableSchools, allCourses) {
+    'initialData',
+    function OepRanksShowRanksCtrl($routeParams, $window, $location, oepUsersApi, oepSettings, initialData) {
       var self = this,
-        $ = window.jQuery;
+        $ = $window.jQuery;
 
-      this.filterOptions = $.extend({}, settings.userOptions);
+      this.filterOptions = $.extend({}, oepSettings.userOptions);
       this.filterOptions.schools = {
         id: 'schools',
         name: 'Schools',
-        choices: availableSchools
+        choices: initialData.availableSchools
       };
       this.filterOptions.courses = {
         id: 'courses',
         name: 'Courses',
-        choices: allCourses
+        choices: initialData.allCourses
+      };
+      this.filterOptions.courses = {
+        id: 'events',
+        name: 'Events',
+        choices: initialData.openedEvents
       };
 
 
@@ -69,17 +90,17 @@
           return;
         }
 
-        if (!currentUser.info || !currentUser.info.services) {
+        if (!initialData.currentUser.info || !initialData.currentUser.info.services) {
           return;
         }
 
         for (var i = 0; i < this.ranks.length; i++) {
-          if (this.ranks[i].id === currentUser.info.id) {
+          if (this.ranks[i].id === initialData.currentUser.info.id) {
             return;
           }
         }
 
-        this.userStats = currentUser.info.services;
+        this.userStats = initialData.currentUser.info.services;
       };
 
       /**

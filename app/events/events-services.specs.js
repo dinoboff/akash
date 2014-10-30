@@ -57,7 +57,7 @@
 
       it('should query event from a cursor', function() {
         httpBackend.expectGET('/api/v1/events?cursor=abcd').respond({});
-        api.get('abcd');
+        api.get({cursor: 'abcd'});
         httpBackend.flush();
       });
 

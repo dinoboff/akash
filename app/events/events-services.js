@@ -20,13 +20,8 @@
          * Fetch the most recent event (after the optional cursor).
          *
          */
-        get: function(cursor) {
-          var param = {};
-
-          if (cursor) {
-            param.cursor = cursor;
-          }
-          return api.all('events').getList(param);
+        get: function(params) {
+          return api.all('events').getList(params);
         },
 
         /**
