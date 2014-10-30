@@ -152,7 +152,7 @@
         }
 
         self.loading = $q.when(self.loading).then(function() {
-          return oepEventsApi.get(self.events.cursor).then(function(events) {
+          return oepEventsApi.get({cursor: self.events.cursor}).then(function(events) {
             self.events = self.events.concat(events);
             self.events.cursor = events.cursor;
           });

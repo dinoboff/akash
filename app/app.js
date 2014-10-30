@@ -56,24 +56,7 @@
 
   config(['$routeProvider', 'cfpLoadingBarProvider',
     function($routeProvider, cfpLoadingBarProvider) {
-      var rankResolver = {
-          'currentUser': ['oepCurrentUserApi',
-            function(oepCurrentUserApi) {
-              return oepCurrentUserApi.auth();
-            }
-          ],
-          'availableSchools': ['oepUsersApi',
-            function(oepUsersApi) {
-              return oepUsersApi.availableSchools();
-            }
-          ],
-          'allCourses': ['oepUsersApi',
-            function(oepUsersApi) {
-              return oepUsersApi.courses.all();
-            }
-          ]
-        },
-        adminMenuResolver = ['$location', 'oepCurrentUserApi',
+      var adminMenuResolver = ['$location', 'oepCurrentUserApi',
           function($location, oepCurrentUserApi) {
             // Resolve the the menu object
             // And check user permission.
@@ -212,30 +195,44 @@
       }).
       when('/b', {
         templateUrl: 'oneteam/b.html',
-        controller: 'OepRanksShowRanks',
+        controller: 'OepRanksShowRanksCtrl',
         controllerAs: 'ctrl',
       }).
       when('/c', {
         templateUrl: 'oneteam/c.html',
-        controller: 'OepRanksShowRanks',
+        controller: 'OepRanksShowRanksCtrl',
         controllerAs: 'ctrl',
       }).
       when('/d', {
         templateUrl: 'oneteam/d.html',
-        controller: 'OepRanksShowRanks',
+        controller: 'OepRanksShowRanksCtrl',
         controllerAs: 'ctrl',
       }).
       when('/ranks', {
         templateUrl: 'ranks/ranks.html',
-        controller: 'OepRanksShowRanks',
+        controller: 'OepRanksShowRanksCtrl',
         controllerAs: 'ctrl',
-        resolve: rankResolver
+        resolve: {
+          initialData: [
+            'oepRanksShowRanksCtrlInitialData',
+            function(oepRanksShowRanksCtrlInitialData){
+              return oepRanksShowRanksCtrlInitialData();
+            }
+          ]
+        }
       }).
       when('/ranks/:sortBy/:filterByType/:filterByValue', {
         templateUrl: 'ranks/ranks.html',
-        controller: 'OepRanksShowRanks',
+        controller: 'OepRanksShowRanksCtrl',
         controllerAs: 'ctrl',
-        resolve: rankResolver
+        resolve: {
+          initialData: [
+            'oepRanksShowRanksCtrlInitialData',
+            function(oepRanksShowRanksCtrlInitialData){
+              return oepRanksShowRanksCtrlInitialData();
+            }
+          ]
+        }
       }).
       when('/user/:userId', {
         templateUrl: 'userdetails/userdetails-user.html',
