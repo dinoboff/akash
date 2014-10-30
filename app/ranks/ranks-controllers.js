@@ -64,7 +64,7 @@
         name: 'Courses',
         choices: initialData.allCourses
       };
-      this.filterOptions.courses = {
+      this.filterOptions.events = {
         id: 'events',
         name: 'Events',
         choices: initialData.openedEvents
