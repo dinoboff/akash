@@ -103,50 +103,50 @@
             </td>
         </tr>
         <tr ng-repeat="student in ctrl.ranks">
-            <td>{{$index + 1}}</td>
+            <td>{{::$index + 1}}</td>
             <td>
-                <a ng-href="#/user/{{student.id}}">
-                    {{student.name | limitTo: 20}}
+                <a ng-href="#/user/{{::student.id}}">
+                    {{::student.name | limitTo: 20}}
                 </a>
             </td>
-            <td>{{student.totalBadges}}</td>
-            <td>{{student.score}}</td>
-            <td>{{student.treeHouse.badges.length || 0}}</td>
-            <td>{{student.treeHouse.points || 0}}</td>
-            <td>{{student.codeSchool.badges.length || 0}}</td>
-            <td>{{student.codeSchool.points || 0}}</td>
-            <td>{{student.codeCombat.badges.length || 0}}</td>
-            <td>{{student.codeCombat.points || 0}}</td>
+            <td>{{::student.totalBadges}}</td>
+            <td>{{::student.score}}</td>
+            <td>{{::student.treeHouse.badges.length || 0}}</td>
+            <td>{{::student.treeHouse.points || 0}}</td>
+            <td>{{::student.codeSchool.badges.length || 0}}</td>
+            <td>{{::student.codeSchool.points || 0}}</td>
+            <td>{{::student.codeCombat.badges.length || 0}}</td>
+            <td>{{::student.codeCombat.points || 0}}</td>
             <td class="badge-list">
-                <img ng-repeat="badge in student.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <img ng-repeat="badge in student.treeHouse.badges" ng-src="{{::badge.iconUrl}}" alt="{{::badge.name}}" title="{{::badge.name}}" class="badge-thumbnail" />
                 <br ng-if="student.treeHouse.badges.length > 0" />
-                <img ng-repeat="badge in student.codeSchool.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <img ng-repeat="badge in student.codeSchool.badges" ng-src="{{::badge.iconUrl}}" alt="{{::badge.name}}" title="{{::badge.name}}" class="badge-thumbnail" />
                 <br ng-if="student.codeSchool.badges.length > 0" />
-                <img ng-repeat="badge in student.codeCombat.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <img ng-repeat="badge in student.codeCombat.badges" ng-src="{{::badge.iconUrl}}" alt="{{::badge.name}}" title="{{::badge.name}}" class="badge-thumbnail" />
 
             </td>
         </tr>
         <tr ng-if="ctrl.userStats">
             <td>You</td>
             <td>
-                <a ng-href="#/user/{{ctrl.userStats.id}}">
-                    {{ctrl.userStats.name | limitTo: 20}}
+                <a ng-href="#/user/{{::ctrl.userStats.id}}">
+                    {{::ctrl.userStats.name | limitTo: 20}}
                 </a>
             </td>
-            <td>{{ctrl.userStats.totalBadges}}</td>
-            <td>{{ctrl.userStats.score}}</td>
-            <td>{{ctrl.userStats.treeHouse.badges.length || 0}}</td>
-            <td>{{ctrl.userStats.treeHouse.points || 0}}</td>
-            <td>{{ctrl.userStats.codeSchool.badges.length || 0}}</td>
-            <td>{{ctrl.userStats.codeSchool.points || 0}}</td>
-            <td>{{ctrl.userStats.codeCombat.badges.length || 0}}</td>
-            <td>{{ctrl.userStats.codeCombat.points || 0}}</td>
+            <td>{{::ctrl.userStats.totalBadges}}</td>
+            <td>{{::ctrl.userStats.score}}</td>
+            <td>{{::ctrl.userStats.treeHouse.badges.length || 0}}</td>
+            <td>{{::ctrl.userStats.treeHouse.points || 0}}</td>
+            <td>{{::ctrl.userStats.codeSchool.badges.length || 0}}</td>
+            <td>{{::ctrl.userStats.codeSchool.points || 0}}</td>
+            <td>{{::ctrl.userStats.codeCombat.badges.length || 0}}</td>
+            <td>{{::ctrl.userStats.codeCombat.points || 0}}</td>
             <td class="badge-list">
-                <img ng-repeat="badge in ctrl.userStats.treeHouse.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <img ng-repeat="badge in ctrl.userStats.treeHouse.badges" ng-src="{{::badge.iconUrl}}" alt="{{::badge.name}}" title="{{::badge.name}}" class="badge-thumbnail" />
                 <br ng-if="student.treeHouse.badges.length > 0" />
-                <img ng-repeat="badge in student.codeSchool.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <img ng-repeat="badge in student.codeSchool.badges" ng-src="{{::badge.iconUrl}}" alt="{{::badge.name}}" title="{{::badge.name}}" class="badge-thumbnail" />
                 <br ng-if="student.codeSchool.badges.length > 0" />
-                <img ng-repeat="badge in student.codeCombat.badges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+                <img ng-repeat="badge in student.codeCombat.badges" ng-src="{{::badge.iconUrl}}" alt="{{::badge.name}}" title="{{::badge.name}}" class="badge-thumbnail" />
 
             </td>
         </tr>
