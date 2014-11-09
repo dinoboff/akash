@@ -515,7 +515,7 @@
       // Everything else (like html templates) should go through
       httpBackend.whenGET(/.*/).passThrough();
       httpBackend.whenJSONP('http://codecombat.com/auth/whoami?callback=JSON_CALLBACK').passThrough();
-      httpBackend.whenJSONP('https://api.github.com/repos/Khan/KaTex/pulls?state=closed&callback=JSON_CALLBACK').passThrough();
+      httpBackend.whenJSONP('https://api.github.com/repos/Khan/KaTex/stats/contributors?callback=JSON_CALLBACK').passThrough();
 
     }
   ])
