@@ -77,6 +77,10 @@
                     <label class="control-label" for="end">End Date <small>(optional)</small>:</label>
                     <input name="end" type="date" class="form-control" id="end" ng-attr-min="{{formCtrl.event.startDate}}" ng-attr-max="{{formCtrl.nextYear}}" ng-model="formCtrl.event.endDate" oep-bs-valid-class="true" />
                 </div>
+              <div class="form-group">
+                    <label class="control-label" for="share">Share on Facebook:</label>
+                    <input type=checkbox class="form-control" id="share"  ng-model="formCtrl.event.share">
+                </div>
             </fieldset>
 
             <div class="row">
