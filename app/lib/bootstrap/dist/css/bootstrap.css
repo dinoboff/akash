@@ -5782,4 +5782,17 @@ button.close {
     display: none !important;
   }
 }
+.fb-share-button
+{
+transform: scale(2.5);
+-ms-transform: scale(2.5);
+-webkit-transform: scale(2.5);
+-o-transform: scale(2.5);
+-moz-transform: scale(2.5);
+transform-origin: bottom left;
+-ms-transform-origin: bottom left;
+-webkit-transform-origin: bottom left;
+-moz-transform-origin: bottom left;
+-webkit-transform-origin: bottom left;
+}
 /*# sourceMappingURL=bootstrap.css.map */
