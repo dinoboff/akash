@@ -72,16 +72,22 @@
    */
   module.controller('OepUserCtrl', [
     '$timeout',
+    '$http',
     'oepUsersApi',
     'eopReportCardApi',
     'oepCurrentUserApi',
     'user',
-    function OepUserCtrl($timeout, oepUsersApi, eopReportCardApi, oepCurrentUserApi, user) {
+    'repositories',
+    function OepUserCtrl($timeout, $http, oepUsersApi, eopReportCardApi, oepCurrentUserApi, user, repositories) {
       var self = this,
         retryDelay = 2000;
 
       this.profile = user;
       this.currentUser = null;
+      
+      this.repositories = repositories;
+      
+      console.log(this.repositories);
 
       if (!user || !user.services) {
         return;
@@ -115,9 +121,57 @@
       };
 
       this.checkBadges(user.services);
+      
+      /**
+       * Get Number of Pull Requests
+       */
+      /* jshint ignore:start */
+      this.getPulls = function() {
+        
+        var a = 0,
+          d = 0,
+          c = 0;        
+        
+        for(var k = 0; k < this.repositories.length; k++) {
+          $http({
+            method: 'JSONP',
+            url: 'https://api.github.com/repos/' + this.repositories[k].owner +'/'+ this.repositories[k].name + '/stats/contributors' + '?callback=JSON_CALLBACK'
+          }).then(function(response) {
+              // success
+              for (var i = 0; i < response.data.data.length; i++){
+                var username = response.data.data[i].author.login;
+                if(username === self.profile.services.github.id) {
+                  for (var j = 0; j < response.data.data[i].weeks.length; j++){
+                    a += response.data.data[i].weeks[j].a;
+                    d += response.data.data[i].weeks[j].d;
+                    c += response.data.data[i].weeks[j].c;
+                  }
+                }
+              }
+              self.profile.services.github.pulls = c;
+              self.profile.services.github.a = a;
+              self.profile.services.github.d = d;
+            },
+            function(response) { // optional
+              // failed
+              console.log(response.status);
+              console.log('Github data not found.\nError: '+response);
+            }
+          );
+        }        
+      };
+      /* jshint ignore:end */
+      try {
+        if(self.profile.services.github.id !== null){
+          console.log('Hello!');
+          this.getPulls();
+        }
+      } catch (e) {
+          console.log(e.message);
+        }
     }
   ]);
-
+  
   /**
    * OepUserFormListCtrl - Controller for the user settings form.
    *
@@ -138,7 +192,8 @@
     'user',
     'availableSchools',
     'availableCourses',
-    function OepUserFormListCtrl($location, $q, $http, $scope,$filter, $window, oepCurrentUserApi, oepUsersApi, oepSettings, oepDebounce, user, availableSchools, availableCourses) {
+    'repositories',
+    function OepUserFormListCtrl($location, $q, $http, $scope,$filter, $window, oepCurrentUserApi, oepUsersApi, oepSettings, oepDebounce, user, availableSchools, availableCourses, repositories) {
       var $ = $window.jQuery,
         _ = $window._,
         search = $window.location.search,
@@ -174,6 +229,9 @@
           });
         })
       };
+      
+      this.repositories = repositories;
+      
       this.defaultCompanies = [
         'Accenture', 'Amazon', 'Carousel', 'Cisco', 'Facebook',
         'Google', 'HP', 'IBM', 'Neo', 'Nitrous.io', 'PayPal',
@@ -304,53 +362,47 @@
 
       /**
        * Get Number of Pull Requests
-       *
-       * TODO: Move business logic to a service out of the controller.
-       * TODO: should be debounced.
        */
+      /**
       this.getPulls = function() {
-
-        /**
-        var repositories = [
-          'https://api.github.com/repos/Khan/KaTex/pulls',
-          'https://api.github.com/repos/Khan/khan-exercises/pulls'
-        ];
-        */
-        var repository = 'https://api.github.com/repos/Khan/KaTex/stats/contributors';
-
-        $http({
-          method: 'JSONP',
-          url: repository + '?callback=JSON_CALLBACK'
-        }).then(function(response) {
-            // success
-            console.log(response.status);
-            console.log(response.data.data[0]);
-            var a = 0;
-            var d = 0;
-            var c = 0;
-            for (var i = 0; i < response.data.data.length; i++){
-              var username = response.data.data[i].author.login;
-              if(username === self.user.info.services.github.id) {
-                console.log(response.data.data[i]);
-                for (var j = 0; j < response.data.data[i].weeks.length; j++){
-                  a += response.data.data[i].weeks[j].a;
-                  d += response.data.data[i].weeks[j].d;
-                  c += response.data.data[i].weeks[j].c;
+        
+        var a = 0,
+          d = 0,
+          c = 0;
+        
+        //var repository = 'https://api.github.com/repos/Khan/KaTex/stats/contributors';
+        
+        for(var k = 0; k < this.repositories.length; k++) {
+          $http({
+            method: 'JSONP',
+            url: 'https://api.github.com/repos/' + this.repositories[k].owner +'/'+ this.repositories[k].name + '/stats/contributors' + '?callback=JSON_CALLBACK'
+          }).then(function(response) {
+              // success
+              for (var i = 0; i < response.data.data.length; i++){
+                var username = response.data.data[i].author.login;
+                if(username === self.user.info.services.github.id) {
+                  for (var j = 0; j < response.data.data[i].weeks.length; j++){
+                    a += response.data.data[i].weeks[j].a;
+                    d += response.data.data[i].weeks[j].d;
+                    c += response.data.data[i].weeks[j].c;
+                  }
                 }
               }
+            
+              self.user.info.services.github.pulls = c;
+              self.user.info.services.github.a = a;
+              self.user.info.services.github.d = d;
+            },
+            function(response) { // optional
+              // failed
+              console.log(response.status);
+              console.log('Github data not found.\nError: '+response);
             }
-            self.user.info.services.github.pulls = c;
-            self.user.info.services.github.a = a;
-            self.user.info.services.github.d = d;
-          },
-          function(response) { // optional
-            // failed
-            console.log(response.status);
-            console.log('Github data not found.\nError: '+response);
-          }
-        );
+          );
+        }
       };
-
+      */
+      
       /**
        * Join a course.
        *

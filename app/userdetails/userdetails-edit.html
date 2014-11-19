@@ -218,8 +218,7 @@
                         ng-model="ctrl.user.info.services.github.id"
                         eop-valid-github-username="true"
                         name="userGithubId"
-                        ng-change="ctrl.update(ctrl.user.info, 'services.github.id', reportCardForm.userGithubId, userForm);
-                                   ctrl.getPulls()"
+                        ng-change="ctrl.update(ctrl.user.info, 'services.github.id', reportCardForm.userGithubId, userForm);"
                     />
                     <strong class="help-block" ng-show="reportCardForm.userGithubId.$error.eopValidGithubUsername">
                         This username is not valid.

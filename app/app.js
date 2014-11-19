@@ -28,6 +28,10 @@
     internships: {
       url: '/admin/internships',
       title: 'Internships'
+    },
+    github: {
+      url: '/admin/github',
+      title: 'Github'
     }
 
   };
@@ -133,6 +137,19 @@
           courses: ['oepUsersApi',
             function(oepUsersApi) {
               return oepUsersApi.courses.all();
+            }
+          ]
+        }
+      }).
+      when(adminMenu.github.url, {
+        templateUrl: 'admin/admin-github.html',
+        controller: 'OepAdminGithubCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          menu: adminMenuResolver,
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
             }
           ]
         }
@@ -282,6 +299,11 @@
             function(oepUsersApi) {
               return oepUsersApi.courses.all(true);
             }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
+            }
           ]
         }
       }).
@@ -321,6 +343,11 @@
                   );
                 }
               });
+            }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
             }
           ]
         }

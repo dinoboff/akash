@@ -426,7 +426,7 @@
           courses;
 
         console.log('GET ' + url);
-
+        
         if (params.opened) {
           courses = _(fixtures.courses).filter({opened: true});
         } else {
@@ -511,12 +511,40 @@
           return [200, {success: true, course: _.omit(course, 'pw')}];
         }
       });
+      
+      // Github repositories list
+      httpBackend.whenGET(fixtures.url.repositories).respond(function(m, url) {
+        var repositories = _(fixtures.repositories);
 
+        console.log('GET ' + url);
+
+        var resp = {
+          repositories: repositories.map().value(),
+          cursor: null
+        };
+
+        return [200, resp];
+      });
+      
+      // New Github repository
+      httpBackend.whenPOST(fixtures.url.repositories).respond(function(m, u, body){
+        var repository = JSON.parse(body),
+          newRepository = _.pick(repository, ['owner', 'name']);
+
+        console.log('POST ' + u + ' ' + body);
+
+        newRepository.url = 'https://github.com/' + newRepository.owner + '/' + newRepository.name;
+        fixtures.repositories.push(newRepository);
+
+        return [200, newRepository];
+      });
+      
       // Everything else (like html templates) should go through
       httpBackend.whenGET(/.*/).passThrough();
       httpBackend.whenJSONP('http://codecombat.com/auth/whoami?callback=JSON_CALLBACK').passThrough();
-      httpBackend.whenJSONP('https://api.github.com/repos/Khan/KaTex/stats/contributors?callback=JSON_CALLBACK').passThrough();
-
+      httpBackend.whenJSONP('https://api.github.com/repos/Khan/khan-exercises/stats/contributors?callback=JSON_CALLBACK').passThrough();
+      httpBackend.whenJSONP('https://api.github.com/repos/codecombat/codecombat/stats/contributors?callback=JSON_CALLBACK').passThrough();
+      httpBackend.whenJSONP('https://api.github.com/repos/Khan/KhanQuest/stats/contributors?callback=JSON_CALLBACK').passThrough();
     }
   ])
 
