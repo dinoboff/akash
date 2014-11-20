@@ -298,6 +298,58 @@
           ]
         }
       }).
+      when('/research/newsfeed', {
+        templateUrl: 'research/research-newsfeed.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/luckydraw', {
+        templateUrl: 'research/research-luckydraw.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/activitylog', {
+        templateUrl: 'research/research-activitylog.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/wishlist', {
+        templateUrl: 'research/research-wishlist.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
       when('/', {
         templateUrl: 'userdetails/userdetails-user.html',
         controller: 'OepUserCtrl',
