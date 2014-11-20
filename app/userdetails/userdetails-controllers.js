@@ -86,8 +86,6 @@
       this.currentUser = null;
       
       this.repositories = repositories;
-      
-      console.log(this.repositories);
 
       if (!user || !user.services) {
         return;
@@ -163,7 +161,6 @@
       /* jshint ignore:end */
       try {
         if(self.profile.services.github.id !== null){
-          console.log('Hello!');
           this.getPulls();
         }
       } catch (e) {

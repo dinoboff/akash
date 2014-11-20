@@ -545,6 +545,7 @@
       httpBackend.whenJSONP('https://api.github.com/repos/Khan/khan-exercises/stats/contributors?callback=JSON_CALLBACK').passThrough();
       httpBackend.whenJSONP('https://api.github.com/repos/codecombat/codecombat/stats/contributors?callback=JSON_CALLBACK').passThrough();
       httpBackend.whenJSONP('https://api.github.com/repos/Khan/KhanQuest/stats/contributors?callback=JSON_CALLBACK').passThrough();
+      httpBackend.whenJSONP('https://api.github.com/repos/ChrisBoesch/akash/stats/contributors?callback=JSON_CALLBACK').passThrough();
     }
   ])
 
