@@ -181,6 +181,18 @@
               return result.course;
             });
           }
+        },
+        
+        repositories: {
+          all: function() {
+            var params = {};
+
+            return oepApi.all('repositories').getList(params);
+          },
+          
+          add: function(repository) {
+            return oepApi.all('repositories').post(repository);
+          }
         }
       };
     }

@@ -327,5 +327,27 @@
   module.controller('OepAdminCoursesCtrl', [
     'oepUsersApi', 'menu', 'courses', OepAdminCoursesCtrl
   ]);
+  
+  /**
+   * OepAdminGithubCtrl - Controller for viewing and adding tracked Github repositories
+   *
+   */
+  function OepAdminGithubCtrl(oepUsersApi, menu, repositories) {
+    var self = this;
+
+    this.repositories = repositories;
+    this.menu = menu;
+    
+    this.add = function(repository) {
+      oepUsersApi.repositories.add(repository).then(function(newRepository) {
+        self.repositories.push(newRepository);
+        repository.owner = repository.name = repository.url = null;
+      });
+    };
+  }
+
+  module.controller('OepAdminGithubCtrl', [
+    'oepUsersApi', 'menu', 'repositories', OepAdminGithubCtrl
+  ]);
 
 })();

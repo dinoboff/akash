@@ -1,0 +1,159 @@
+<form name="userForm" role="form" class="form-horizontal">
+  <div ng-if="!ctrl.isNewUser">
+
+    <h2>Internships</h2>
+    <hr/>
+    <ng-form name="intershipsForm">
+      <div class="form-group" name="intershipsForm">
+        <label for="interested-in-internships" class="col-sm-4 control-label">
+          Interested in an internship<span ng-show="intershipsForm.interestedInInternships.$dirty">*</span>?
+        </label>
+        <div class="col-sm-8">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"
+                     id="interested-in-internships"
+                     ng-model="ctrl.user.info.internship.interested"
+                     name="interestedInInternships"
+                     ng-change="ctrl.update(ctrl.user.info, 'internship.interested', intershipsForm.interestedInInternships, userForm)"
+                     />
+              I'm interested in internships.
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="ctrl.user.info.internship.interested">
+        <fieldset>
+          <legend>Companies</legend>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Which companies would you like to intern at?</label>
+            <div class="col-sm-8">
+              <span class="help-block">
+                You can choose  up to 5 or enter additional companies.
+              </span>
+              <div class="checkbox" ng-repeat="name in ctrl.defaultCompanies">
+                <label>
+                  <ng-form name="companyForm">
+                    <input type="checkbox"
+                           ng-model="ctrl.user.info.internship.companies[name]"
+                           ng-disabled="!ctrl.user.info.internship.companies[name] &amp;&amp; ctrl.maxedIntership(ctrl.user.info.internship.companies)"
+                           name="company"
+                           ng-change="ctrl.update(ctrl.user.info, 'internship.companies['+name+']', companyForm.company, userForm)"
+                           />
+                    {{name}}<span ng-show="companyForm.company.$dirty">*</span>
+                  </ng-form>
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>When would you like to intern?</legend>
+
+          <div class="form-group clearfix">
+            <label for="intership-start-1" class="col-sm-4 control-label">
+              First internship start<span ng-show="intershipsForm.intershipStart1.$dirty">*</span>:
+            </label>
+            <div class="col-sm-4 col-md-3 col-lg-2">
+              <input type="date" id="intership-start-1" class="form-control"
+                     ng-model="ctrl.user.info.internship.dates[0].start"
+                     placeholder="yyyy-mm-dd"
+                     ng-attr-min="{{ctrl.today}}"
+                     ng-attr-max="{{ctrl.nextYear}}"
+                     name="intershipStart1"
+                     ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].start', intershipsForm.intershipStart1, userForm)"
+                     />
+            </div>
+          </div>
+
+          <div class="form-group clearfix">
+            <label for="intership-end-1" class="col-sm-4 control-label">
+              End<span ng-show="intershipsForm.intershipEnd1.$dirty">*</span>:
+            </label>
+            <div class="col-sm-4 col-md-3 col-lg-2">
+              <input type="date" id="intership-end-1" class="form-control"
+                     ng-model="ctrl.user.info.internship.dates[0].end"
+                     placeholder="yyyy-mm-dd"
+                     ng-attr-min="{{ctrl.user.info.internship.dates[0].start}}"
+                     ng-attr-max="{{ctrl.nextYear}}"
+                     name="intershipEnd1"
+                     ng-change="ctrl.update(ctrl.user.info, 'internship.dates[0].end', intershipsForm.intershipEnd1, userForm)"
+                     />
+            </div>
+          </div>
+
+          <div class="form-group clearfix" ng-if="ctrl.user.info.internship.dates[0].end">
+            <label for="intership-start" class="col-sm-4 control-label">
+              Second internship start<span ng-show="intershipsForm.intershipStart2.$dirty">*</span>:
+            </label>
+            <div class="col-sm-4 col-md-3 col-lg-2">
+              <input type="date" id="intership-start-2" class="form-control"
+                     ng-model="ctrl.user.info.internship.dates[1].start"
+                     placeholder="yyyy-mm-dd"
+                     ng-attr-min="{{ctrl.today}}"
+                     ng-attr-max="{{ctrl.nextYear}}"
+                     name="intershipStart2"
+                     ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].start', intershipsForm.intershipStart2, userForm)"
+                     />
+            </div>
+          </div>
+
+          <div class="form-group clearfix" ng-if="ctrl.user.info.internship.dates[0].end">
+            <label for="intership-end-1" class="col-sm-4 control-label">
+              End<span ng-show="intershipsForm.intershipEnd2.$dirty">*</span>:
+            </label>
+            <div class="col-sm-4 col-md-3 col-lg-2">
+              <input type="date" id="intership-end-2" class="form-control"
+                     ng-model="ctrl.user.info.internship.dates[1].end"
+                     placeholder="yyyy-mm-dd"
+                     ng-attr-min="{{ctrl.user.info.internship.dates[1].start}}"
+                     ng-attr-max="{{ctrl.nextYear}}"
+                     name="intershipEnd2"
+                     ng-change="ctrl.update(ctrl.user.info, 'internship.dates[1].end', intershipsForm.intershipEnd2, userForm)"
+                     />
+            </div>
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Notifications</legend>
+
+          <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"
+                         ng-model="ctrl.user.info.internship.notification.choices"
+                         name="notifyChoice"
+                         ng-change="ctrl.update(ctrl.user.info, 'internship.notification.choices', intershipsForm.notifyChoice, userForm)"
+                         />
+                  Email me about my internship choices<span ng-show="intershipsForm.notifyChoice.$dirty">*</span>.
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"
+                         ng-model="ctrl.user.info.internship.notification.recommendations"
+                         name="notifyRecommendations"
+                         ng-change="ctrl.update(ctrl.user.info, 'internship.notification.recommendations', intershipsForm.notifyRecommendations, userForm)"
+                         />
+                  Email me about recommended internships<span ng-show="intershipsForm.notifyRecommendations.$dirty">*</span>.
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+      </div>
+    </ng-form>
+  </div>
+</form>

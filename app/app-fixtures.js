@@ -120,6 +120,7 @@
       updateBadges: /api\/v1\/users\/([^\/]+)\/stats/,
       ranks: /api\/v1\/ranks(?:\?(.+))?$/,
       suggestions: /api\/v1\/suggestions$/,
+      repositories: /api\/v1\/repositories$/,
       internships: /api\/v1\/internships$/,
       events: /api\/v1\/events$/,
       oneEvent: /api\/v1\/events\/([^\/]+)$/,
@@ -615,6 +616,15 @@
       name: 'SMU SIS Architectural Analysis G1 Term 1 2014',
       opened: true,
       pw: 'password'
+    }],
+    repositories: [{
+      owner: 'Khan',
+      name: 'khan-exercises',
+      url: 'https://github.com/Khan/khan-exercises'
+    }, {
+      owner: 'codecombat',
+      name: 'codecombat',
+      url: 'https://github.com/codecombat/codecombat'
     }]
   })
 

@@ -30,6 +30,10 @@
     internships: {
       url: '/admin/internships',
       title: 'Internships'
+    },
+    github: {
+      url: '/admin/github',
+      title: 'Github'
     }
 
   };
@@ -150,6 +154,19 @@
           courses: ['oepUsersApi',
             function(oepUsersApi) {
               return oepUsersApi.courses.all();
+            }
+          ]
+        }
+      }).
+      when(adminMenu.github.url, {
+        templateUrl: 'admin/admin-github.html',
+        controller: 'OepAdminGithubCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          menu: adminMenuResolver,
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
             }
           ]
         }
@@ -299,11 +316,145 @@
             function(oepUsersApi) {
               return oepUsersApi.courses.all(true);
             }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
+            }
           ]
         }
       }).
       when('/research', {
         templateUrl: 'research/research-view.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/internships', {
+        templateUrl: 'research/research-internships.html',
+        controller: 'OepUserFormListCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          user: ['oepCurrentUserApi', '$location',
+            function(currentUserApi, $location) {
+              return currentUserApi.auth().then(function(user) {
+                if (!user.isLoggedIn) {
+                  $location.path('/ranks');
+                }
+                return user;
+              });
+            }
+          ],
+          availableSchools: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.availableSchools();
+            }
+          ],
+          availableCourses: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.courses.all(true);
+            }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
+            }
+          ]
+        }
+      }).
+      when('/research/github', {
+        templateUrl: 'research/research-github.html',
+        controller: 'OepUserCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          user: ['$window', '$location', 'oepCurrentUserApi',
+            function($window, $location, userApi) {
+              return userApi.auth().then(function(data) {
+                if (data && data.loginUrl) {
+                  $location.path('/ranks');
+                  return;
+                }
+
+                if (!data.info) {
+                  $location.path('/edit');
+                } else {
+                  return $window.jQuery.extend({
+                      isCurrentUser: true
+                    },
+                    data.info
+                  );
+                }
+              });
+            }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
+            }
+          ]
+        }
+      }).
+      when('/research/newsfeed', {
+        templateUrl: 'research/research-newsfeed.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/luckydraw', {
+        templateUrl: 'research/research-luckydraw.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/activitylog', {
+        templateUrl: 'research/research-activitylog.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/wishlist', {
+        templateUrl: 'research/research-wishlist.html',
+        controller: 'OepResearchCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepResearchCtrlInitialData',
+            function(oepResearchCtrlInitialData) {
+              return oepResearchCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/research/recommendation', {
+        templateUrl: 'research/research-recommendation.html',
         controller: 'OepResearchCtrl',
         controllerAs: 'ctrl',
         resolve: {
@@ -338,6 +489,11 @@
                   );
                 }
               });
+            }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
             }
           ]
         }
