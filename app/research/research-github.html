@@ -1,0 +1,34 @@
+<div
+     id="register-github" class="well clearfix"
+     ng-if="ctrl.profile.isCurrentUser &amp;&amp; !ctrl.profile.services.github.id"
+     >
+  <h2>Github</h2>
+  <p>
+    <a href="http://github.com/">Github</a>
+    is a web-based hosting service which offers all of the
+    distributed revision control and source code management
+    functionalities of Git.
+  </p>
+  <p>
+    Once you’ve registered on Github, visit
+    <a href="#/edit" class="edit-link">our setting page</a>
+    and enter your Github username.
+  </p>
+</div>
+
+<div
+     id="view-github" class="well clearfix"
+     ng-if="ctrl.profile.isCurrentUser &amp;&amp; ctrl.profile.services.github.id"
+     >
+  <h2>Github</h2>
+
+  <h3>Your <a href="http://github.com/">Github</a> stats:</h3>
+  Total number of commits for tracked repositiories: {{ctrl.profile.services.github.pulls}} <br />
+  Lines of code added: {{ctrl.profile.services.github.a}} <br />
+  Lines of code deleted: {{ctrl.profile.services.github.d}} <br />
+
+  <h3>Tracked repositories:</h3>
+  <li ng-repeat="repository in ctrl.repositories">
+    <a target="_blank" ng-href="{{repository.url}}">{{repository.owner}}/{{repository.name}}</a>
+  </li>
+</div>
