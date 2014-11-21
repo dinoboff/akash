@@ -4,6 +4,7 @@
  * Defines `OepEventFormCtrl`
  *
  */
+/*global FB:false */
 
 (function() {
   'use strict';
@@ -29,7 +30,6 @@
     function OepEventFormCtrl($timeout, oepEventsApi, oepDate, oepIsoDate, oepSettings) {
       var today = oepDate(),
         nextYear = oepDate([today.year() + 1, 11, 31]);
-
       this.services = {
         id: 'services',
         name: 'Services',
@@ -53,6 +53,15 @@
        *
        */
       this.save = function(event, editor, onsuccess, form) {
+        if (event.share){
+          console.log('came here');
+          FB.ui({
+            method: 'feed',
+            link : 'http://www.chrisboesch.com/#/events/',
+            caption : 'Please Sign up for My Event - '+event.name+' by signing up on chrisvoesch.com',
+            description : event.description,
+          }, function(){});
+        }
         var self = this;
 
         onsuccess = onsuccess || angular.noop;
@@ -170,7 +179,8 @@
     '$q',
     'oepEventsApi',
     'oepCurrentUserApi',
-    function oepEventDetailsCtrlInitialDataFactory($route, $q, oepEventsApi, oepCurrentUserApi) {
+    function oepEventDetailsCtrlInitialDataFactory($route, $q, oepEventsApi,
+                                                    oepCurrentUserApi) {
       return function oepEventDetailsCtrlInitialData() {
         return $q.all({
           event: oepEventsApi.getDetails($route.current.params.eventId),
