@@ -123,6 +123,7 @@
       repositories: /api\/v1\/repositories$/,
       internships: /api\/v1\/internships$/,
       events: /api\/v1\/events$/,
+      openedEvents: /api\/v1\/events\?limit=0&opened=true$/,
       oneEvent: /api\/v1\/events\/([^\/]+)$/,
       eventParticipants: /api\/v1\/events\/([^\/]+)\/participants\/([^\/]+)$/,
       schools: /api\/v1\/schools/,
