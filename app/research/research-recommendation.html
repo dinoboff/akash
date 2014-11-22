@@ -1,2 +1,13 @@
-<h2>Recommendation</h2>
-Work in progress...
+<h2>Recommended Badges</h2> <br />
+
+<div class="badges ng-scope">
+  <div class="row">
+    <div class="col-xs-4 col-md-2 ng-scope" ng-repeat="badge in ctrl.recommendedBadges">
+      
+      <a ng-href="{{badge.url}}" class="thumbnail" title="{{badge.name}}" target="_blank">        
+        <img class="codecombat" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" />        
+      </a>
+      
+    </div>    
+  </div>
+</div>

@@ -166,6 +166,102 @@
       } catch (e) {
           console.log(e.message);
         }
+      
+      this.getRecommendations = function() {
+        
+        oepUsersApi.getById(self.profile.id).then(function(info) {
+          self.profile.services = info.services;
+      
+          self.badges = [
+            {'url': 'http://codecombat.com/play/level/rescue-mission', 'iconUrl': 'http://codecombat.com/file/db/level/52740644904ac0411700067c/rescue_mission_icon.png', 'id': 'rescue-mission', 'name': 'Rescue Mission'},
+            {'url': 'http://codecombat.com/play/level/grab-the-mushroom', 'iconUrl': 'http://codecombat.com/file/db/level/529662dfe0df8f0000000007/grab_the_mushroom_icon.png', 'id': 'grab-the-mushroom', 'name': 'Grab the Mushroom'},
+            {'url': 'http://codecombat.com/play/level/drink-me', 'iconUrl': 'http://codecombat.com/file/db/level/525dc5589a0765e496000006/drink_me_icon.png', 'id': 'drink-me', 'name': 'Drink Me'},
+            {'url': 'http://www.codeschool.com/courses/javascript-road-trip-part-1', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/297/level-1-on-javascript-road-trip-part-1-ff645bd94243922a90b775da5ee2647c.png', 'name': 'Level 1 on JavaScript Road Trip Part 1'},
+            {'url': 'http://codecombat.com/play/level/taunt-the-guards', 'iconUrl': 'http://codecombat.com/file/db/level/5276c9bdcf83207a2801ff8f/taunt_icon.png', 'id': 'taunt-the-guards', 'name': 'Taunt the Guards'},
+            {'url': 'http://codecombat.com/play/level/its-a-trap', 'iconUrl': 'http://codecombat.com/file/db/level/528aea2d7f37fc4e0700016b/its_a_trap_icon.png', 'id': 'its-a-trap', 'name': 'It\'s a Trap!'},
+            {'url': 'http://codecombat.com/play/level/cowardly-taunt', 'iconUrl': 'http://codecombat.com/file/db/level/525abfd9b12777d78e000009/cowardly_taunt_icon.png', 'id': 'cowardly-taunt', 'name': 'Cowardly Taunt'},
+            {'url': 'http://codecombat.com/play/level/commanding-followers', 'iconUrl': 'http://codecombat.com/file/db/level/525ef8ef06e1ab0962000003/commanding_followers_icon.png', 'id': 'commanding-followers', 'name': 'Commanding Followers'},
+            {'url': 'http://codecombat.com/play/level/mobile-artillery', 'iconUrl': 'http://codecombat.com/file/db/level/525085419851b83f4b000001/mobile_artillery_icon.png', 'id': 'mobile-artillery', 'name': 'Mobile Artillery'},
+            {'url': 'http://codecombat.com/play/level/dungeons-of-kithgard', 'iconUrl': 'http://codecombat.com/file/db/level/5275272c69abdcb12401216e/break_the_prison_icon.png', 'id': 'dungeons-of-kithgard', 'name': 'Dungeons of Kithgard'},
+            {'url': 'http://codecombat.com/play/level/gems-in-the-deep', 'iconUrl': 'http://codecombat.com/file/db/level/529662dfe0df8f0000000007/grab_the_mushroom_icon.png', 'id': 'gems-in-the-deep', 'name': 'Gems in the Deep'},
+            {'url': 'http://codecombat.com/play/level/shadow-guard', 'iconUrl': 'http://codecombat.com/file/db/level/525ef8ef06e1ab0962000003/commanding_followers_icon.png', 'id': 'shadow-guard', 'name': 'Shadow Guard', 'updatedAt': 'Fri, 17 Oct 2014 07:25:49 +0000'},
+            {'url': 'http://codecombat.com/play/level/true-names', 'iconUrl': 'http://codecombat.com/file/db/level/525f150306e1ab0962000018/taunt_icon.png', 'id': 'true-names', 'name': 'True Names'},
+            {'url': 'http://codecombat.com/play/level/the-raised-sword', 'iconUrl': 'http://codecombat.com/file/db/level/52740644904ac0411700067c/rescue_mission_icon.png', 'id': 'the-raised-sword', 'name': 'The Raised Sword'},
+            {'url': 'http://codecombat.com/play/level/the-first-kithmaze', 'iconUrl': 'http://codecombat.com/file/db/level/525ef8ef06e1ab0962000003/commanding_followers_icon.png', 'id': 'the-first-kithmaze', 'name': 'The First Kithmaze'},
+            {'url': 'http://www.codeschool.com/courses/javascript-road-trip-part-1', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/298/level-2-on-javascript-road-trip-part-1-e568b2c31b1fd0da0dc94cc4d5452150.png', 'name': 'Level 2 on JavaScript Road Trip Part 1'},
+            {'url': 'http://www.codeschool.com/courses/javascript-road-trip-part-1', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/299/level-3-on-javascript-road-trip-part-1-ae7652ab8f363e27fea8afe06cee30e3.png', 'name': 'Level 3 on JavaScript Road Trip Part 1'},
+            {'url': 'http://codecombat.com/play/level/hunter-triplets', 'iconUrl': 'http://codecombat.com/file/db/level/526711d9add4f8965f000002/hunter_triplets_icon.png', 'name': 'Hunter Triplets'},
+            {'url': 'http://www.codeschool.com/courses/try-git', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/121/completed-try-git-b54d1cd9fa940e4a3c1925056d38eca2.png', 'name': 'Completed Try Git'},
+            {'url': 'http://www.codeschool.com/courses/try-objective-c', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/247/level-1-on-try-objective-c-cb1933bf0eef7e10368445e40c96f801.png', 'name': 'Level 1 on Try Objective-C'},
+            {'url': 'http://codecombat.com/play/level/the-right-route', 'iconUrl': 'http://codecombat.com/file/db/level/526fd3043c637ece50001bb2/the_herd_icon.png', 'id': 'the-right-route', 'name': 'The Right Route'},
+            {'url': 'http://www.codeschool.com/courses/try-jquery', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/192/level-1-on-try-jquery-195852b5089f07d0a4ec66634dbc3285.png', 'name': 'Level 1 on Try jQuery'},
+            {'url': 'http://www.codeschool.com/courses/try-objective-c', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/248/level-2-on-try-objective-c-eb7fc97ab60c09066184efcc9b59064a.png', 'name': 'Level 2 on Try Objective-C'},
+            {'iconUrl': 'https://wac.A8B5.edgecastcdn.net/80A8B5/achievement-images/badges_html_howtomakeawebsite_stage01.png', 'id': '912', 'name': 'Beginning HTML and CSS'},
+            {'url': 'http://www.codeschool.com/courses/try-jquery', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/193/level-2-on-try-jquery-804e03c59fd757dbe7c3964d238e37a2.png', 'name': 'Level 2 on Try jQuery'},
+            {'url': 'http://www.codeschool.com/courses/discover-drive', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/367/level-1-complete-on-discover-drive-a796f7534a1d5e1b0f15789a044b1a45.png', 'name': 'Level 1 Complete on Discover Drive'},
+            {'url': 'http://www.codeschool.com/courses/shaping-up-with-angular-js', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/393/level-1-on-shaping-up-with-angular-js-692c3614fa425d233878a702003d2f98.png', 'name': 'Level 1 on Shaping up with Angular.js'},
+            {'url': 'http://www.codeschool.com/courses/try-objective-c', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/249/level-3-on-try-objective-c-eb6eb18f34044444af8be55253a496ed.png', 'name': 'Level 3 on Try Objective-C'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/398/level-1-on-try-r-4e63910f06a5b6b1f93433378f27c1e5.png', 'name': 'Level 1 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/shaping-up-with-angular-js', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/394/level-2-on-shaping-up-with-angular-js-e87b03dfe5b569bc9c1a67769f8bec3a.png', 'name': 'Level 2 on Shaping up with Angular.js'},
+            {'url': 'http://www.codeschool.com/courses/discover-devtools', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/198/level-1-on-discover-devtools-f048aefdc0cede79cff1a4ba6dcf3498.png', 'name': 'Level 1 on Discover DevTools'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/171/level-2-on-try-r-1cfcc8e45a6a9e76a993fa1be5e34ffb.png', 'name': 'Level 2 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/172/level-3-on-try-r-0c5645d0a3466ad9436513206e0cc5c6.png', 'name': 'Level 3 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/try-jquery', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/194/level-3-on-try-jquery-0fd4605995b2b2aed756dcd55ba3c3c8.png', 'name': 'Level 3 on Try jQuery'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/173/level-4-on-try-r-6b38c8d3db1668a9289a34bbebf5e6bd.png', 'name': 'Level 4 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/174/level-5-on-try-r-d17d09553b76065061a7aaf79c5648a2.png', 'name': 'Level 5 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/175/level-6-on-try-r-915ee507d445363194add7029433c9c0.png', 'name': 'Level 6 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/try-r', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/176/level-7-on-try-r-4b071e224b3d6fe9e6f47e38d731c503.png', 'name': 'Level 7 on Try R'},
+            {'url': 'http://www.codeschool.com/courses/rails-for-zombies-redux', 'iconUrl': 'https://d1ffx7ull4987f.cloudfront.net/images/achievements/large_badge/134/level-1-on-rails-for-zombies-redux-2ba020b1379910903e2f8724a8199404.png', 'name': 'Level 1 on Rails for Zombies Redux'}
+          ];
+
+          self.recommendedBadges = [];
+          var count = 0;
+          for(var i = 0; i < self.badges.length && count < 5; i++) {
+            var flag = true;
+            var j;
+            try {
+              if(flag) {
+                for(j = 0; j < self.profile.services.codeSchool.badges.length; j++) {
+                  if(self.profile.services.codeSchool.badges[j].name === self.badges[i].name) {
+                    flag=false;
+                    break;
+                  }
+                }
+              }
+            } catch (e) {}
+            try {
+              if(flag) {
+                for(j = 0; j < self.profile.services.treeHouse.badges.length; j++) {
+                  if(self.profile.services.treeHouse.badges[j].name === self.badges[i].name) {
+                    flag=false;
+                    break;
+                  }
+                }
+              }
+            } catch (e) {}
+            try {
+              if(flag) {
+                for(j = 0; j < self.profile.services.codeCombat.badges.length; j++) {
+                  if(self.profile.services.codeCombat.badges[j].name === self.badges[i].name) {
+                    flag=false;
+                    break;
+                  }
+                }
+              }
+            } catch (e) {}
+            if(flag){
+              self.recommendedBadges.push(self.badges[i]);
+              count++;
+            }
+          }
+        });
+      };
+      
+      try {
+        this.getRecommendations();
+      } catch (e) {
+          console.log(e.message);
+        }
     }
   ]);
   
