@@ -26,7 +26,6 @@
           if (cursor) {
             param.cursor = cursor;
           }
-          console.log(api);
           return api.all('internships').getList(param);
         },
 

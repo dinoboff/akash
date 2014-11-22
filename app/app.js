@@ -289,6 +289,11 @@
                 });
               });
             }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
+            }
           ]
         }
       }).

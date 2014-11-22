@@ -343,6 +343,12 @@
         events: events,
         cursor: ''
       });
+      
+      // Opene events list
+      httpBackend.whenGET(fixtures.url.openedEvents).respond({
+        events: events,
+        cursor: ''
+      });
 
       // New event
       httpBackend.whenPOST(fixtures.url.events).respond(function(m, u, body) {
@@ -354,6 +360,7 @@
 
         return [200, event];
       });
+      
       // One event
       httpBackend.whenGET(fixtures.url.oneEvent).respond(function(m, url) {
         var eventId = parseInt(fixtures.url.oneEvent.exec(url)[1], 10);
