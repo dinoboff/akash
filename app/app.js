@@ -289,6 +289,11 @@
                 });
               });
             }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
+            }
           ]
         }
       }).
@@ -455,13 +460,32 @@
       }).
       when('/research/recommendation', {
         templateUrl: 'research/research-recommendation.html',
-        controller: 'OepResearchCtrl',
+        controller: 'OepUserCtrl',
         controllerAs: 'ctrl',
         resolve: {
-          initialData: [
-            'oepResearchCtrlInitialData',
-            function(oepResearchCtrlInitialData) {
-              return oepResearchCtrlInitialData();
+          user: ['$window', '$location', 'oepCurrentUserApi',
+            function($window, $location, userApi) {
+              return userApi.auth().then(function(data) {
+                if (data && data.loginUrl) {
+                  $location.path('/ranks');
+                  return;
+                }
+
+                if (!data.info) {
+                  $location.path('/edit');
+                } else {
+                  return $window.jQuery.extend({
+                      isCurrentUser: true
+                    },
+                    data.info
+                  );
+                }
+              });
+            }
+          ],
+          repositories: ['oepUsersApi',
+            function(oepUsersApi) {
+              return oepUsersApi.repositories.all();
             }
           ]
         }
