@@ -10,6 +10,7 @@
 
   var module = angular.module('oep.internships.controllers', [
     'oep.date.services',
+    'oep.internships.services',
     'oep.user.services'
   ]);
 
@@ -24,7 +25,10 @@
     'oepCurrentUserApi',
     'oepIsoDate',
     'currentUser',
-    function OepInternshipsCtrl($window, oepCurrentUserApi, oepIsoDate, currentUser) {
+    'oepInternshipsApi',
+    function OepInternshipsCtrl($window, oepCurrentUserApi, oepIsoDate, currentUser,internshipApi) {
+      this.api = internshipApi;
+      this.currentUser = currentUser;
       var self = this,
         _ = $window._,
         limit = 5;
@@ -61,10 +65,10 @@
       this.save = function(internship) {
         this.saving = true;
         this.saved = false;
-
-        return oepCurrentUserApi.update({
-          'internship': internship
-        }).then(function() {
+        internship.user = this.currentUser.name;
+        return this.api.create(internship).then(function(internship) {
+          self.internship = internship;
+          console.log(self.internship);
           self.saved = true;
         })['finally'](function() {
           self.saving = false;
@@ -77,8 +81,8 @@
       this.reset = function() {
         this.saving = false;
         this.saved = false;
-
-        this.internship = _.cloneDeep(currentUser.info.internship);
+        
+        this.internship =  _.cloneDeep(currentUser.info.internship);
         _.defaults(this.internship, {
           companies: {},
           dates: [],

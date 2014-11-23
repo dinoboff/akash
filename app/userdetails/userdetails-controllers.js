@@ -222,37 +222,41 @@
       /* jshint ignore:start */
       this.getPulls = function() {
         
-        var a = 0,
-          d = 0,
-          c = 0;        
+        oepUsersApi.getById(self.profile.id).then(function(info) {
+          self.profile.services = info.services;
         
-        for(var k = 0; k < this.repositories.length; k++) {
-          $http({
-            method: 'JSONP',
-            url: 'https://api.github.com/repos/' + this.repositories[k].owner +'/'+ this.repositories[k].name + '/stats/contributors' + '?callback=JSON_CALLBACK'
-          }).then(function(response) {
-              // success
-              for (var i = 0; i < response.data.data.length; i++){
-                var username = response.data.data[i].author.login;
-                if(username === self.profile.services.github.id) {
-                  for (var j = 0; j < response.data.data[i].weeks.length; j++){
-                    a += response.data.data[i].weeks[j].a;
-                    d += response.data.data[i].weeks[j].d;
-                    c += response.data.data[i].weeks[j].c;
+          var a = 0,
+            d = 0,
+            c = 0;        
+
+          for(var k = 0; k < self.repositories.length; k++) {
+            $http({
+              method: 'JSONP',
+              url: 'https://api.github.com/repos/' + self.repositories[k].owner +'/'+ self.repositories[k].name + '/stats/contributors' + '?callback=JSON_CALLBACK'
+            }).then(function(response) {
+                // success
+                for (var i = 0; i < response.data.data.length; i++){
+                  var username = response.data.data[i].author.login;
+                  if(username === self.profile.services.github.id) {
+                    for (var j = 0; j < response.data.data[i].weeks.length; j++){
+                      a += response.data.data[i].weeks[j].a;
+                      d += response.data.data[i].weeks[j].d;
+                      c += response.data.data[i].weeks[j].c;
+                    }
                   }
                 }
+                self.profile.services.github.pulls = c;
+                self.profile.services.github.a = a;
+                self.profile.services.github.d = d;
+              },
+              function(response) { // optional
+                // failed
+                console.log(response.status);
+                console.log('Github data not found.\nError: '+response);
               }
-              self.profile.services.github.pulls = c;
-              self.profile.services.github.a = a;
-              self.profile.services.github.d = d;
-            },
-            function(response) { // optional
-              // failed
-              console.log(response.status);
-              console.log('Github data not found.\nError: '+response);
-            }
-          );
-        }        
+            );
+          }
+        });
       };
       /* jshint ignore:end */
       

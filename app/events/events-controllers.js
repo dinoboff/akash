@@ -53,15 +53,6 @@
        *
        */
       this.save = function(event, editor, onsuccess, form) {
-        if (event.share){
-          console.log('came here');
-          FB.ui({
-            method: 'feed',
-            link : 'http://www.chrisboesch.com/#/events/',
-            caption : 'Please Sign up for My Event - '+event.name+' by signing up on chrisvoesch.com',
-            description : event.description,
-          }, function(){});
-        }
         var self = this;
 
         onsuccess = onsuccess || angular.noop;
@@ -203,7 +194,16 @@
     function OepEventDetailsCtrl($q, $window, oepSettings, oepEventsApi, initialData) {
       var self = this,
         _ = $window._;
-
+      console.log('here');
+      this.share = function(eventID){
+          console.log(eventID);
+          FB.ui({
+            method: 'feed',
+            link : 'http://www.chrisboesch.com/#/events/',
+            caption : 'Please Sign up for My Event - '+event.name+' by signing up on chrisvoesch.com',
+            description : event.description,
+          }, function(){});
+        };
       this.loading = false;
       this.event = initialData.event;
       this.currentUser = initialData.currentUser;

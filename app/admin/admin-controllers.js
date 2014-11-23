@@ -108,9 +108,14 @@
    */
   function OepAdminInternshipsCtrl(oepInternshipsApi, menu, internships) {
     //var self = this;
-    this.internships = internships;
+    this.temp = internships;
+    this.internships = [];
+    for( var i=0 ; i< this.temp.length; i++){
+      this.internships.push(this.temp[i]);
+    }
+    console.log(this.internships);
     this.menu = menu;
-    this.dateFilter='';
+    this.dateFilter='First Period';
     this.dateOptions = ['First Period','Second Period'];
     this.year = new Date().getFullYear();
     this.yearOptions = generateYears(new Date().getFullYear());
@@ -153,6 +158,7 @@
   ]);
   //function to check if users inputed date lies within the month
   function checkIfDateSelected(obj,monthList,counter,year,dateFilter){
+    //console.log(obj);
     var startYear='';
     var endYear='';
     var startMonth='';
@@ -172,21 +178,26 @@
     if(startYear===year){
       if(endYear===year){
         if((startMonth)<=counter && (endMonth)>=counter ){
+          console.log('here2');
           return true;
         }
       }
       else if((startMonth)<=counter){
+        console.log('here3');
         return true;
       }
     }
     else if(endYear===year){
       if(endMonth>=counter){
+        console.log('here4');
         return true;
       }
     }
     else if(endYear>year){
+      console.log('here5');
       return true;
     }
+    console.log('here6');
     return false;
   }
   
@@ -208,18 +219,19 @@
   function getMonths(company, internships){
     var userDetails = [];
     var userDisplay = company.users;
+    //console.log(userDisplay);
     for(var i =0; i<userDisplay.length;i++){
       var user = userDisplay[i];
       for ( var j=0 ; j<internships.length ; j++){
         if(internships[j].user===user){
-          var startMonth1 = new Date(internships[j].sDate).getMonth()+1;
-          var startYear1 = new Date(internships[j].sDate).getFullYear();
-          var endMonth1 = new Date(internships[j].eDate).getMonth()+1;
-          var endYear1 = new Date(internships[j].eDate).getFullYear();
-          var startMonth2 = new Date(internships[j].sDate2).getMonth()+1;
-          var startYear2 = new Date(internships[j].sDate2).getFullYear();
-          var endMonth2 = new Date(internships[j].eDate2).getMonth()+1;
-          var endYear2 = new Date(internships[j].eDate2).getFullYear();
+          var startMonth1 = new Date(internships[j].dates[0].start).getMonth()+1;
+          var startYear1 = new Date(internships[j].dates[0].start).getFullYear();
+          var endMonth1 = new Date(internships[j].dates[0].end).getMonth()+1;
+          var endYear1 = new Date(internships[j].dates[0].end).getFullYear();
+          var startMonth2 = new Date(internships[j].dates[1].start).getMonth()+1;
+          var startYear2 = new Date(internships[j].dates[1].start).getFullYear();
+          var endMonth2 = new Date(internships[j].dates[1].end).getMonth()+1;
+          var endYear2 = new Date(internships[j].dates[1].end).getFullYear();
           var toDisplay = {'user' : user, 'startMonth1' :startMonth1,'startYear1':
           startYear1, 'endYear1' : endYear1,'endMonth1' :endMonth1, 'startMonth2'
           :startMonth2,'startYear2':startYear2, 'endYear2' : endYear2,'endMonth2'
@@ -241,10 +253,10 @@
       var user = userDisplay[i];
       for ( var j=0 ; j<internships.length ; j++){
         if(internships[j].user===user){
-          var toDisplay = {'user' : user, 'StartDate1' :internships[j].sDate,
-                             'EndDate1' :internships[j].eDate, 'StartDate2'
-                             :internships[j].sDate2,
-                             'EndDate2' :internships[j].eDate2} ;
+          var toDisplay = {'user' : user, 'StartDate1' :internships[j].dates[0].start,
+                             'EndDate1' :internships[j].dates[0].end, 'StartDate2'
+                             :internships[j].dates[1].start,
+                             'EndDate2' :internships[j].dates[1].start} ;
           userDetails.push(toDisplay);
         }
         else {
@@ -261,12 +273,16 @@
     var duplicate=true;
     var internshipSummary=[];
     for(var i=0;i<internships.length;i++){
+      console.log('1');
       var tempInternship=internships[i];
-      for(var j=0;j<tempInternship.selectedCompanies.length;j++){
-        var tempCompany=tempInternship.selectedCompanies[j];
+      for(var tempCompany in tempInternship.companies){
+        if (!tempInternship.companies.hasOwnProperty(tempCompany)) {
+        //The current property is not a direct property of p
+          continue;
+        }
         if(internshipSummary.length>0){
           for(var k=0; k<internshipSummary.length;k++){
-            if(tempCompany.name===internshipSummary[k].name){
+            if(tempCompany===internshipSummary[k].name){
               for(var l=0;l<internshipSummary[k].users.length;l++){
                 if(internshipSummary[k].users[l]===tempInternship.user){
                   duplicate=false;
@@ -281,13 +297,13 @@
             }
           }
           if(flag){
-            var newDetails = {'name' : tempCompany.name, 'users' :
+            var newDetails = {'name' : tempCompany, 'users' :
                               [tempInternship.user]};
             internshipSummary.push(newDetails);
           }
         }
         else{
-          var companyDetails = {'name' : tempCompany.name, 'users' :[tempInternship.user]} ;
+          var companyDetails = {'name' : tempCompany, 'users' :[tempInternship.user]} ;
           internshipSummary.push(companyDetails);
         }
       }

@@ -360,6 +360,7 @@
 
         return [200, event];
       });
+      
       // One event
       httpBackend.whenGET(fixtures.url.oneEvent).respond(function(m, url) {
         var eventId = parseInt(fixtures.url.oneEvent.exec(url)[1], 10);
