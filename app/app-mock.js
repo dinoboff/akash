@@ -344,7 +344,7 @@
         cursor: ''
       });
       
-      // Opene events list
+      // Opened events list
       httpBackend.whenGET(fixtures.url.openedEvents).respond({
         events: events,
         cursor: ''
