@@ -1,0 +1,60 @@
+<div oep-scholarship="ctrl.scholarship" oep-user="ctrl.currentUser.info"></div>
+
+<!--
+<input type="image" ng-click="ctrl.share(ctrl.scholarship.id)" src="/lib/sharingIcons/facebook.png"><br/>
+Click to Share on Facebook
+<div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>-->
+
+<h3>Applicants Ranked by badges</h3>
+<table class="table table-striped ranks">
+    <thead>
+        <tr>
+            <th>Ranking</th>
+            <th>Name</th>
+            <th>Badges</th>
+            <th>Interested</th>
+            <th>Deferred</th>
+            <th>Offered</th>
+            <th>Time Remaining</th>
+            <th>Past Accepts</th>
+            <th>Scholarship Badges</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="9" ng-show="!ctrl.scholarship.stats || ctrl.scholarship.stats.length == 0">
+                Nobody is qualified.
+            </td>
+        </tr>
+        <tr ng-repeat="student in ctrl.scholarship.stats">
+            <td>{{$index + 1}}</td>
+            <td>
+                <a ng-href="#/user/{{student.id}}">
+                    {{student.name | limitTo: 20}}
+                </a>
+            </td>
+            <td>{{student.totalBadges}}</td>
+            <td>{{ student.scholarshipApplications[ctrl.scholarship.service.id].interested | oepYesNo: {'maybe': ''} }}</td>
+            <td>{{ student.scholarshipApplications[ctrl.scholarship.service.id].deferred | oepYesNo: {'maybe': ''} }}</td>
+            <td ng-switch on="student.scholarships[ctrl.scholarship.id].status">
+                <span ng-switch-when="1">Pending</span>
+                <span ng-switch-when="2">Accepted</span>
+            </td>
+            <td>
+                <span ng-if="student.scholarships[ctrl.scholarship.id].endDate">
+                    {{ student.scholarships[ctrl.scholarship.id].endDate | oepDuration }}
+                </span>
+            </td>
+            <td>{{student.scholarships[ctrl.scholarship.id].pastAccept}}</td>
+            <td class="badge-list">
+                <img ng-repeat="badge in student.scholarships[ctrl.scholarship.id].earnedBadges" ng-src="{{badge.iconUrl}}" alt="{{badge.name}}" title="{{badge.name}}" class="badge-thumbnail" />
+            </td>
+        </tr>
+
+        <tr ng-if="ctrl.scholarship.cursor" class="more">
+            <td colspan="9"><a class="btn btn-primary" ng-click="ctrl.getMore(ctrl.scholarship.cursor)">More</a>
+            </td>
+        </tr>
+
+    </tbody>
+</table>

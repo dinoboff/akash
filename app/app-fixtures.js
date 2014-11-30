@@ -134,7 +134,10 @@
       coursePassword: /api\/v1\/courses\/([^\/]+)\/password$/,
       courseOpen: /api\/v1\/courses\/([^\/]+)\/opened$/,
       courseClose: /api\/v1\/courses\/([^\/]+)\/closed$/,
-      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/
+      courseJoin: /api\/v1\/courses\/([^\/]+)\/participants$/,
+      scholarships: /api\/v1\/scholarships$/,
+      oneScholarship: /api\/v1\/scholarships\/([^\/]+)$/,
+      oneScholarshipApplication: /api\/v1\/scholarships\/([^\/]+)\/users\/([^\/]+)/
     },
     summary: {
       'numSchools': 4,
@@ -161,7 +164,9 @@
       'isAdmin': true,
       'logoutUrl': '/logout',
       'name': 'chris@example.com',
-      'internship': {'company':[]}
+      'internship': {
+        'company': []
+      }
     },
     chris: function(info) {
       return {
@@ -179,7 +184,7 @@
         'email': 'shannon@example.com',
         'gender': 'female',
         'yearOfBirth': '1992',
-        'school': '1',
+        'school': '6',
         'gravatar': 'http://www.gravatar.com/avatar/0916eb03d5bb2818c14b36ffa0cc4397',
         'services': {
           'treeHouse': {
@@ -200,7 +205,7 @@
         'email': 'profchris@example.com',
         'gender': 'male',
         'yearOfBirth': 'before-1980',
-        'school': '2',
+        'school': '22',
         'gravatar': 'http://www.gravatar.com/avatar/4e9e7887b253d6dbe8a453bee39b91e2',
         'services': {
           'treeHouse': {
@@ -626,7 +631,43 @@
       owner: 'codecombat',
       name: 'codecombat',
       url: 'https://github.com/codecombat/codecombat'
-    }]
+    }],
+    scholarships: {
+      'SMU Treehouse': {
+        id: '1',
+        name: 'SMU Treehouse',
+        description: 'Scholaship to Treehouse open to junior college students',
+        restrictions: {
+          schoolType: [{
+            id: 'Junior College',
+            name: 'Junior College'
+          }]
+        },
+        service: {
+          id: 'treehouse',
+          name: 'Treehouse',
+          spots: 1,
+          days: 7
+        }
+      },
+      'Sandra Boesch Treehouse': {
+        id: '2',
+        name: 'Sandra Boesch Treehouse',
+        description: 'Scholaship to Treehouse open to female students',
+        restrictions: {
+          gender: [{
+            id: 'female',
+            name: 'Female'
+          }]
+        },
+        service: {
+          id: 'treehouse',
+          name: 'Treehouse',
+          spots: 1,
+          days: 7
+        }
+      }
+    }
   })
 
   ;

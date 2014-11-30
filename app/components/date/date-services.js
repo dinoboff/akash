@@ -51,7 +51,7 @@
    */
   factory('oepIsoDate', [
     'oepDate',
-    function oepIsoDate(oepDate){
+    function oepIsoDate(oepDate) {
       return function(date) {
         date = date || oepDate();
         return date.toISOString().split('T')[0];

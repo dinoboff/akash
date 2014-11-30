@@ -1,0 +1,112 @@
+<h1>Scholarships</h1>
+
+<div class="row">
+
+    <div class="col-md-8">
+        <!-- scholarship list -->
+        <hr/>
+
+        <ul class="list-unstyled">
+            <li ng-show="!ctrl.scholarships || ctrl.scholarships.length == 0">No scholarship.</li>
+            <li ng-repeat="ss in ctrl.scholarships track by ss.id">
+                <div oep-scholarship="ss" oep-user="ctrl.currentUser.info"></div>
+                <hr/>
+            </li>
+            <li class="more" ng-show="ctrl.scholarships.cursor"><a ng-click="ctrl.getMore(ctrl.scholarships.cursor)">Show more scholarships</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        <form role="form" name="scholarshipForm" ng-controller="OepScholarshipFormCtrl as formCtrl" ng-if="ctrl.currentUser.info.id &amp;&amp; ctrl.currentUser.isAdmin">
+            <fieldset>
+                <legend>New scholarship</legend>
+
+                <p class="alert alert-success" ng-if="formCtrl.saved">
+                    scholarship created successfully!
+                    <br/>Thanks for creating the scholarship.
+                </p>
+
+                <div class="form-group">
+                    <label class="control-label" for="scholarship-patron">Patron ID*:</label>
+                    <input name="scholarship-patron" type="text" class="form-control" id="scholarship-patron" ng-model="formCtrl.scholarship.patron.id" required="true" oep-bs-valid-class="true" />
+                    <span class="help-block">Once subscribtion payment is in place, this feild will be populated with the current user id</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="scholarship-name">Name*:</label>
+                    <input name="scholarship-name" type="text" class="form-control" id="scholarship-name" ng-model="formCtrl.scholarship.name" required="true" oep-bs-valid-class="true" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="description">Description:</label>
+                    <textarea name="description" class="form-control" id="description" rows="3" ng-model="formCtrl.scholarship.description" oep-bs-valid-class="true"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="service">Service offered*:</label>
+                    <select name="service" id="service" class="form-control" ng-model="formCtrl.selectedService" ng-required="true" ng-options="opt as opt.name for opt in formCtrl.services" oep-bs-valid-class="true" ng-change="formCtrl.serviceSet(formCtrl.selectedService, formCtrl.scholarship.service)">
+                        <option value="">Select a Service...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="scholarship-spots">scholarship spots*:</label>
+                    <input name="scholarship-spots" type="number" class="form-control" id="scholarship-spots" ng-model="formCtrl.scholarship.service.spots" required="true" min="1" oep-bs-valid-class="true" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="scholarship-days">scholarship duration (in days)*:</label>
+                    <input name="scholarship-days" type="number" class="form-control" id="scholarship-days" ng-model="formCtrl.scholarship.service.days" required="true" min="1" oep-bs-valid-class="true" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="restrictionType">Restrict by:</label>
+                    <select id="restrictionType" name="restrictionType" class="form-control"
+                        ng-model="formCtrl.restrictBy"
+                        ng-options="type as type.name for (name, type) in ctrl.restrictionOptions"
+                        ng-change="formCtrl.restrictionTypeChanged()"
+                    >
+                        <option value="">No Restriction</option>
+                    </select>
+                </div>
+
+                <div class="form-group" ng-if="formCtrl.restrictBy">
+
+                    <label for="restrictionValue" class="control-label sr-only">Restriction set to:</label>
+
+                    <select id="restrictionValue" name="restrictionValue" class="form-control"
+                        ng-model="formCtrl.restrictTo"
+                        ng-change="formCtrl.restrictionSet(formCtrl.scholarship, formCtrl.restrictBy, formCtrl.restrictTo)"
+                        ng-options="choice as choice.name for choice in formCtrl.restrictBy.choices"
+                        ng-if="formCtrl.restrictBy.id != 'schools'"
+                    >
+                        <option value="">No Restriction</option>
+                    </select>
+
+                    <select id="restrictionValue" name="restrictionValue" class="form-control"
+                        ng-model="formCtrl.restrictTo"
+                        ng-change="formCtrl.restrictionSet(formCtrl.scholarship, formCtrl.restrictBy, formCtrl.restrictTo)"
+                        ng-options="choice as choice.name group by choice.group for choice in formCtrl.restrictBy.choices"
+                        ng-if="formCtrl.restrictBy.id == 'schools'"
+                    >
+                        <option value="">No Restriction</option>
+                    </select>
+                </div>
+
+            </fieldset>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="submit" class=" btn btn-primary btn-lg btn-block" ng-click="formCtrl.save(formCtrl.scholarship, scholarshipForm)" ng-disabled="scholarshipForm.$invalid || formCtrl.saving || formCtrl.saved">Create scholarship</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-default btn-lg btn-block" ng-click="formCtrl.reset(scholarshipForm)" ng-disabled="formCtrl.saving || scholarshipForm.$pristine">Reset</button>
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+</div>

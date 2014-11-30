@@ -1,0 +1,30 @@
+<h3>
+    <a ng-href="#/scholarships/{{scholarship.id}}">{{scholarship.name}}</a>
+</h3>
+
+<dl class="dl-horizontal">
+
+    <dt>Description</dt>
+    <dd>{{scholarship.description}}</dd>
+
+    <dt>Open to</dt>
+    <dd ng-if="scholarship.restrictions|oepEmpty">all (no restriction)</dd>
+    <dd ng-repeat="(k, restriction) in scholarship.restrictions">
+        {{ restriction | oepJoin:{'value': 'name'} | lowercase }} students
+    </dd>
+
+
+    <dt>Services</dt>
+    <dd>
+        {{scholarship.service.spots}}
+        access to {{scholarship.service.name}}
+        (for {{scholarship.service.days}} days)
+    </dd>
+
+    <dt></dt>
+    <dd ng-if="ctrl.canApply(scholarship, user)" ng-switch on="ctrl.hasApplied(scholarship, user)">
+        <a ng-click="ctrl.add(scholarship, user)" ng-switch-when="false">Apply</a>
+        <a ng-click="ctrl.remove(scholarship, user)" ng-switch-when="true">Withdraw application</a>
+    </dd>
+</dl>
+<!--<div class="fb-share-button" data-href="#/scholarships/{{scholarship.id}}" data-width="100"></div>-->

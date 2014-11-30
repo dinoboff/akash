@@ -45,6 +45,7 @@
       'oep.admin.controllers',
       'oep.admin.directives',
       'oep.controllers',
+      'oep.date.filters',
       'oep.events.controllers',
       'oep.events.directives',
       'oep.form.directives',
@@ -52,6 +53,8 @@
       'oep.navbar.controllers',
       'oep.ranks.controllers',
       'oep.research.controllers',
+      'oep.scholarships.controllers',
+      'oep.scholarships.directive',
       'oep.suggestions.controllers',
       'oep.templates',
       'oep.user.directives',
@@ -249,7 +252,7 @@
         resolve: {
           initialData: [
             'oepRanksShowRanksCtrlInitialData',
-            function(oepRanksShowRanksCtrlInitialData){
+            function(oepRanksShowRanksCtrlInitialData) {
               return oepRanksShowRanksCtrlInitialData();
             }
           ]
@@ -262,7 +265,7 @@
         resolve: {
           initialData: [
             'oepRanksShowRanksCtrlInitialData',
-            function(oepRanksShowRanksCtrlInitialData){
+            function(oepRanksShowRanksCtrlInitialData) {
               return oepRanksShowRanksCtrlInitialData();
             }
           ]
@@ -486,6 +489,32 @@
           repositories: ['oepUsersApi',
             function(oepUsersApi) {
               return oepUsersApi.repositories.all();
+            }
+          ]
+        }
+      }).
+      when('/scholarships', {
+        templateUrl: 'scholarships/scholarships-view-list.html',
+        controller: 'OepScholarshipsListCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepScholarshipsListCtrlInitialData',
+            function(oepScholarshipsListCtrlInitialData) {
+              return oepScholarshipsListCtrlInitialData();
+            }
+          ]
+        }
+      }).
+      when('/scholarships/:scholarshipsId', {
+        templateUrl: 'scholarships/scholarships-view-details.html',
+        controller: 'OepScholarshipDetailsCtrl',
+        controllerAs: 'ctrl',
+        resolve: {
+          initialData: [
+            'oepScholarshipDetailsCtrlInitialData',
+            function(oepScholarshipDetailsCtrlInitialData) {
+              return oepScholarshipDetailsCtrlInitialData();
             }
           ]
         }

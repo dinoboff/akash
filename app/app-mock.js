@@ -20,10 +20,10 @@
   }
 
 
-  angular.module('oepMocked', ['oep', 'ngMockE2E', 'oep.fixtures', 'eop.card.services']).
+  angular.module('oepMocked', ['oep', 'ngMockE2E', 'oep.fixtures', 'eop.card.services', 'oep.date.services']).
 
-  run(['$httpBackend', 'OEP_FIXTURES', '$window', 'eopReportCardApi',
-    function(httpBackend, fixtures, window, reportCardApi) {
+  run(['$httpBackend', 'OEP_FIXTURES', '$window', 'eopReportCardApi', 'moment',
+    function(httpBackend, fixtures, window, reportCardApi, moment) {
       var users = fixtures.users, // List of user info,
         suggestions = [],
         events = [],
@@ -343,7 +343,7 @@
         events: events,
         cursor: ''
       });
-      
+
       // Opened events list
       httpBackend.whenGET(fixtures.url.openedEvents).respond({
         events: events,
@@ -360,19 +360,19 @@
 
         return [200, event];
       });
-      
+
       // One event
       httpBackend.whenGET(fixtures.url.oneEvent).respond(function(m, url) {
         var eventId = parseInt(fixtures.url.oneEvent.exec(url)[1], 10);
 
         return [200, events[eventId - 1]];
       });
-      
+
       httpBackend.whenGET(fixtures.url.internships).respond({
         internships: internships,
         cursor: ''
       });
-      
+
       //New Internship
       httpBackend.whenPOST(fixtures.url.internships).respond(function(m, u, body) {
         var internship = JSON.parse(body);
@@ -426,6 +426,68 @@
         return [200, suggestion];
       });
 
+      // scholarship
+      httpBackend.whenGET(fixtures.url.scholarships).respond(function(m, url){
+        console.log('GET ' + url);
+        return [200, _.map(fixtures.scholarships)];
+      });
+
+      httpBackend.whenPOST(fixtures.url.scholarships).respond(function(m, url, body){
+        console.log('POST ' + url, JSON.parse(body));
+        return [200, _.map(fixtures.scholarships)];
+      });
+
+      httpBackend.whenGET(fixtures.url.oneScholarship).respond(function(m, url) {
+        var scholarshipId = fixtures.url.oneScholarship.exec(url)[1],
+          scholarship = _.find(fixtures.scholarships, {id: scholarshipId}),
+          serviceId = scholarship.service.id;
+
+        console.log('GET ' + url);
+        scholarship.stats = _.map(users, detailledServices);
+        scholarship.cursor = '';
+
+        scholarship.stats[0].scholarshipApplications = {};
+        scholarship.stats[0].scholarshipApplications[serviceId] = {
+          interested: true
+        };
+
+        scholarship.stats[1].scholarshipApplications = {};
+        scholarship.stats[1].scholarshipApplications[serviceId] = {
+          interested: true,
+          deferred: moment.utc().add(5, 'weeks').format()
+        };
+
+        scholarship.stats[2].scholarshipApplications = {};
+        scholarship.stats[2].scholarshipApplications[serviceId] = {
+          interested: undefined
+        };
+
+        scholarship.stats[2].scholarships = {};
+        scholarship.stats[2].scholarships[scholarshipId] = {
+          offered: 2,
+          endDate: moment.utc().add(5, 'days').format(),
+          pastAccept: 1,
+          earnedBadges: [{
+            'id': 922,
+            'name': 'HTML First',
+            'iconUrl': 'https://wac.A8B5.edgecastcdn.net/80A8B5/achievement-images/bagdes_html_howtobuildawebsite_stage02.png',
+          }]
+        };
+
+        console.log('scholarship: ', scholarship);
+        return [200, scholarship];
+      });
+
+      httpBackend.whenPUT(fixtures.url.oneScholarshipApplication).respond(function(m, url) {
+        console.log('PUT ' + url);
+        return [200, {}];
+      });
+
+      httpBackend.whenDELETE(fixtures.url.oneScholarshipApplication).respond(function(m, url) {
+        console.log('DELETE ' + url);
+        return [200, {}];
+      });
+
       // Courses
       httpBackend.whenGET(fixtures.url.courses).respond(function(m, url) {
         var query = fixtures.url.courses.exec(url)[1] || '',
@@ -433,7 +495,7 @@
           courses;
 
         console.log('GET ' + url);
-        
+
         if (params.opened) {
           courses = _(fixtures.courses).filter({opened: true});
         } else {
@@ -518,7 +580,7 @@
           return [200, {success: true, course: _.omit(course, 'pw')}];
         }
       });
-      
+
       // Github repositories list
       httpBackend.whenGET(fixtures.url.repositories).respond(function(m, url) {
         var repositories = _(fixtures.repositories);
@@ -532,7 +594,7 @@
 
         return [200, resp];
       });
-      
+
       // New Github repository
       httpBackend.whenPOST(fixtures.url.repositories).respond(function(m, u, body){
         var repository = JSON.parse(body),
@@ -545,7 +607,7 @@
 
         return [200, newRepository];
       });
-      
+
       // Everything else (like html templates) should go through
       httpBackend.whenGET(/.*/).passThrough();
       httpBackend.whenJSONP('http://codecombat.com/auth/whoami?callback=JSON_CALLBACK').passThrough();

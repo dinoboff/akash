@@ -39,7 +39,7 @@
       };
     }));
 
-    describe('oepUserApi', function() {
+    describe('oepCurrentUserApi', function() {
       var currentUserApi;
 
       beforeEach(inject(function(oepCurrentUserApi) {
@@ -553,6 +553,132 @@
           pw: 'password'
         });
       });
+    });
+
+
+    describe('oepUsersApi.scholarships', function() {
+      var api;
+
+      beforeEach(inject(function(oepUsersApi) {
+        api = oepUsersApi.scholarships;
+      }));
+
+      it('should get the list of scholarships', function() {
+        var scholarships;
+
+        $httpBackend.expectGET(fix.url.scholarships).respond({
+          cursor: '',
+          scholarships: []
+        });
+        api.all().then(function(resp){
+          scholarships = resp;
+        });
+        $httpBackend.flush();
+
+        expect(scholarships.slice()).toEqual([]);
+        expect(scholarships.cursor).toEqual(null);
+      });
+
+      it('should test if a user can apply to a scholarship', function() {
+        var scholarships = fix.scholarships['Sandra Boesch Treehouse'],
+          femaleUser = fix.users.Shannon,
+          maleUser = fix.users.ProfChris;
+
+        expect(api.canApply(scholarships, femaleUser)).toBe(true);
+        expect(api.canApply(scholarships, maleUser)).toBe(false);
+      });
+
+      it('should test if a user can apply to a scholarship based on his/her school type', function() {
+        var scholarships = fix.scholarships['SMU Treehouse'],
+          jcUser = _.cloneDeep(fix.users.Shannon),
+          universityUser = _.cloneDeep(fix.users.ProfChris);
+
+        $httpBackend.expectGET('/api/v1/schools').respond([{
+          id: '1',
+          name: 'ZZZ',
+          group: 'Junior College'
+        }, {
+          id: '2',
+          name: 'AAA',
+          group: 'University'
+        }]);
+
+        jcUser.school = '1';
+        universityUser.school = '2';
+        expect(api.canApply(scholarships, jcUser)).toBe(false);
+        $httpBackend.flush();
+
+        expect(api.canApply(scholarships, jcUser)).toBe(true);
+        expect(api.canApply(scholarships, universityUser)).toBe(false);
+      });
+
+      it('should apply student to scholarships', function() {
+        var scholarship = fix.scholarships['SMU Treehouse'],
+          user = _.cloneDeep(fix.users.Shannon),
+          scholarshipsId, userId;
+
+        $httpBackend.expectPUT(fix.url.oneScholarshipApplication).respond(function(m, url){
+          var parts = fix.url.oneScholarshipApplication.exec(url);
+
+          scholarshipsId = parts[1];
+          userId = parts[2];
+          return [200, {}];
+        });
+        api.addUser(scholarship, user);
+        $httpBackend.flush();
+
+        expect(scholarshipsId).toBe(scholarship.id);
+        expect(userId).toBe(user.id);
+      });
+
+      it('should remove student application', function() {
+        var scholarship = fix.scholarships['SMU Treehouse'],
+          user = _.cloneDeep(fix.users.Shannon),
+          scholarshipsId, userId;
+
+        $httpBackend.expectDELETE(fix.url.oneScholarshipApplication).respond(function(m, url){
+          var parts = fix.url.oneScholarshipApplication.exec(url);
+
+          scholarshipsId = parts[1];
+          userId = parts[2];
+          return [200, {}];
+        });
+
+        api.removeUser(scholarship, user);
+        $httpBackend.flush();
+
+        expect(scholarshipsId).toBe(scholarship.id);
+        expect(userId).toBe(user.id);
+      });
+
+      it('should get the details of a specific scholarship offer', function() {
+        var scholarship = fix.scholarships['SMU Treehouse'],
+          scholarshipsId;
+
+        $httpBackend.expectGET(fix.url.oneScholarship).respond(function(m, url) {
+          scholarshipsId = fix.url.oneScholarship.exec(url)[1];
+          return [200, {}];
+        });
+        api.getDetails(scholarship.id);
+        $httpBackend.flush();
+
+        expect(scholarshipsId).toBe(scholarship.id);
+      });
+
+      it('should post new scholarship', function() {
+        var scholarship = fix.scholarships['SMU Treehouse'],
+           resp;
+
+        $httpBackend.expectPOST(fix.url.scholarships).respond(function(m, u, body) {
+          resp = JSON.parse(body);
+          return [200, resp];
+        });
+        api.create(scholarship);
+        $httpBackend.flush();
+
+        expect(resp).toEqual(scholarship);
+      });
+
     });
 
   });
