@@ -48,12 +48,64 @@
    *
    */
   factory('oepUsersApi', ['oepApi', 'oepDebounce', '$q', '$window',
-    function(oepApi, debounce, $q) {
-      var updatePromises = {},
+    function(oepApi, debounce, $q, $window) {
+      var _ = $window._,
+        oepUsersApi,
+        updatePromises = {},
         schoolsPromise = null,
-        schools = null;
+        schools = null,
+        /**
+         * Factory for test of a restriction against a user attribute.
+         *
+         * A restriction is an array object describing valid attribute
+         * of user to enter a membership. Those object must have an id
+         * (the valid attribute value) and may have a name attribute.
+         *
+         */
+        genericTest = function genericTestFactory(userAttr) {
+          return function aGenericTest(restriction, user) {
+            return (
+              !restriction.length ||
+              _(restriction).map('id').contains(user[userAttr])
+            );
+          };
+        },
+        scholarshipTests={
+          /**
+           * Simple test for the user's gender, school and
+           * year of birth attributes.
+           *
+           */
+          gender: genericTest('gender'),
+          school: genericTest('school'),
+          yearOfBirth: genericTest('yearOfBirth'),
 
-      return {
+          /**
+           * return True if the user school is compatible with the schoolType
+           * retriction
+           */
+          schoolType: function(restriction, user) {
+            var validSchools,
+              validSchoolTypes = _.map(restriction, 'id');
+
+            if (!restriction.length) {
+              return true;
+            }
+
+            if (!schools) {
+              oepUsersApi.availableSchools();
+              return false;
+            }
+
+            validSchools = _(schools).filter(function(school){
+              return _.contains(validSchoolTypes, school.group);
+            }).map('id');
+
+            return validSchools.contains(user.school);
+          }
+        };
+
+      oepUsersApi = {
 
         /**
          * Fetch the info for the user (defined by it his/her id)
@@ -182,19 +234,67 @@
             });
           }
         },
-        
+
         repositories: {
           all: function() {
             var params = {};
 
             return oepApi.all('repositories').getList(params);
           },
-          
+
           add: function(repository) {
             return oepApi.all('repositories').post(repository);
           }
+        },
+
+        scholarships: {
+
+          all: function(params) {
+            return oepApi.all('scholarships').getList(params);
+          },
+
+          getDetails: function(scholarshipId, params) {
+            return oepApi.one('scholarships', scholarshipId).get(params);
+          },
+
+          create: function(scholarship) {
+            return oepApi.all('scholarships').post(scholarship);
+          },
+
+          canApply: function(scholarship, user) {
+            if (!scholarship.restrictions) {
+              return true;
+            }
+
+            return _.all(scholarship.restrictions, function(restriction, key) {
+              var test = scholarshipTests[key];
+
+              if (!test) {
+                return true;
+              }
+
+              return test(restriction, user);
+            });
+          },
+
+          addUser: function(scholarship, user) {
+            return oepApi.
+              one('scholarships', scholarship.id).
+              one('users', user.id)
+              .customPUT();
+          },
+
+          removeUser: function(scholarship, user) {
+            return oepApi.
+              one('scholarships', scholarship.id).
+              one('users', user.id)
+              .remove();
+          }
+
         }
       };
+
+      return oepUsersApi;
     }
   ]).
 
