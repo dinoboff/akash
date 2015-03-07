@@ -5,7 +5,7 @@
 Click to Share on Facebook
 <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>-->
 
-<h3>Participants Ranked by {{ctrl.rankedBy.label}}</h3>
+<h3>Participants Ranked by {{ctrl.rankedBy.label}}<em ng-if="ctrl.event.frozenAt"> on {{ctrl.event.frozenAt|date:'medium'}}</em></h3>
 <table class="table table-striped ranks">
     <thead>
         <tr>
@@ -36,7 +36,7 @@ Click to Share on Facebook
                 Nobody joined this event yet.
             </td>
         </tr>
-        <tr ng-repeat="student in ctrl.event.stats">
+        <tr ng-repeat="student in ctrl.event.stats" ng-class="{'last': ($index + 1) == ctrl.event.cutoffNumber, 'event-out': ($index + 1) > ctrl.event.cutoffNumber}">
             <td>{{$index + 1}}</td>
             <td>
                 <a ng-href="#/user/{{student.id}}">
