@@ -40,6 +40,8 @@
 
   angular.module(
     'oep', [
+      'angulartics',
+      'angulartics.google.analytics',
       'angular-loading-bar',
       'ngRoute',
       'oep.admin.controllers',
@@ -62,6 +64,13 @@
       'oep.userdetails.controllers'
     ]
   ).
+
+  config(['$analyticsProvider',
+    function($analyticsProvider) {
+      $analyticsProvider.firstPageview(true);
+      $analyticsProvider.withAutoBase(true);
+    }
+  ]).
 
   run(['$window',
     function initFb($window) {
