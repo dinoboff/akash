@@ -9,7 +9,7 @@ Click to Share on Facebook
 <table class="table table-striped ranks">
     <thead>
         <tr>
-            <th colspan="2"></th>
+            <th colspan="3"></th>
             <th colspan="2">Total</th>
             <th colspan="2">Treehouse</th>
             <th colspan="2">Code School</th>
@@ -17,7 +17,8 @@ Click to Share on Facebook
             <th colspan="1"></th>
         </tr>
         <tr>
-            <th>Ranking</th>
+            <th>#</th>
+            <th></th>
             <th>Name</th>
             <th>Badges</th>
             <th>Score</th>
@@ -32,12 +33,15 @@ Click to Share on Facebook
     </thead>
     <tbody>
         <tr>
-            <td colspan="11" ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
+            <td colspan="12" ng-show="!ctrl.event.stats || ctrl.event.stats.length == 0">
                 Nobody joined this event yet.
             </td>
         </tr>
         <tr ng-repeat="student in ctrl.event.stats" ng-class="{'last': ($index + 1) == ctrl.event.cutoffNumber, 'event-out': ($index + 1) > ctrl.event.cutoffNumber}">
             <td>{{$index + 1}}</td>
+            <td class="school-crest">
+                <img ng-if="ctrl.schools[student.schoolId].iconUrl" ng-src="{{ctrl.schools[student.schoolId].iconUrl}}" ng-attr-alt="from {{ctrl.schools[student.schoolId].name}}">
+            </td>
             <td>
                 <a ng-href="#/user/{{student.id}}">
                     {{student.name | limitTo: 20}}

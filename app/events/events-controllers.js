@@ -170,12 +170,20 @@
     '$q',
     'oepEventsApi',
     'oepCurrentUserApi',
-    function oepEventDetailsCtrlInitialDataFactory($route, $q, oepEventsApi,
-                                                    oepCurrentUserApi) {
+    'oepUsersApi',
+    function oepEventDetailsCtrlInitialDataFactory(
+      $route, $q, oepEventsApi, oepCurrentUserApi, oepUsersApi
+    ) {
       return function oepEventDetailsCtrlInitialData() {
         return $q.all({
           event: oepEventsApi.getDetails($route.current.params.eventId),
-          currentUser: oepCurrentUserApi.auth()
+          currentUser: oepCurrentUserApi.auth(),
+          schools: oepUsersApi.availableSchools().then(function(arrList) {
+            return arrList.reduce(function(schools, item) {
+              schools[item.id] = item;
+              return schools;
+            });
+          })
         });
       };
     }
@@ -207,6 +215,7 @@
       this.loading = false;
       this.event = initialData.event;
       this.currentUser = initialData.currentUser;
+      this.schools = initialData.schools;
       this.rankedBy = _.find(oepSettings.rankingOptions, {
         id: this.event.rankedBy
       });

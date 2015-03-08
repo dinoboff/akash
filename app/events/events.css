@@ -3,3 +3,7 @@ tr.last {
   border-bottom-width: 3px;
   border-bottom-style: dashed;
 }
+
+.school-crest img {
+  height: 20px;
+}
