@@ -59,17 +59,15 @@
         name: 'Schools',
         choices: initialData.availableSchools
       };
-      this.filterOptions.courses = {
-        id: 'courses',
-        name: 'Courses',
-        choices: initialData.allCourses
-      };
       this.filterOptions.events = {
         id: 'events',
         name: 'Events',
         choices: initialData.openedEvents
       };
 
+      delete this.filterOptions.yearOfBirth;
+      delete this.filterOptions.gender;
+      delete this.filterOptions.services;
 
       this.filterBy = null;
       this.rankOpts = $.extend({sortBy: 'totalBadges'}, $routeParams);
