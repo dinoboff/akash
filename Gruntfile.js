@@ -252,7 +252,7 @@ module.exports = function(grunt) {
       build: {
         options: {
           patterns: [{
-            match: /\/\*.*sourceMappingURL=bootstrap-theme\.css\.map.*\*\//,
+            match: /\/\*# sourceMappingURL\=bootstrap\-theme\.css\.map \*\//g,
             replacement: ''
           }]
         },
