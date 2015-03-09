@@ -248,6 +248,23 @@ module.exports = function(grunt) {
       }
     },
 
+    replace: {
+      build: {
+        options: {
+          patterns: [{
+            match: /\/\*.*sourceMappingURL=bootstrap-theme\.css\.map.*\*\//,
+            replacement: ''
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['build/vendor.css'],
+          dest: 'build/'
+        }]
+      }
+    },
+
     rev: {
       dist: {
         files: {
@@ -392,7 +409,7 @@ module.exports = function(grunt) {
     'copy:build',
     'targethtml:build',
   ]);
-  grunt.registerTask('build', ['build:assets', 'rev', 'usemin']);
+  grunt.registerTask('build', ['build:assets', 'rev', 'usemin', 'replace']);
 
   grunt.registerTask('dist', [
     'build:assets',
@@ -405,7 +422,7 @@ module.exports = function(grunt) {
     'usemin'
   ]);
 
-  //Commenting out e2e due to errors. 
+  //Commenting out e2e due to errors.
   grunt.registerTask('test', ['test:unit']);
   //grunt.registerTask('test', ['test:unit', 'test:e2e']);
   grunt.registerTask('test:unit', ['jshint', 'clean:coverage', 'karma:unit']);
