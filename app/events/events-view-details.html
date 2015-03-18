@@ -40,7 +40,7 @@ Click to Share on Facebook
         <tr ng-repeat="student in ctrl.event.stats" ng-class="{'last': ($index + 1) == ctrl.event.cutoffNumber, 'event-out': ($index + 1) > ctrl.event.cutoffNumber}">
             <td>{{$index + 1}}</td>
             <td class="school-crest">
-                <img ng-if="ctrl.schools[student.schoolId].iconUrl" ng-src="{{ctrl.schools[student.schoolId].iconUrl}}" ng-attr-alt="from {{ctrl.schools[student.schoolId].name}}">
+                <img ng-if="ctrl.schools[student.schoolId].iconUrl" ng-src="{{ctrl.schools[student.schoolId].iconUrl}}" ng-attr-alt="from {{ctrl.schools[student.schoolId].name}}" ng-attr-title="{{ctrl.schools[student.schoolId].name}}">
             </td>
             <td>
                 <a ng-href="#/user/{{student.id}}">
